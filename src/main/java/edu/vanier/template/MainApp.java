@@ -55,6 +55,7 @@ public class MainApp extends Application {
     public static void switchScene(String fxmlFile, Object fxmlController) {
         try {
             scene.setRoot(loadFXML(fxmlFile, fxmlController));
+
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
