@@ -28,7 +28,7 @@ public class SecondaryFXMLController {
     @FXML
     Button add;
     @FXML
-    Pane canvas = new Pane();
+    public Pane canvas = new Pane();
     @FXML
     VBox vbox;
 
@@ -36,6 +36,9 @@ public class SecondaryFXMLController {
     Particle[] listOfParticles = new Particle[1000];
     int numberOfParticles = 0;
 
+    double velocityX;
+    double velocityY;
+    double velocity = 2;
 
     @FXML
     public void initialize() {
@@ -47,13 +50,15 @@ public class SecondaryFXMLController {
 
     private void addParticlesButton(){
         add.setOnAction(event -> {
-            Circle circle= new Circle(10,10,10,Color.RED);
-            listOfParticles[numberOfParticles] = new Particle(circle, 2 ,1);
-            KeyFrame kf = new KeyFrame(Duration.millis(100),(e -> moveCircle(circle)));
-            Timeline timeline1 = new Timeline();
-            timeline1.getKeyFrames().add(kf);
-            timeline1.setCycleCount(Animation.INDEFINITE);
-            timeline1.play();
+            Circle circle = new Circle(10,10,10,Color.RED);
+            velocityX = Math.random()*10;
+            velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
+            System.out.println(velocityX);
+            System.out.println(velocityY);
+
+            listOfParticles[numberOfParticles] = new Particle(circle, 2 ,1, canvas);
+            listOfParticles[numberOfParticles].createTimeline();
+            listOfParticles[numberOfParticles].play();
             canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
         });
     }
@@ -70,25 +75,5 @@ public class SecondaryFXMLController {
         vbox.getChildren().add(canvas);
     }
 
-    private void moveCircle(Circle circle) {
 
-        for (int i = 0; i < numberOfParticles; i++) {
-            if (listOfParticles[i].getCircle().getCenterX() <= listOfParticles[i].getCircle().getRadius() - 5){
-                listOfParticles[i].velocityX = -listOfParticles[i].velocityX;
-            }
-            else if (listOfParticles[i].getCircle().getCenterX() >= canvas.getWidth() - listOfParticles[i].getCircle().getRadius() - 5) {
-                listOfParticles[i].velocityX = -listOfParticles[i].velocityX;
-            }
-
-            if (listOfParticles[i].getCircle().getCenterY() <= listOfParticles[i].getCircle().getRadius() - 5){
-                listOfParticles[i].velocityY = -listOfParticles[i].velocityY;
-            }
-            else if (listOfParticles[i].getCircle().getCenterY() >= canvas.getHeight()-listOfParticles[i].getCircle().getRadius() - 5){
-                listOfParticles[i].velocityY = -listOfParticles[i].velocityY;
-            }
-            listOfParticles[i].getCircle().setCenterX(listOfParticles[i].getCircle().getCenterX() + listOfParticles[i].velocityX);
-            listOfParticles[i].getCircle().setCenterY(listOfParticles[i].getCircle().getCenterY() + listOfParticles[i].velocityY);
-        }
-
-    }
 }
