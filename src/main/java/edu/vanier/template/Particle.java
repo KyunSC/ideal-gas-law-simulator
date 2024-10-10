@@ -35,7 +35,7 @@ public class Particle {
     }
 
     public void createTimeline(){
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(50),(e -> moveCircle(circle)));
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(10),(e -> moveCircle(circle)));
         Timeline timeline1 = new Timeline();
         timeline1.getKeyFrames().add(keyFrame);
         timeline1.setCycleCount(Animation.INDEFINITE);
@@ -45,17 +45,17 @@ public class Particle {
     private void moveCircle(Circle particle) {
 
         //for (int i = 0; i < numberOfParticles; i++) {
-        if (particle.getCenterX() <= particle.getRadius() - 5){
+        if (particle.getCenterX() <= particle.getRadius() - 1){
             velocityX = -velocityX;
         }
-        else if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 5) {
+        else if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) {
             velocityX = -velocityX;
         }
 
-        if (particle.getCenterY() <= particle.getRadius() - 5){
+        if (particle.getCenterY() <= particle.getRadius() - 1){
             velocityY = -velocityY;
         }
-        else if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 5){
+        else if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 1){
             velocityY = -velocityY;
         }
         particle.setCenterX(particle.getCenterX() + velocityX);

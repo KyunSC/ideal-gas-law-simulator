@@ -79,6 +79,7 @@ public class SecondaryFXMLController {
     private void checkParticleParticleCollision() {
         for (int i = 0; i < numberOfParticles; i++) {
             for (int j = (i+1); j <numberOfParticles ; j++) {
+
             }
         }
     }
