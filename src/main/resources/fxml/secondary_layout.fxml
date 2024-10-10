@@ -15,7 +15,7 @@
    <center>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox>
+            <VBox fx:id="vbox">
                <children>
                   <Label text="A JavaFX project template. Secondary scene">
                      <font>
@@ -25,6 +25,7 @@
                   <HBox prefHeight="45.0" prefWidth="219.0">
                      <children>
                         <Button fx:id="btnSwitchScene" text="Switch to primary Scene" />
+                        <Button fx:id="add" text="ADD" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -33,10 +34,7 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                   </HBox>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle height="40" width="40" x="10" y="10" > </Rectangle>
-                     </children>
+                  <Pane>
                   </Pane>
                </children>
             </VBox>

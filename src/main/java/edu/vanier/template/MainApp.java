@@ -4,9 +4,12 @@ import edu.vanier.template.controllers.MainAppFXMLController;
 import java.io.IOException;
 import java.util.logging.Level;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,7 @@ public class MainApp extends Application {
             logger.info("Bootstrapping the application...");
             // Load the scene of the primary stage.
             Parent root = loadFXML(MAINAPP_LAYOUT, new MainAppFXMLController());
-            scene = new Scene(root, 640, 480);
+            scene = new Scene(root, 1280, 720);
             primaryStage.setScene(scene);
             primaryStage.sizeToScene();
             // Put this appliation's main window on top of other already-opened windows
@@ -55,6 +58,7 @@ public class MainApp extends Application {
     public static void switchScene(String fxmlFile, Object fxmlController) {
         try {
             scene.setRoot(loadFXML(fxmlFile, fxmlController));
+
 
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
