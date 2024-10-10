@@ -15,7 +15,7 @@
          <children>
             <VBox fx:id="vbox" spacing="10" style="-fx-padding: 0 5 10 5;">
                <children>
-                  <Label text="Secondary scene" style="-fx-padding: 20 10 10 10;">
+                  <Label style="-fx-padding: 20 10 10 10;" text="Secondary scene">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -23,7 +23,6 @@
                   <HBox prefHeight="45.0" prefWidth="219.0">
                      <children>
                         <Button fx:id="btnSwitchScene" text="Switch to primary Scene" />
-                        <Button fx:id="add" text="ADD" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -32,11 +31,19 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                   </HBox>
-                  <Pane>
+                  <Pane style="-fx-background-color: Black;">
                   </Pane>
                </children>
             </VBox>
          </children>
       </HBox>
    </center>
+   <right>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="add" prefHeight="26.0" prefWidth="56.0" style="-fx-background-color: lightGreen;" text="ADD" />
+            <Button fx:id="add10" mnemonicParsing="false" style="-fx-background-color: lightgreen;" text="Add 10" />
+         </children>
+      </VBox>
+   </right>
 </BorderPane>

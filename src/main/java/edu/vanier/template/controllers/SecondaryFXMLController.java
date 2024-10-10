@@ -28,6 +28,8 @@ public class SecondaryFXMLController {
     @FXML
     Button add;
     @FXML
+    Button add10;
+    @FXML
     public Pane canvas = new Pane();
     @FXML
     VBox vbox;
@@ -46,7 +48,29 @@ public class SecondaryFXMLController {
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
         initCanvas();
         addParticlesButton();
+        add10ParticlesButton();
         particleCollisionTimeline();
+    }
+
+    private void add10ParticlesButton() {
+        add10.setOnAction(event -> {
+            for (int i = 0; i < 10; i++) {
+                addParticle();
+            }
+        });
+    }
+
+    private void addParticle() {
+        Circle circle = new Circle(11,11,10,Color.RED);
+        velocityX = Math.random()*5;
+        velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
+        System.out.println(velocityX);
+        System.out.println(velocityY);
+
+        listOfParticles[numberOfParticles] = new Particle(circle, velocityX,velocityY, canvas);
+        listOfParticles[numberOfParticles].createTimeline();
+        listOfParticles[numberOfParticles].play();
+        canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
     }
 
     private void particleCollisionTimeline() {
@@ -63,18 +87,10 @@ public class SecondaryFXMLController {
 
     private void addParticlesButton(){
         add.setOnAction(event -> {
-            Circle circle = new Circle(10,10,10,Color.RED);
-            velocityX = Math.random()*5;
-            velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
-            System.out.println(velocityX);
-            System.out.println(velocityY);
-
-            listOfParticles[numberOfParticles] = new Particle(circle, velocityX,velocityY, canvas);
-            listOfParticles[numberOfParticles].createTimeline();
-            listOfParticles[numberOfParticles].play();
-            canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
+            addParticle();
         });
     }
+
 
     private void checkParticleParticleCollision() {
         for (int i = 0; i < numberOfParticles; i++) {
