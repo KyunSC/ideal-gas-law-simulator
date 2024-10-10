@@ -1,6 +1,7 @@
 package edu.vanier.template.controllers;
 
 import edu.vanier.template.MainApp;
+import edu.vanier.template.Particle;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -25,17 +26,12 @@ public class SecondaryFXMLController {
     Button btnSwitchScene;
     @FXML
     Button add;
-
     @FXML
     Pane canvas = new Pane();
-
     @FXML
     VBox vbox;
 
-    Double velocityX = 3.0;
-    Double velocityY = 2.0;
-
-    Circle[] listOfParticles = new Circle[1000];
+    Particle[] listOfParticles = new Particle[1000];
     int numberOfParticles = 0;
 
 
@@ -43,51 +39,53 @@ public class SecondaryFXMLController {
     public void initialize() {
         logger.info("Initializing MainAppController...");
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
-        canvas.setMinSize(500, 500);
-        canvas.setMaxSize(500, 500);
-        canvas.setBorder(new Border((new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
-        vbox.getChildren().add(canvas);
+        initCanvas();
+        addParticlesButton();
+    }
+
+    private void addParticlesButton(){
         add.setOnAction(event -> {
             Circle circle= new Circle(10,10,10,Color.RED);
-            velocityX = 10.0;
-            listOfParticles[numberOfParticles] = circle;
-            KeyFrame kf = new KeyFrame(Duration.millis(1),(e -> moveCircle(circle)));
+            listOfParticles[numberOfParticles] = new Particle(circle, 2 ,1);
+            KeyFrame kf = new KeyFrame(Duration.millis(100),(e -> moveCircle(circle)));
             Timeline timeline1 = new Timeline();
             timeline1.getKeyFrames().add(kf);
             timeline1.setCycleCount(Animation.INDEFINITE);
             timeline1.play();
-            canvas.getChildren().add(listOfParticles[numberOfParticles++]);
+            canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
         });
-
     }
 
-
     private void loadPrimaryScene(Event e) {
-
         MainApp.switchScene(MainApp.MAINAPP_LAYOUT, new MainAppFXMLController());
         logger.info("Loaded the primary scene...");
+    }
+
+    private void initCanvas(){
+        canvas.setMinSize(500, 500);
+        canvas.setMaxSize(500, 500);
+        canvas.setBorder(new Border((new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
+        vbox.getChildren().add(canvas);
     }
 
     private void moveCircle(Circle circle) {
 
         for (int i = 0; i < numberOfParticles; i++) {
-            if (listOfParticles[i].getCenterX() <= 9){
-                velocityX = -velocityX;
+            if (listOfParticles[i].getCircle().getCenterX() <= 9){
+                listOfParticles[i].velocityX = -listOfParticles[i].velocityX;
             }
-            else if (listOfParticles[i].getCenterX() >= 490) {
-                velocityX = -velocityX;
+            else if (listOfParticles[i].getCircle().getCenterX() >= 490) {
+                listOfParticles[i].velocityX = -listOfParticles[i].velocityX;
             }
-            if (listOfParticles[i].getCenterY() <= 9){
-                velocityY = -velocityY;
+            if (listOfParticles[i].getCircle().getCenterY() <= 9){
+                listOfParticles[i].velocityY = -listOfParticles[i].velocityY;
             }
-            else if (listOfParticles[i].getCenterY() >= 490){
-                velocityY = -velocityY;
+            else if (listOfParticles[i].getCircle().getCenterY() >= 490){
+                listOfParticles[i].velocityY = -listOfParticles[i].velocityY;
             }
-            listOfParticles[i].setCenterX(listOfParticles[i].getCenterX() + velocityX);
-            listOfParticles[i].setCenterY(listOfParticles[i].getCenterY() + velocityY);
+            listOfParticles[i].getCircle().setCenterX(listOfParticles[i].getCircle().getCenterX() + listOfParticles[i].velocityX);
+            listOfParticles[i].getCircle().setCenterY(listOfParticles[i].getCircle().getCenterY() + listOfParticles[i].velocityY);
         }
 
-
-        System.out.println(circle.getCenterX());
     }
 }
