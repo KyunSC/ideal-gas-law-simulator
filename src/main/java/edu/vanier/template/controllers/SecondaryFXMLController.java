@@ -73,16 +73,17 @@ public class SecondaryFXMLController {
     private void moveCircle(Circle circle) {
 
         for (int i = 0; i < numberOfParticles; i++) {
-            if (listOfParticles[i].getCircle().getCenterX() <= 9){
+            if (listOfParticles[i].getCircle().getCenterX() <= listOfParticles[i].getCircle().getRadius() - 5){
                 listOfParticles[i].velocityX = -listOfParticles[i].velocityX;
             }
-            else if (listOfParticles[i].getCircle().getCenterX() >= 490) {
+            else if (listOfParticles[i].getCircle().getCenterX() >= canvas.getWidth() - listOfParticles[i].getCircle().getRadius() - 5) {
                 listOfParticles[i].velocityX = -listOfParticles[i].velocityX;
             }
-            if (listOfParticles[i].getCircle().getCenterY() <= 9){
+
+            if (listOfParticles[i].getCircle().getCenterY() <= listOfParticles[i].getCircle().getRadius() - 5){
                 listOfParticles[i].velocityY = -listOfParticles[i].velocityY;
             }
-            else if (listOfParticles[i].getCircle().getCenterY() >= 490){
+            else if (listOfParticles[i].getCircle().getCenterY() >= canvas.getHeight()-listOfParticles[i].getCircle().getRadius() - 5){
                 listOfParticles[i].velocityY = -listOfParticles[i].velocityY;
             }
             listOfParticles[i].getCircle().setCenterX(listOfParticles[i].getCircle().getCenterX() + listOfParticles[i].velocityX);
