@@ -5,6 +5,7 @@ import edu.vanier.template.Particle;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -30,6 +31,7 @@ public class SecondaryFXMLController {
     Pane canvas = new Pane();
     @FXML
     VBox vbox;
+
 
     Particle[] listOfParticles = new Particle[1000];
     int numberOfParticles = 0;

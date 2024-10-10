@@ -12,7 +12,7 @@
    <center>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox>
+            <VBox fx:id="vBox" style="-fx-padding: 20 10 10 10;">
                <children>
                   <Label text="A JavaFX project template. Primary scene">
                      <font>

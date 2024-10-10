@@ -13,9 +13,9 @@
    <center>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="vbox">
+            <VBox fx:id="vbox" spacing="10" style="-fx-padding: 0 5 10 5;">
                <children>
-                  <Label text="A JavaFX project template. Secondary scene">
+                  <Label text="Secondary scene" style="-fx-padding: 20 10 10 10;">
                      <font>
                         <Font size="14.0" />
                      </font>
