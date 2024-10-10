@@ -15,7 +15,6 @@ public class Particle {
     Circle circle;
     public double velocityX;
     public double velocityY;
-    KeyFrame keyFrame;
     Timeline timeline;
     Pane canvas;
 
@@ -43,24 +42,11 @@ public class Particle {
     }
 
     private void moveCircle(Circle particle) {
-
-        //for (int i = 0; i < numberOfParticles; i++) {
-        if (particle.getCenterX() <= particle.getRadius()){
-            velocityX = -velocityX;
-        }
-        else if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) {
-            velocityX = -velocityX;
-        }
-
-        if (particle.getCenterY() <= particle.getRadius() - 1){
-            velocityY = -velocityY;
-        }
-        else if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius()){
-            velocityY = -velocityY;
-        }
+        if (particle.getCenterX() <= particle.getRadius()) velocityX *= -1;
+        else if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) velocityX *= -1;
+        if (particle.getCenterY() <= particle.getRadius() - 1) velocityY *= -1;
+        else if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius()) velocityY *= -1;
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
-        //}
-
     }
 }

@@ -64,9 +64,6 @@ public class SecondaryFXMLController {
         Circle circle = new Circle(11,11,10,Color.RED);
         velocityX = Math.random()*5;
         velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
-        System.out.println(velocityX);
-        System.out.println(velocityY);
-
         listOfParticles[numberOfParticles] = new Particle(circle, velocityX,velocityY, canvas);
         listOfParticles[numberOfParticles].createTimeline();
         listOfParticles[numberOfParticles].play();
