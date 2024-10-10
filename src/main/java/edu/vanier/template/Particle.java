@@ -30,14 +30,6 @@ public class Particle {
         return circle;
     }
 
-    public double getVelocityX() {
-        return velocityX;
-    }
-
-    public double getVelocityY() {
-        return velocityY;
-    }
-
     public void play(){
         timeline.play();
     }

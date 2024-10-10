@@ -38,7 +38,7 @@ public class SecondaryFXMLController {
 
     double velocityX;
     double velocityY;
-    double velocity = 2;
+    double velocity = 5;
 
     @FXML
     public void initialize() {
@@ -46,21 +46,41 @@ public class SecondaryFXMLController {
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
         initCanvas();
         addParticlesButton();
+        particleCollisionTimeline();
+    }
+
+    private void particleCollisionTimeline() {
+        Timeline elasticCollisionTimeline = new Timeline();
+        KeyFrame keyframe = new KeyFrame(
+                Duration.millis(100),
+                (event -> {
+                    checkParticleParticleCollision();
+                })
+        );
+        elasticCollisionTimeline.getKeyFrames().add(keyframe);
+        elasticCollisionTimeline.play();
     }
 
     private void addParticlesButton(){
         add.setOnAction(event -> {
             Circle circle = new Circle(10,10,10,Color.RED);
-            velocityX = Math.random()*10;
+            velocityX = Math.random()*5;
             velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
             System.out.println(velocityX);
             System.out.println(velocityY);
 
-            listOfParticles[numberOfParticles] = new Particle(circle, 2 ,1, canvas);
+            listOfParticles[numberOfParticles] = new Particle(circle, velocityX,velocityY, canvas);
             listOfParticles[numberOfParticles].createTimeline();
             listOfParticles[numberOfParticles].play();
             canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
         });
+    }
+
+    private void checkParticleParticleCollision() {
+        for (int i = 0; i < numberOfParticles; i++) {
+            for (int j = (i+1); j <numberOfParticles ; j++) {
+            }
+        }
     }
 
     private void loadPrimaryScene(Event e) {
