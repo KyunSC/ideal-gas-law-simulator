@@ -42,10 +42,8 @@ public class Particle {
     }
 
     private void moveCircle(Circle particle) {
-        if (particle.getCenterX() <= particle.getRadius()) velocityX *= -1;
-        else if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) velocityX *= -1;
-        if (particle.getCenterY() <= particle.getRadius() - 1) velocityY *= -1;
-        else if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius()) velocityY *= -1;
+        if (particle.getCenterX() <= particle.getRadius() || particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) velocityX *= -1;
+        if (particle.getCenterY() <= particle.getRadius() - 1 || particle.getCenterY() >= canvas.getHeight()-particle.getRadius()) velocityY *= -1;
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
     }
