@@ -2,10 +2,14 @@ package edu.vanier.template.controllers;
 
 import edu.vanier.template.MainApp;
 import edu.vanier.template.Particle;
+import edu.vanier.template.calculations.PVnRT;
+import edu.vanier.template.graphics.PressureGauge;
+import edu.vanier.template.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -42,10 +46,33 @@ public class SecondaryFXMLController {
     double velocityY;
     double velocity = 5;
 
+    private Thermometer thermometer;
+    private PVnRT pvnrt;
+
+    private PressureGauge pressureGauge;
+
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
+
+        pvnrt = new PVnRT();
+        pvnrt.setMoles(0);
+
+        pressureGauge = new PressureGauge(pvnrt);
+
+        thermometer = new Thermometer(pvnrt);
+
+        HBox hbox = new HBox();
+        hbox.setSpacing(10);
+        hbox.setPrefHeight(500);
+
+        hbox.getChildren().addAll(canvas, pressureGauge.getGaugePane(), thermometer.getThermometerPane());
+
+        hbox.setAlignment(Pos.CENTER_RIGHT);
+
+        vbox.getChildren().add(hbox);
+
         initCanvas();
         addParticlesButton();
         add10ParticlesButton();
@@ -57,6 +84,7 @@ public class SecondaryFXMLController {
             for (int i = 0; i < 10; i++) {
                 addParticle();
             }
+            updatePressure();
         });
     }
 
@@ -68,6 +96,9 @@ public class SecondaryFXMLController {
         listOfParticles[numberOfParticles].createTimeline();
         listOfParticles[numberOfParticles].play();
         canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
+
+        thermometer.updateThermometer();
+        updatePressure();
     }
 
     private void particleCollisionTimeline() {
@@ -85,6 +116,7 @@ public class SecondaryFXMLController {
     private void addParticlesButton(){
         add.setOnAction(event -> {
             addParticle();
+            updatePressure();
         });
     }
 
@@ -109,5 +141,8 @@ public class SecondaryFXMLController {
         vbox.getChildren().add(canvas);
     }
 
-
+    private void updatePressure() {
+        pvnrt.setMoles(numberOfParticles);
+        pressureGauge.updateGauge();
+    }
 }

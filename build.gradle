@@ -37,6 +37,9 @@ dependencies {
     // Link Logback to the project: @see: https://logback.qos.ch/ 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
     implementation "ch.qos.logback:logback-core:$logbackVersion"
+
+    //medusa gauges
+    implementation 'eu.hansolo:medusa:21.0.7'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

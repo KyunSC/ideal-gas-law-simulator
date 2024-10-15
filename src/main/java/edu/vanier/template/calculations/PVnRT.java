@@ -11,9 +11,9 @@ public class PVnRT {
      * default constructor
      */
     public PVnRT() {
-        this.temperature = 0; //K
+        this.temperature = 300; //K
         this.rConstant = 0.08206; // L*atm/mol*K
-        this.volume = 1; //L
+        this.volume = 10; //L
         this.moles = 0; //mol
         this.pressure = calculatePressure(); //atm
     }
@@ -57,8 +57,8 @@ public class PVnRT {
         if (moles == 0) {
             this.temperature = 0;
         } else if (this.moles == 0 && moles > 0) {
-            // when moles are initially added defaults temperature to 298
-            this.temperature = 298;
+            // when moles are initially added defaults temperature to 300
+            this.temperature = 300;
         }
         this.moles = moles;
         calculatePressure();
