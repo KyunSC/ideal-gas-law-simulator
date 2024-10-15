@@ -11,15 +11,16 @@ public class PVnRT {
      * default constructor
      */
     public PVnRT() {
-        this.temperature = 298; //K
+        this.temperature = 0; //K
         this.rConstant = 0.08206; // L*atm/mol*K
         this.volume = 1; //L
-        this.pressure = 1; //atm
         this.moles = 0; //mol
+        this.pressure = calculatePressure(); //atm
     }
 
-    public void recalculatePressure() {
+    public double calculatePressure() {
         pressure = (moles * rConstant * temperature) / volume;
+        return pressure;
     }
 
     public double getTemperature() {
@@ -27,8 +28,12 @@ public class PVnRT {
     }
 
     public void setTemperature(double temperature) {
-        this.temperature = temperature;
-        recalculatePressure();
+        if (moles > 0) {
+            this.temperature = temperature;
+            calculatePressure();
+        } else {
+            System.out.println("Temperature cannot be changed when moles are zero.");
+        }
     }
 
     public double getVolume() {
@@ -37,7 +42,7 @@ public class PVnRT {
 
     public void setVolume(double volume) {
         this.volume = volume;
-        recalculatePressure();
+        calculatePressure();
     }
 
     public double getPressure() {
@@ -49,7 +54,24 @@ public class PVnRT {
     }
 
     public void setMoles(double moles) {
+        if (moles == 0) {
+            this.temperature = 0;
+        } else if (this.moles == 0 && moles > 0) {
+            // when moles are initially added defaults temperature to 298
+            this.temperature = 298;
+        }
         this.moles = moles;
-        recalculatePressure();
+        calculatePressure();
+    }
+
+    @Override
+    public String toString() {
+        return "PVnRT{" +
+                "temperature=" + temperature +
+                ", rConstant=" + rConstant +
+                ", volume=" + volume +
+                ", pressure=" + pressure +
+                ", moles=" + moles +
+                '}';
     }
 }
