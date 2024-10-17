@@ -64,12 +64,10 @@ public class SecondaryFXMLController {
         thermometer = new Thermometer(pvnrt);
 
         HBox hbox = new HBox();
-        hbox.setSpacing(10);
-        hbox.setPrefHeight(500);
 
         hbox.getChildren().addAll(canvas, pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
-        hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setAlignment(Pos.CENTER);
 
         vbox.getChildren().add(hbox);
 

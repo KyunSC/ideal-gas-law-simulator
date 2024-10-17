@@ -27,6 +27,12 @@ public class Thermometer {
         thermometer.setTickLabelsVisible(true);
         thermometer.setTickMarkSectionsVisible(true);
 
+        thermometer.setPrefSize(125, 125);
+        thermometer.setMinSize(125, 125);
+        thermometer.setMaxSize(125, 125);
+
+        thermometer.zeroColorProperty();
+
     }
 
     public void updateThermometer() {
