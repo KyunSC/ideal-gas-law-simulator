@@ -119,10 +119,19 @@ public class SecondaryFXMLController {
     }
 
 
-    private void checkParticleParticleCollision() {
+    public void checkParticleParticleCollision() {
         for (int i = 0; i < numberOfParticles; i++) {
-            for (int j = (i+1); j <numberOfParticles ; j++) {
-
+            for (int j = (i+1); j < numberOfParticles ; j++) {
+                double deltaX = Math.abs(listOfParticles[i].getCircle().getCenterX() - listOfParticles[j].getCircle().getCenterX());
+                double deltaY = Math.abs(listOfParticles[i].getCircle().getCenterY() - listOfParticles[j].getCircle().getCenterY());
+                if (deltaX <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()){
+                    listOfParticles[i].velocityX *= -1;
+                    listOfParticles[j].velocityX *= -1;
+                }
+                if (deltaY <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()){
+                    listOfParticles[i].velocityY *= -1;
+                    listOfParticles[j].velocityY *= -1;
+                }
             }
         }
     }
