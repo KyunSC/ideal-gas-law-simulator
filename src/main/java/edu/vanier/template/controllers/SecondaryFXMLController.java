@@ -18,6 +18,8 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * FXML controller class for a secondary scene.
  *
@@ -88,7 +90,7 @@ public class SecondaryFXMLController {
 
     private void addParticle() {
         Circle circle = new Circle(11,11,10,Color.RED);
-        velocityX = Math.random()*5;
+        velocityX = Math.random()*velocity;
         velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         listOfParticles[numberOfParticles] = new Particle(circle, velocityX,velocityY, canvas);
         listOfParticles[numberOfParticles].createTimeline();
@@ -108,6 +110,7 @@ public class SecondaryFXMLController {
                 })
         );
         elasticCollisionTimeline.getKeyFrames().add(keyframe);
+        elasticCollisionTimeline.setCycleCount(Animation.INDEFINITE);
         elasticCollisionTimeline.play();
     }
 
@@ -118,17 +121,20 @@ public class SecondaryFXMLController {
         });
     }
 
-
     public void checkParticleParticleCollision() {
         for (int i = 0; i < numberOfParticles; i++) {
             for (int j = (i+1); j < numberOfParticles ; j++) {
                 double deltaX = Math.abs(listOfParticles[i].getCircle().getCenterX() - listOfParticles[j].getCircle().getCenterX());
                 double deltaY = Math.abs(listOfParticles[i].getCircle().getCenterY() - listOfParticles[j].getCircle().getCenterY());
-                if (deltaX <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()){
+                if (deltaX <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()
+                        && deltaY <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()
+                        && listOfParticles[i].getCircle().getCenterX() > 20
+                        && listOfParticles[i].getCircle().getCenterY() > 20
+                        && listOfParticles[j].getCircle().getCenterX() > 20
+                        && listOfParticles[j].getCircle().getCenterY() > 20
+                ){
                     listOfParticles[i].velocityX *= -1;
                     listOfParticles[j].velocityX *= -1;
-                }
-                if (deltaY <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()){
                     listOfParticles[i].velocityY *= -1;
                     listOfParticles[j].velocityY *= -1;
                 }
