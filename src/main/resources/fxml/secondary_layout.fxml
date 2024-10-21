@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="vbox" spacing="10" style="-fx-padding: 0 5 10 5;">
                <children>
-                  <Label style="-fx-padding: 20 10 10 10;" text="Secondary scene">
+                  <Label prefHeight="50.0" prefWidth="135.0" style="-fx-padding: 20 10 10 10;" text="Secondary scene">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -31,7 +27,7 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                   </HBox>
-                  <Pane style="-fx-background-color: Black;">
+                  <Pane prefWidth="219.0" style="-fx-background-color: Black;">
                   </Pane>
                </children>
             </VBox>
@@ -39,10 +35,16 @@
       </HBox>
    </center>
    <right>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="199.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="add" prefHeight="26.0" prefWidth="56.0" style="-fx-background-color: lightGreen;" text="ADD" />
-            <Button fx:id="add10" mnemonicParsing="false" style="-fx-background-color: lightgreen;" text="Add 10" />
+            <Button fx:id="add" prefHeight="26.0" prefWidth="187.0" style="-fx-background-color: lightGreen;" text="ADD 1">
+               <VBox.margin>
+                  <Insets right="25.0" />
+               </VBox.margin></Button>
+            <Button fx:id="add10" mnemonicParsing="false" prefHeight="25.0" prefWidth="187.0" style="-fx-background-color: lightgreen;" text="ADD 10">
+               <VBox.margin>
+                  <Insets right="25.0" top="10.0" />
+               </VBox.margin></Button>
          </children>
       </VBox>
    </right>

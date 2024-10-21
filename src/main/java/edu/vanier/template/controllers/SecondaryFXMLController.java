@@ -42,6 +42,9 @@ public class SecondaryFXMLController {
     public Pane canvas = new Pane();
     @FXML
     VBox vbox;
+    @FXML
+    BorderPane borderPane;
+
 
 
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -89,6 +92,10 @@ public class SecondaryFXMLController {
         addParticlesButton();
         add10ParticlesButton();
         particleCollisionTimeline();
+
+        BackgroundFill bf = new BackgroundFill(Color.BLACK, CornerRadii.EMPTY , Insets.EMPTY);
+        Background bg = new Background(bf);
+        borderPane.setBackground(bg);
     }
 
     private void addToQuadrants(){
