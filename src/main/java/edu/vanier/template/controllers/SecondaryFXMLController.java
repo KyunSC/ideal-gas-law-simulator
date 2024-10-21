@@ -46,7 +46,6 @@ public class SecondaryFXMLController {
     BorderPane borderPane;
 
 
-
     ArrayList<Particle> listOfParticles = new ArrayList<>();
     ArrayList<Particle> firstListOfParticles = new ArrayList<>();
     ArrayList<Particle> secondListOfParticles = new ArrayList<>();
@@ -136,7 +135,7 @@ public class SecondaryFXMLController {
         for (int i = 0; i < listOfParticles.size(); i++) {
             if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 secondListOfParticles.add(listOfParticles.get(i));
-                listOfParticles.remove(i);
+                //listOfParticles.remove(i);
             }
         }
 
@@ -159,7 +158,7 @@ public class SecondaryFXMLController {
         for (int i = 0; i < listOfParticles.size(); i++) {
             if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 thirdListOfParticles.add(listOfParticles.get(i));
-                listOfParticles.remove(i);
+                //listOfParticles.remove(i);
             }
         }
 
@@ -182,7 +181,7 @@ public class SecondaryFXMLController {
         for (int i = 0; i < listOfParticles.size(); i++) {
             if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 fourthListOfParticles.add(listOfParticles.get(i));
-                listOfParticles.remove(i);
+                //listOfParticles.remove(i);
             }
         }
 
@@ -245,10 +244,10 @@ public class SecondaryFXMLController {
         });
     }
 
-    
+
 
     public void checkParticleParticleCollision() {
-        for (int i = 0; i < totalNumberOfParticles; i++) {
+        for (int i = 0; i < listOfParticles.size(); i++) {
             for (int j = (i+1); j < totalNumberOfParticles ; j++) {
                 double deltaX = Math.abs(listOfParticles.get(i).getCircle().getCenterX() - listOfParticles.get(j).getCircle().getCenterX());
                 double deltaY = Math.abs(listOfParticles.get(i).getCircle().getCenterY() - listOfParticles.get(j).getCircle().getCenterY());
@@ -276,7 +275,7 @@ public class SecondaryFXMLController {
     private void initCanvas(){
         canvas.setMinSize(500, 500);
         canvas.setMaxSize(500, 500);
-        canvas.setBorder(new Border((new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
+        canvas.setBorder(new Border((new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
         vbox.getChildren().add(canvas);
     }
 
