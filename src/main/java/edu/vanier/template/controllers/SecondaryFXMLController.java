@@ -213,10 +213,10 @@ public class SecondaryFXMLController {
         velocityX = Math.random()*velocity;
         velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
 
-        listOfParticles[numberOfParticles] = new Particle(circle, velocityX,velocityY, canvas);
-        listOfParticles[numberOfParticles].createTimeline();
-        listOfParticles[numberOfParticles].play();
-        canvas.getChildren().add(listOfParticles[numberOfParticles++].getCircle());
+        listOfParticles.set(numberOfParticles, new Particle(circle, velocityX, velocityY, canvas));
+        listOfParticles.get(numberOfParticles).createTimeline();
+        listOfParticles.get(numberOfParticles).play();
+        canvas.getChildren().add(listOfParticles.get(numberOfParticles++).getCircle());
 
         thermometer.updateThermometer();
         updatePressure();
@@ -254,19 +254,19 @@ public class SecondaryFXMLController {
     public void checkParticleParticleCollision() {
         for (int i = 0; i < numberOfParticles; i++) {
             for (int j = (i+1); j < numberOfParticles ; j++) {
-                double deltaX = Math.abs(listOfParticles[i].getCircle().getCenterX() - listOfParticles[j].getCircle().getCenterX());
-                double deltaY = Math.abs(listOfParticles[i].getCircle().getCenterY() - listOfParticles[j].getCircle().getCenterY());
-                if (deltaX <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()
-                        && deltaY <= listOfParticles[i].getCircle().getRadius() + listOfParticles[j].getCircle().getRadius()
-                        && listOfParticles[i].getCircle().getCenterX() > 20
-                        && listOfParticles[i].getCircle().getCenterY() > 20
-                        && listOfParticles[j].getCircle().getCenterX() > 20
-                        && listOfParticles[j].getCircle().getCenterY() > 20
+                double deltaX = Math.abs(listOfParticles.get(i).getCircle().getCenterX() - listOfParticles.get(j).getCircle().getCenterX());
+                double deltaY = Math.abs(listOfParticles.get(i).getCircle().getCenterY() - listOfParticles.get(j).getCircle().getCenterY());
+                if (deltaX <= listOfParticles.get(i).getCircle().getRadius() + listOfParticles.get(j).getCircle().getRadius()
+                        && deltaY <= listOfParticles.get(i).getCircle().getRadius() + listOfParticles.get(j).getCircle().getRadius()
+                        && listOfParticles.get(i).getCircle().getCenterX() > 20
+                        && listOfParticles.get(i).getCircle().getCenterY() > 20
+                        && listOfParticles.get(j).getCircle().getCenterX() > 20
+                        && listOfParticles.get(j).getCircle().getCenterY() > 20
                 ){
-                    listOfParticles[i].velocityX *= -1;
-                    listOfParticles[j].velocityX *= -1;
-                    listOfParticles[i].velocityY *= -1;
-                    listOfParticles[j].velocityY *= -1;
+                    listOfParticles.get(i).velocityX *= -1;
+                    listOfParticles.get(j).velocityX *= -1;
+                    listOfParticles.get(i).velocityY *= -1;
+                    listOfParticles.get(j).velocityY *= -1;
                 }
             }
         }
