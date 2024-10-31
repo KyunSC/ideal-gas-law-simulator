@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * FXML controller class for the primary stage's scene.
  *
- * @author frostybee
+ *
  */
 public class MainAppFXMLController {
 

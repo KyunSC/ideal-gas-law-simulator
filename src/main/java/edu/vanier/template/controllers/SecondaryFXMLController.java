@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * FXML controller class for a secondary scene.
  *
- * @author frostybee
+ *
  */
 public class SecondaryFXMLController {
 

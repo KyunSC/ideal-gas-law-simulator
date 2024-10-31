@@ -64,7 +64,6 @@ public class PVnRT {
         calculatePressure();
     }
 
-    @Override
     public String toString() {
         return "PVnRT{" +
                 "temperature=" + temperature +
