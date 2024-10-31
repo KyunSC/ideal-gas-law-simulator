@@ -3,6 +3,9 @@ package edu.vanier.template;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,13 +20,16 @@ public class Particle {
     public double velocityY;
     Timeline timeline;
     Pane canvas;
+    Bounds bounds;
 
     public Particle(Circle circle, double velocityX, double velocityY, Pane canvas){
         this.circle = circle;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.canvas = canvas;
+
     }
+
 
     public Circle getCircle() {
         return circle;
@@ -47,5 +53,6 @@ public class Particle {
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
 
+        Bounds circleBounds = particle.getBoundsInParent();
     }
 }
