@@ -3,6 +3,7 @@ package edu.vanier.template;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -21,15 +22,14 @@ public class Particle {
     Timeline timeline;
     Pane canvas;
     Bounds bounds;
+    BoundingBox boundingBox = new BoundingBox(10, 10, 480,480);
 
     public Particle(Circle circle, double velocityX, double velocityY, Pane canvas){
         this.circle = circle;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.canvas = canvas;
-
     }
-
 
     public Circle getCircle() {
         return circle;
@@ -48,11 +48,11 @@ public class Particle {
     }
 
     private void moveCircle(Circle particle) {
-        if (particle.getCenterX() <= particle.getRadius() || particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) velocityX *= -1;
-        if (particle.getCenterY() <= particle.getRadius() - 1 || particle.getCenterY() >= canvas.getHeight()-particle.getRadius()) velocityY *= -1;
+        if (particle.getBoundsInParent().intersects(boundingBox)){
+            if (particle.getCenterX() <= particle.getRadius() || particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 1) velocityX *= -1;
+            if (particle.getCenterY() <= particle.getRadius() - 1 || particle.getCenterY() >= canvas.getHeight()-particle.getRadius()) velocityY *= -1;
+        }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
-
-        Bounds circleBounds = particle.getBoundsInParent();
     }
 }

@@ -8,6 +8,7 @@ import edu.vanier.template.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
@@ -44,7 +46,6 @@ public class SecondaryFXMLController {
     VBox vbox;
     @FXML
     BorderPane borderPane;
-
 
     ArrayList<Particle> listOfParticles = new ArrayList<>();
     ArrayList<Particle> firstListOfParticles = new ArrayList<>();
@@ -99,8 +100,8 @@ public class SecondaryFXMLController {
                 Duration.millis(100),
                 event -> {
                     addFirstQuadrant();
-                    addToSecondThirdFourth(listOfParticles, secondListOfParticles);
-                    addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
+                    //addToSecondThirdFourth(listOfParticles, secondListOfParticles);
+                    //addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
                     addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
                 }
         );
@@ -116,14 +117,12 @@ public class SecondaryFXMLController {
                 secondListOfParticles.remove(i);
             }
         }
-
         for (int i = 0; i < thirdListOfParticles.size(); i++) {
             if (thirdListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && thirdListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 firstListOfParticles.add(thirdListOfParticles.get(i));
                 thirdListOfParticles.remove(i);
             }
         }
-
         for (int i = 0; i < fourthListOfParticles.size(); i++) {
             if (fourthListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && fourthListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 firstListOfParticles.add(fourthListOfParticles.get(i));
@@ -132,62 +131,53 @@ public class SecondaryFXMLController {
         }
     }
 
-    private void addToSecondThirdFourth(ArrayList<Particle> listOfParticles, ArrayList targetList){
+    private void addToSecondThirdFourth(ArrayList<Particle> listOfParticles, ArrayList<Particle> targetList){
         for (int i = 0; i < listOfParticles.size(); i++) {
             if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 targetList.add(listOfParticles.get(i));
                 listOfParticles.remove(i);
             }
         }
+    }
 
-        for (int i = 0; i < thirdListOfParticles.size(); i++) {
-            if (thirdListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && thirdListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                targetList.add(thirdListOfParticles.get(i));
-                thirdListOfParticles.remove(i);
+    public static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
             }
-        }
-
-        for (int i = 0; i < fourthListOfParticles.size(); i++) {
-            if (fourthListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && fourthListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                targetList.add(fourthListOfParticles.get(i));
-                fourthListOfParticles.remove(i);
+            catch (Exception e){
+                System.err.println(e);
             }
-        }
+        }).start();
     }
 
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
+                updatePressure();
                 addParticle();
             }
-            updatePressure();
         });
     }
 
     private void addParticle() {
-        double lastTime = System.currentTimeMillis();
         Circle circle = new Circle(11,11,10,Color.RED);
         velocityX = Math.random()*velocity;
         velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
-        double currentTime = System.currentTimeMillis();
         Particle particle = new Particle(circle, velocityX, velocityY, canvas);
         particle.createTimeline();
         particle.play();
         canvas.getChildren().add(particle.getCircle());
+        listOfParticles.add(particle);
         thermometer.updateThermometer();
         updatePressure();
-        while (lastTime > currentTime - 20){
-            currentTime = System.currentTimeMillis();
-        }
-        listOfParticles.add(particle);
-
-
     }
 
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(100),
+                Duration.millis(500),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
