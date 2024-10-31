@@ -102,7 +102,6 @@ public class SecondaryFXMLController {
                     addSecondQuadrant();
                     addThirdQuadrant();
                     addFourthQuadrant();
-                    System.out.println(System.currentTimeMillis());
                 }
         );
         timeline.getKeyFrames().add(kf);
@@ -223,7 +222,7 @@ public class SecondaryFXMLController {
         canvas.getChildren().add(particle.getCircle());
         thermometer.updateThermometer();
         updatePressure();
-        while (lastTime > currentTime - 30){
+        while (lastTime > currentTime - 20){
             currentTime = System.currentTimeMillis();
         }
         listOfParticles.add(particle);
