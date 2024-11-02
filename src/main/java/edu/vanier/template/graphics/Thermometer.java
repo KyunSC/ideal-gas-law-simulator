@@ -2,6 +2,8 @@ package edu.vanier.template.graphics;
 
 import edu.vanier.template.calculations.PVnRT;
 import eu.hansolo.medusa.Gauge;
+import javafx.geometry.Pos;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class Thermometer {
@@ -39,9 +41,7 @@ public class Thermometer {
         thermometer.setValue(pvnrt.getTemperature());
     }
 
-    public VBox getThermometerPane() {
-        VBox vbox = new VBox();
-        vbox.getChildren().add(thermometer);
-        return vbox;
+    public StackPane getThermometerPane() {
+        return new StackPane(thermometer);
     }
 }

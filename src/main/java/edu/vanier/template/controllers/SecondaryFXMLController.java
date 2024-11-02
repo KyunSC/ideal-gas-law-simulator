@@ -41,11 +41,9 @@ public class SecondaryFXMLController {
     @FXML
     Button add10;
     @FXML
-    public Pane canvas = new Pane();
+    Pane canvas;
     @FXML
-    VBox vbox;
-    @FXML
-    BorderPane borderPane;
+    VBox gaugeVBox;
 
     ArrayList<Particle> listOfParticles = new ArrayList<>();
     ArrayList<Particle> firstListOfParticles = new ArrayList<>();
@@ -73,25 +71,13 @@ public class SecondaryFXMLController {
         pvnrt.setMoles(0);
 
         pressureGauge = new PressureGauge(pvnrt);
-
         thermometer = new Thermometer(pvnrt);
+        gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
-        HBox hbox = new HBox();
-
-        hbox.getChildren().addAll(canvas, pressureGauge.getGaugePane(), thermometer.getThermometerPane());
-        hbox.setAlignment(Pos.CENTER);
-
-        vbox.getChildren().add(hbox);
-
-        initCanvas();
         addParticlesButton();
         add10ParticlesButton();
         particleCollisionTimeline();
         addToQuadrants();
-
-        BackgroundFill bf = new BackgroundFill(Color.BLACK, CornerRadii.EMPTY , Insets.EMPTY);
-        Background bg = new Background(bf);
-        borderPane.setBackground(bg);
     }
 
     private void addToQuadrants(){
@@ -216,12 +202,7 @@ public class SecondaryFXMLController {
         logger.info("Loaded the primary scene...");
     }
 
-    private void initCanvas(){
-        canvas.setMinSize(500, 500);
-        canvas.setMaxSize(500, 500);
-        canvas.setBorder(new Border((new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
-        vbox.getChildren().add(canvas);
-    }
+
 
     private void updatePressure() {
         pvnrt.setMoles(totalNumberOfParticles);

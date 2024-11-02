@@ -5,47 +5,62 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <HBox alignment="CENTER" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="centerHBox" alignment="CENTER" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="vbox" spacing="10" style="-fx-padding: 0 5 10 5;">
-               <children>
-                  <Label prefHeight="50.0" prefWidth="135.0" style="-fx-padding: 20 10 10 10;" text="Secondary scene">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <HBox prefHeight="45.0" prefWidth="219.0">
-                     <children>
-                        <Button fx:id="btnSwitchScene" text="Switch to primary Scene" />
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <Pane prefWidth="219.0" style="-fx-background-color: Black;">
-                  </Pane>
-               </children>
-            </VBox>
+            <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="183.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-radius: 10; -fx-border-style: solid;" />
+            <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="271.0" prefWidth="54.0" spacing="10" style="-fx-padding: 0 5 10 5;" />
          </children>
       </HBox>
    </center>
    <right>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="199.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="350.0" prefWidth="156.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="add" prefHeight="26.0" prefWidth="187.0" style="-fx-background-color: lightGreen;" text="ADD 1">
+            <Button fx:id="add" prefHeight="26.0" prefWidth="187.0" style="-fx-background-color: lightblue;" text="ADD 1">
                <VBox.margin>
                   <Insets right="25.0" />
                </VBox.margin></Button>
-            <Button fx:id="add10" mnemonicParsing="false" prefHeight="25.0" prefWidth="187.0" style="-fx-background-color: lightgreen;" text="ADD 10">
+            <Button fx:id="add10" mnemonicParsing="false" prefHeight="25.0" prefWidth="187.0" style="-fx-background-color: lightblue;" text="ADD 10">
                <VBox.margin>
                   <Insets right="25.0" top="10.0" />
                </VBox.margin></Button>
          </children>
       </VBox>
    </right>
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="36.0" prefWidth="133.0" style="-fx-padding: 20 10 10 10;" text="Secondary scene">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnSwitchScene" alignment="CENTER" prefHeight="20.0" prefWidth="143.0" style="-fx-background-color: lightblue;" text="Switch to primary Scene" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" prefHeight="75.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" style="-fx-background-color: lightblue;" text="RESET">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
 </BorderPane>
