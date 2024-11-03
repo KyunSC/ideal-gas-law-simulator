@@ -44,14 +44,19 @@ public class SecondaryFXMLController {
     Pane canvas;
     @FXML
     VBox gaugeVBox;
+    @FXML
+    Button remove1;
+    @FXML
+    Button remove10;
+    @FXML
+    Button reset;
 
+    ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
     ArrayList<Particle> firstListOfParticles = new ArrayList<>();
     ArrayList<Particle> secondListOfParticles = new ArrayList<>();
     ArrayList<Particle> thirdListOfParticles = new ArrayList<>();
     ArrayList<Particle> fourthListOfParticles = new ArrayList<>();
-
-    int totalNumberOfParticles = 0;
 
     double velocityX;
     double velocityY;
@@ -59,7 +64,6 @@ public class SecondaryFXMLController {
 
     private Thermometer thermometer;
     private PVnRT pvnrt;
-
     private PressureGauge pressureGauge;
 
     @FXML
@@ -76,6 +80,9 @@ public class SecondaryFXMLController {
 
         addParticlesButton();
         add10ParticlesButton();
+        remove1Button();
+        remove10Button();
+        resetButton();
         particleCollisionTimeline();
         addToQuadrants();
     }
@@ -86,8 +93,8 @@ public class SecondaryFXMLController {
                 Duration.millis(100),
                 event -> {
                     addFirstQuadrant();
-                    //addToSecondThirdFourth(listOfParticles, secondListOfParticles);
-                    //addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
+                    addToSecondThirdFourth(listOfParticles, secondListOfParticles);
+                    addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
                     addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
                 }
         );
@@ -156,6 +163,7 @@ public class SecondaryFXMLController {
         particle.play();
         canvas.getChildren().add(particle.getCircle());
         listOfParticles.add(particle);
+        allParticles.add(particle);
         thermometer.updateThermometer();
         updatePressure();
     }
@@ -163,7 +171,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(500),
+                Duration.millis(2000),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -183,6 +191,45 @@ public class SecondaryFXMLController {
         });
     }
 
+    private void resetButton(){
+        reset.setOnAction(event -> {
+            for (int i = 0; i < allParticles.size(); i++) canvas.getChildren().remove(allParticles.get(i).getCircle());
+            allParticles.clear();
+            updatePressure();
+            pressureGauge.updateGauge();
+            thermometer.updateThermometer();
+        });
+    }
+
+    private void remove1(){
+        if (!allParticles.isEmpty()) {
+            canvas.getChildren().remove(allParticles.getLast().getCircle());
+            allParticles.removeLast();
+            updatePressure();
+            pressureGauge.updateGauge();
+        }
+        else {
+            updatePressure();
+            pressureGauge.updateGauge();
+            pvnrt.setTemperature(0);
+            thermometer.updateThermometer();
+        }
+    }
+
+    private void remove1Button(){
+        remove1.setOnAction(event -> {
+            remove1();
+        });
+    }
+
+    private void remove10Button(){
+        remove10.setOnAction(event -> {
+            for (int i = 0; i < 10; i++) {
+                if (!allParticles.isEmpty())remove1();
+            }
+            thermometer.updateThermometer();
+        });
+    }
 
     public void checkParticleParticleCollision(ArrayList<Particle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
@@ -202,10 +249,8 @@ public class SecondaryFXMLController {
         logger.info("Loaded the primary scene...");
     }
 
-
-
     private void updatePressure() {
-        pvnrt.setMoles(totalNumberOfParticles);
+        pvnrt.setMoles(allParticles.size());
         pressureGauge.updateGauge();
     }
 
