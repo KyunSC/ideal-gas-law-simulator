@@ -63,6 +63,8 @@ public class SecondaryFXMLController {
     Button play;
     @FXML
     Button fastForward;
+    @FXML
+    Slider temperatureSlider;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -303,6 +305,10 @@ public class SecondaryFXMLController {
 
     private void changeVolume(){
         canvas.setPrefWidth((volumeSlider.getValue()/100) * canvas.getMaxWidth());
+    }
+
+    private void changeVelocityByTemperature(){
+        
     }
 
     private void loadPrimaryScene(Event e) {
