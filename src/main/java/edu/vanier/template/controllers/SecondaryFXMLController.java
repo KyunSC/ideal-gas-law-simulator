@@ -57,6 +57,10 @@ public class SecondaryFXMLController {
     Button reset;
     @FXML
     Slider volumeSlider;
+    @FXML
+    Button pause;
+    @FXML
+    Button play;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -89,6 +93,8 @@ public class SecondaryFXMLController {
         add10ParticlesButton();
         remove1Button();
         remove10Button();
+        pauseFunction();
+        playFunction();
         resetButton();
         particleCollisionTimeline();
         addToQuadrants();
@@ -140,8 +146,7 @@ public class SecondaryFXMLController {
             }
         }
     }
-
-    public static void setTimeout(Runnable runnable, int delay){
+    /*public static void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
             try {
                 Thread.sleep(delay);
@@ -151,7 +156,7 @@ public class SecondaryFXMLController {
                 System.err.println(e);
             }
         }).start();
-    }
+    }*/
 
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
@@ -206,6 +211,22 @@ public class SecondaryFXMLController {
             updatePressure();
             pressureGauge.updateGauge();
             thermometer.updateThermometer();
+        });
+    }
+
+    private void pauseFunction(){
+        pause.setOnAction(event -> {
+            for (int i = 0; i < allParticles.size(); i++) {
+                allParticles.get(i).pause();
+            }
+        });
+    }
+
+    private void playFunction(){
+        play.setOnAction(event -> {
+            for (int i = 0; i < allParticles.size(); i++) {
+                allParticles.get(i).play();
+            }
         });
     }
 

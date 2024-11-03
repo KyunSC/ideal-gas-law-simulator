@@ -43,6 +43,11 @@ public class Particle {
     public void play(){timeline.play();}
 
     /**
+     * Function for pausing the timeline associated with the specific particle
+     */
+    public void pause(){timeline.pause();}
+
+    /**
      * Timeline for the movement of the circle
      * Timeline with a duration of 10 millis that repeats the function moveCircle()
      * Timeline plays and infinite amount of time

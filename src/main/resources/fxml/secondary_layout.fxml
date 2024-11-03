@@ -12,7 +12,7 @@
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <HBox fx:id="centerHBox" alignment="CENTER" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="centerHBox" alignment="CENTER" fillHeight="false" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
          <children>
             <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-radius: 10; -fx-border-style: solid;">
                <children>
@@ -25,6 +25,7 @@
                   <Button fx:id="add" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: lightblue;" text="+ 1" />
                   <Button fx:id="add10" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: lightblue;" text="+ 10" />
                </children></VBox>
+            <Slider majorTickUnit="100.0" max="1000.0" minorTickCount="10" orientation="VERTICAL" prefHeight="250.0" prefWidth="59.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
          </children>
       </HBox>
    </center>
@@ -54,6 +55,8 @@
                   <Insets />
                </HBox.margin>
             </Button>
+            <Button fx:id="pause" mnemonicParsing="false" style="-fx-background-color: lightblue;" text="▐▐" />
+            <Button fx:id="play" mnemonicParsing="false" style="-fx-background-color: lightblue;" text="▶" />
          </children>
          <BorderPane.margin>
             <Insets />
