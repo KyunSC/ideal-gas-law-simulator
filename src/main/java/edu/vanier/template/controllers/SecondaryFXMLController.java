@@ -63,6 +63,10 @@ public class SecondaryFXMLController {
     Button play;
     @FXML
     Button fastForward;
+    @FXML
+    Button heatButton;
+    @FXML
+    Button coolButton;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -73,7 +77,7 @@ public class SecondaryFXMLController {
 
     double velocityX;
     double velocityY;
-    double velocity = 5;
+    double velocity = 1;
 
     private Thermometer thermometer;
     private PVnRT pvnrt;
@@ -101,6 +105,51 @@ public class SecondaryFXMLController {
         resetButton();
         particleCollisionTimeline();
         addToQuadrants();
+        setupTemperatureControls();
+    }
+
+    private void setupTemperatureControls() {
+        Timeline heatTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(1)));
+        heatTimeline.setCycleCount(Animation.INDEFINITE);
+
+        heatButton.setOnMousePressed(event -> heatTimeline.play());
+        heatButton.setOnMouseReleased(event -> heatTimeline.stop());
+
+        Timeline coolTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(-1)));
+        coolTimeline.setCycleCount(Animation.INDEFINITE);
+
+        coolButton.setOnMousePressed(event -> coolTimeline.play());
+        coolButton.setOnMouseReleased(event -> coolTimeline.stop());
+    }
+
+    private void updateParticlesWithTemperature(double newTemperature) {
+        if (newTemperature <= 0) {
+            for (Particle particle : allParticles) {
+                particle.setVelocityX(0);
+                particle.setVelocityY(0);
+            }
+        } else {
+            double referenceTemperature = 300;
+            double scalingFactor = Math.sqrt(newTemperature / referenceTemperature);
+
+            for (Particle particle : allParticles) {
+                particle.setVelocityX(particle.getVelocityX() * scalingFactor);
+                particle.setVelocityY(particle.getVelocityY() * scalingFactor);
+            }
+        }
+    }
+
+    private void adjustTemperature(int tempChange) {
+        int temperatureIncrement = 10;
+        double newTemperature = pvnrt.getTemperature() + tempChange * temperatureIncrement;
+
+        newTemperature = Math.min(1000, Math.max(0, newTemperature));
+        pvnrt.setTemperature(newTemperature);
+
+        updateParticlesWithTemperature(newTemperature);
+        updatePressure();
+
+        thermometer.updateThermometer();
     }
 
     private void addToQuadrants(){
