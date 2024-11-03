@@ -14,9 +14,9 @@
    <center>
       <HBox fx:id="centerHBox" alignment="CENTER" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="337.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-radius: 10; -fx-border-style: solid;">
+            <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-radius: 10; -fx-border-style: solid;">
                <children>
-                  <Slider layoutY="510.0" majorTickUnit="10.0" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <Slider fx:id="volumeSlider" layoutY="510.0" majorTickUnit="10.0" min="10.0" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" />
                </children></Pane>
             <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="271.0" prefWidth="54.0" spacing="10" style="-fx-padding: 0 5 10 5;">
                <children>
@@ -36,7 +36,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnSwitchScene" alignment="CENTER" prefHeight="20.0" prefWidth="143.0" style="-fx-background-color: lightblue;" text="Switch to primary Scene" />
+            <Button fx:id="btnSwitchScene" alignment="CENTER" prefHeight="20.0" prefWidth="143.0" style="-fx-background-color: lightblue;" text="Back to Menu" />
          </children>
          <opaqueInsets>
             <Insets />

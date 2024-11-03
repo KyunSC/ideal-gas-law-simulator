@@ -12,6 +12,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -54,6 +55,8 @@ public class SecondaryFXMLController {
     Button remove10;
     @FXML
     Button reset;
+    @FXML
+    Slider volumeSlider;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -100,6 +103,7 @@ public class SecondaryFXMLController {
                     addToSecondThirdFourth(listOfParticles, secondListOfParticles);
                     addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
                     addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
+                    changeVolume();
                 }
         );
         timeline.getKeyFrames().add(kf);
@@ -246,6 +250,10 @@ public class SecondaryFXMLController {
                 }
             }
         }
+    }
+
+    private void changeVolume(){
+        canvas.setPrefWidth((volumeSlider.getValue()/100) * canvas.getMaxWidth());
     }
 
     private void loadPrimaryScene(Event e) {
