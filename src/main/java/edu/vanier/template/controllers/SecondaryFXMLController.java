@@ -27,7 +27,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * FXML controller class for a secondary scene.
- *
+ * Contains all the FXML objects that will need behaviors
+ * allParticle Arraylist used to keep all the particles
+ * Pane is separated in 4 quadrants
+ * Top Left is Quadrant 1, Top Right is Quadrant 2, Bottom Left is Quadrant 3, Bottom Right is Quadrant 4
+ * Quadrants are used to be more effective when detecting collisions between Particles
  *
  */
 public class SecondaryFXMLController {
