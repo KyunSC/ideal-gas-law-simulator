@@ -61,6 +61,8 @@ public class SecondaryFXMLController {
     Button pause;
     @FXML
     Button play;
+    @FXML
+    Button fastForward;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -95,6 +97,7 @@ public class SecondaryFXMLController {
         remove10Button();
         pauseFunction();
         playFunction();
+        fastForwardFunction();
         resetButton();
         particleCollisionTimeline();
         addToQuadrants();
@@ -227,6 +230,31 @@ public class SecondaryFXMLController {
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).play();
             }
+        });
+    }
+
+    private void fastForwardFunction(){
+        Timeline timeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(
+                Duration.millis(1),
+                event1 -> {
+                    for (Particle allParticle : allParticles) {
+                        allParticle.play();
+                    }
+                }
+        );
+        timeline.setOnFinished(event1 -> {
+            for (Particle allParticle : allParticles) {
+                allParticle.play();
+            }
+            for (int i = 0; i < allParticles.size(); i++) {
+                allParticles.get(i).pause();
+            }
+        });
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(10);
+        fastForward.setOnAction(event -> {
+            timeline.play();
         });
     }
 

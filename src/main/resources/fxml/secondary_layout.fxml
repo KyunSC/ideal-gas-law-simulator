@@ -57,6 +57,7 @@
             </Button>
             <Button fx:id="pause" mnemonicParsing="false" style="-fx-background-color: lightblue;" text="▐▐" />
             <Button fx:id="play" mnemonicParsing="false" style="-fx-background-color: lightblue;" text="▶" />
+            <Button fx:id="fastForward" mnemonicParsing="false" style="-fx-background-color: lightblue;" text="⏮" />
          </children>
          <BorderPane.margin>
             <Insets />
