@@ -298,6 +298,10 @@ public class SecondaryFXMLController {
     private void remove1(){
         if (!allParticles.isEmpty()) {
             canvas.getChildren().remove(allParticles.getLast().getCircle());
+            if (firstListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
+            if (secondListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
+            if (thirdListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
+            if (fourthListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
             allParticles.removeLast();
             updatePressure();
             pressureGauge.updateGauge();
@@ -336,12 +340,12 @@ public class SecondaryFXMLController {
     public void checkParticleParticleCollision(ArrayList<Particle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
-                /*if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
+                if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
                     targetListOfParticles.get(i).velocityX *= -1;
                     targetListOfParticles.get(j).velocityX *= -1;
                     targetListOfParticles.get(i).velocityY *= -1;
                     targetListOfParticles.get(j).velocityY *= -1;
-                }*/
+                }
             }
         }
 
