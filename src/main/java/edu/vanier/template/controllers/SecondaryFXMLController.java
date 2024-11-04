@@ -8,9 +8,6 @@ import edu.vanier.template.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
@@ -20,11 +17,7 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 /**
  * FXML controller class for a secondary scene.
@@ -77,6 +70,8 @@ public class SecondaryFXMLController {
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
+    private final double baseParticleVelocity = 2;
+    private int numberOfParticles = 0;
 
     @FXML
     public void initialize() {
@@ -125,10 +120,8 @@ public class SecondaryFXMLController {
                 System.out.println(particle.getVelocity());
             }
         } else {
-
-
             for (Particle particle : allParticles) {
-                particle.setVelocity(calculateRMS(newTemperature) / calculateRMS(300));
+                particle.setVelocity((baseParticleVelocity * calculateRMS(newTemperature)) / calculateRMS(300));
             }
         }
     }
@@ -213,15 +206,20 @@ public class SecondaryFXMLController {
     }
 
     private void addParticle() {
+        numberOfParticles++;
+        updatePressure();
+        thermometer.updateThermometer();
+
         Circle circle = new Circle(11,11,10,Color.RED);
-        Particle particle = new Particle(circle, canvas);
+        double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
+        Particle particle = new Particle(circle, particleVelocity, canvas);
         particle.createTimeline();
         particle.play();
         canvas.getChildren().add(particle.getCircle());
         listOfParticles.add(particle);
         allParticles.add(particle);
-        thermometer.updateThermometer();
-        updatePressure();
+
+
     }
 
     private void particleCollisionTimeline() {
@@ -300,6 +298,7 @@ public class SecondaryFXMLController {
 
     private void remove1(){
         if (!allParticles.isEmpty()) {
+            numberOfParticles--;
             canvas.getChildren().remove(allParticles.getLast().getCircle());
             allParticles.removeLast();
             updatePressure();
@@ -347,7 +346,7 @@ public class SecondaryFXMLController {
     }
 
     private void updatePressure() {
-        pvnrt.setMoles(allParticles.size());
+        pvnrt.setMoles(numberOfParticles);
         pressureGauge.updateGauge();
     }
 

@@ -13,7 +13,6 @@ public class Particle {
     Circle circle;
     public double velocityX;
     public double velocityY;
-
     public double velocity;
     public double particleAngle;
     Timeline timeline;
@@ -26,9 +25,9 @@ public class Particle {
      *
      * @param canvas canvas
      */
-    public Particle(Circle circle, Pane canvas){
+    public Particle(Circle circle, double velocity, Pane canvas){
         this.circle = circle;
-        this.velocity = 1;
+        this.velocity = velocity;
         this.velocityX = Math.random()*velocity;
         this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
