@@ -13,6 +13,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +61,8 @@ public class SecondaryFXMLController {
     Button heatButton;
     @FXML
     Button coolButton;
-
-
+    @FXML
+    Line lid;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -187,17 +188,6 @@ public class SecondaryFXMLController {
             }
         }
     }
-    /*public static void setTimeout(Runnable runnable, int delay){
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            }
-            catch (Exception e){
-                System.err.println(e);
-            }
-        }).start();
-    }*/
 
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
@@ -380,6 +370,8 @@ public class SecondaryFXMLController {
             canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
+            lid.setStartX(-240);
+            lid.setEndX(-240 + (440 * (volumeSlider.getValue()/volumeSlider.getMax())));
         } ));
     }
 
