@@ -27,10 +27,15 @@ public class PressureGauge {
         pressureGauge.setPrefSize(125, 125);
         pressureGauge.setMinSize(125, 125);
         pressureGauge.setMaxSize(125, 125);
-        pressureGauge.setSkinType(Gauge.SkinType.GAUGE);
-        pressureGauge.setForegroundBaseColor(Color.BLACK);
+        pressureGauge.setSkinType(Gauge.SkinType.MODERN);
+        pressureGauge.setForegroundBaseColor(Color.WHITE);
+        pressureGauge.setThresholdColor(Color.RED);
+        pressureGauge.setThreshold(170);
+        pressureGauge.setThresholdVisible(true);
         pressureGauge.setInteractive(true);
         pressureGauge.setOnButtonPressed(buttonEvent -> System.out.println("Pressure Gauge button pressed."));
+//        pressureGauge.setAnimated(true);
+//        pressureGauge.setAnimationDuration(500);
     }
 
     public void updateGauge() {

@@ -27,10 +27,15 @@ public class Thermometer {
         thermometer.setPrefSize(125, 125);
         thermometer.setMinSize(125, 125);
         thermometer.setMaxSize(125, 125);
-        thermometer.setSkinType(Gauge.SkinType.GAUGE);
-        thermometer.setForegroundBaseColor(Color.BLACK);
+        thermometer.setSkinType(Gauge.SkinType.MODERN);
+        thermometer.setForegroundBaseColor(Color.WHITE);
+        thermometer.setThresholdColor(Color.RED);
+        thermometer.setThreshold(800);
+        thermometer.setThresholdVisible(true);
         thermometer.setInteractive(true);
         thermometer.setOnButtonPressed(buttonEvent -> System.out.println("Thermometer button pressed."));
+//        thermometer.setAnimated(true);
+//        thermometer.setAnimationDuration(500);
     }
 
     public void updateThermometer() {
