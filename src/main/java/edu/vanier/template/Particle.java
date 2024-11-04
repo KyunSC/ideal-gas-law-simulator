@@ -13,6 +13,9 @@ public class Particle {
     Circle circle;
     public double velocityX;
     public double velocityY;
+
+    public double velocity;
+    public double particleAngle;
     Timeline timeline;
     Pane canvas;
     BoundingBox boundingBox = new BoundingBox(10, 10, 480,480);
@@ -20,14 +23,15 @@ public class Particle {
     /**
      *
      * @param circle its the shape of the particle
-     * @param velocityX the amount that the circle moves per tick
-     * @param velocityY the amount that the circle moves per tick
+     *
      * @param canvas canvas
      */
-    public Particle(Circle circle, double velocityX, double velocityY, Pane canvas){
+    public Particle(Circle circle, Pane canvas){
         this.circle = circle;
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
+        this.velocity = 1;
+        this.velocityX = Math.random()*velocity;
+        this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
+        this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
     }
 
@@ -39,12 +43,24 @@ public class Particle {
         return velocityY;
     }
 
-    public void setVelocityX(double velocityX) {
-        this.velocityX = velocityX;
+    public void setVelocity(double velocity) {
+        if (velocity == 0) {
+            this.velocity = 0;
+            this.velocityX =0;
+            this.velocityY=0;
+        } else {
+            if (this.velocity != 0) {
+                this.particleAngle = Math.atan2(velocityY, velocityX);
+            }
+            this.velocity = velocity;
+
+            velocityX = velocity * Math.cos(particleAngle); // New x velocity
+            velocityY = velocity * Math.sin(particleAngle); // New y velocity
+        }
     }
 
-    public void setVelocityY(double velocityY) {
-        this.velocityY = velocityY;
+    public double getVelocity() {
+        return velocity;
     }
 
     /**

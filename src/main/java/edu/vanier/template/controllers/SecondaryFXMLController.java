@@ -74,11 +74,6 @@ public class SecondaryFXMLController {
     ArrayList<Particle> secondListOfParticles = new ArrayList<>();
     ArrayList<Particle> thirdListOfParticles = new ArrayList<>();
     ArrayList<Particle> fourthListOfParticles = new ArrayList<>();
-
-    double velocityX;
-    double velocityY;
-    double velocity = 1;
-
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
@@ -106,6 +101,7 @@ public class SecondaryFXMLController {
         particleCollisionTimeline();
         addToQuadrants();
         setupTemperatureControls();
+        initializeVolumeSlider();
     }
 
     private void setupTemperatureControls() {
@@ -125,16 +121,14 @@ public class SecondaryFXMLController {
     private void updateParticlesWithTemperature(double newTemperature) {
         if (newTemperature <= 0) {
             for (Particle particle : allParticles) {
-                particle.setVelocityX(0);
-                particle.setVelocityY(0);
+               particle.setVelocity(0);
+                System.out.println(particle.getVelocity());
             }
         } else {
-            double referenceTemperature = 300;
-            double scalingFactor = Math.sqrt(newTemperature / referenceTemperature);
+
 
             for (Particle particle : allParticles) {
-                particle.setVelocityX(particle.getVelocityX() * scalingFactor);
-                particle.setVelocityY(particle.getVelocityY() * scalingFactor);
+                particle.setVelocity(calculateRMS(newTemperature) / calculateRMS(300));
             }
         }
     }
@@ -161,7 +155,6 @@ public class SecondaryFXMLController {
                     addToSecondThirdFourth(listOfParticles, secondListOfParticles);
                     addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
                     addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
-                    changeVolume();
                 }
         );
         timeline.getKeyFrames().add(kf);
@@ -221,9 +214,7 @@ public class SecondaryFXMLController {
 
     private void addParticle() {
         Circle circle = new Circle(11,11,10,Color.RED);
-        velocityX = Math.random()*velocity;
-        velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
-        Particle particle = new Particle(circle, velocityX, velocityY, canvas);
+        Particle particle = new Particle(circle, canvas);
         particle.createTimeline();
         particle.play();
         canvas.getChildren().add(particle.getCircle());
@@ -350,10 +341,6 @@ public class SecondaryFXMLController {
         }
     }
 
-    private void changeVolume(){
-        canvas.setPrefWidth((volumeSlider.getValue()/100) * canvas.getMaxWidth());
-    }
-
     private void loadPrimaryScene(Event e) {
         MainApp.switchScene(MainApp.MAINAPP_LAYOUT, new MainAppFXMLController());
         logger.info("Loaded the primary scene...");
@@ -362,6 +349,18 @@ public class SecondaryFXMLController {
     private void updatePressure() {
         pvnrt.setMoles(allParticles.size());
         pressureGauge.updateGauge();
+    }
+
+    private void initializeVolumeSlider() {
+        volumeSlider.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
+            pvnrt.setVolume(volumeSlider.getValue());
+            updatePressure();
+        } ));
+    }
+
+    private double calculateRMS(double temp) {
+        return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass());
     }
 
 }

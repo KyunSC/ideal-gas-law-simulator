@@ -11,7 +11,7 @@
          <children>
             <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-radius: 10; -fx-border-style: solid;">
                <children>
-                  <Slider fx:id="volumeSlider" layoutY="510.0" majorTickUnit="10.0" min="10.0" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" />
+                  <Slider fx:id="volumeSlider" blockIncrement="1.0" layoutY="510.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
                </children></Pane>
             <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="271.0" prefWidth="54.0" spacing="10" style="-fx-padding: 0 5 10 5;">
                <children>
