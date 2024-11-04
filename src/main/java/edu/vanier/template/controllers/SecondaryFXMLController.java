@@ -72,7 +72,7 @@ public class SecondaryFXMLController {
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
-    private final double baseParticleVelocity = 2;
+    private final double baseParticleVelocity = 3;
 
     @FXML
     public void initialize() {
