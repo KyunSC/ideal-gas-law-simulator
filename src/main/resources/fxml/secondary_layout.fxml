@@ -26,13 +26,14 @@
                   <Button fx:id="coolButton" mnemonicParsing="false" prefHeight="25.6" prefWidth="41.6" text="Cool" textFill="#2689c7" />
                </children>
             </VBox>
+
          </children>
       </HBox>
    </center>
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="36.0" prefWidth="133.0" style="-fx-padding: 20 10 10 10;" text="Secondary scene">
+            <Label alignment="CENTER" prefHeight="48.0" prefWidth="185.0" style="-fx-padding: 20 10 10 10;" text="Ideal Gas Law Simulation">
                <font>
                   <Font size="14.0" />
                </font>

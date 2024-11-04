@@ -61,6 +61,8 @@ public class SecondaryFXMLController {
     @FXML
     Button coolButton;
 
+
+
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
     ArrayList<Particle> firstListOfParticles = new ArrayList<>();
