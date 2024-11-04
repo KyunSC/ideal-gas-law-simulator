@@ -2,9 +2,8 @@ package edu.vanier.template.graphics;
 
 import edu.vanier.template.calculations.PVnRT;
 import eu.hansolo.medusa.Gauge;
-import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class Thermometer {
     private PVnRT pvnrt;
@@ -22,19 +21,16 @@ public class Thermometer {
         thermometer.setMinValue(0);
         thermometer.setMaxValue(1000);
         thermometer.setValue(pvnrt.getTemperature());
-
         thermometer.setMajorTickSpace(50);
         thermometer.setMinorTickSpace(10);
         thermometer.setTickLabelDecimals(0);
-        thermometer.setTickLabelsVisible(true);
-        thermometer.setTickMarkSectionsVisible(true);
-
         thermometer.setPrefSize(125, 125);
         thermometer.setMinSize(125, 125);
         thermometer.setMaxSize(125, 125);
-
-        thermometer.zeroColorProperty();
-
+        thermometer.setSkinType(Gauge.SkinType.GAUGE);
+        thermometer.setForegroundBaseColor(Color.BLACK);
+        thermometer.setInteractive(true);
+        thermometer.setOnButtonPressed(buttonEvent -> System.out.println("Thermometer button pressed."));
     }
 
     public void updateThermometer() {

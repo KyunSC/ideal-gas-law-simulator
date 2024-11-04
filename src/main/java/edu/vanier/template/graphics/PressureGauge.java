@@ -21,16 +21,16 @@ public class PressureGauge {
         pressureGauge.setMinValue(0);
         pressureGauge.setMaxValue(200);
         pressureGauge.setValue(pvnrt.getPressure());
-
         pressureGauge.setMajorTickSpace(20);
         pressureGauge.setMinorTickSpace(5);
         pressureGauge.setTickLabelDecimals(0);
-        pressureGauge.setTickLabelsVisible(true);
-        pressureGauge.setTickMarkSectionsVisible(true);
-
         pressureGauge.setPrefSize(125, 125);
         pressureGauge.setMinSize(125, 125);
         pressureGauge.setMaxSize(125, 125);
+        pressureGauge.setSkinType(Gauge.SkinType.GAUGE);
+        pressureGauge.setForegroundBaseColor(Color.BLACK);
+        pressureGauge.setInteractive(true);
+        pressureGauge.setOnButtonPressed(buttonEvent -> System.out.println("Pressure Gauge button pressed."));
     }
 
     public void updateGauge() {
