@@ -51,6 +51,8 @@ public class PVnRT {
         return pressure;
     }
 
+    public void setPressure(double pressure){this.pressure = pressure;}
+
     public double getMoles() {
         return moles;
     }
