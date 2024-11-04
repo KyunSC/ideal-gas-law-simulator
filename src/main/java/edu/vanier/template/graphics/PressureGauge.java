@@ -9,7 +9,6 @@ public class PressureGauge {
     private Gauge pressureGauge;
     private PVnRT pvnrt;
 
-    // Constructor
     public PressureGauge(PVnRT pvnrt) {
         this.pvnrt = pvnrt;
         createGauge();

@@ -6,6 +6,7 @@ public class PVnRT {
     private double volume;
     private double pressure;
     private double moles;
+    private double molarMass;
 
     /**
      * default constructor
@@ -16,6 +17,7 @@ public class PVnRT {
         this.volume = 10; //L
         this.moles = 0; //mol
         this.pressure = calculatePressure(); //atm
+        this.molarMass = 0.0320; //default molar mass for oxygen
     }
 
     public double calculatePressure() {
@@ -62,6 +64,14 @@ public class PVnRT {
         }
         this.moles = moles;
         calculatePressure();
+    }
+
+    public double getrConstant() {
+        return rConstant;
+    }
+
+    public double getMolarMass() {
+        return molarMass;
     }
 
     public String toString() {

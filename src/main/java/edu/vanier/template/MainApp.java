@@ -32,9 +32,10 @@ public class MainApp extends Application {
             logger.info("Bootstrapping the application...");
             // Load the scene of the primary stage.
             Parent root = loadFXML(MAINAPP_LAYOUT, new MainAppFXMLController());
-            scene = new Scene(root, 1280, 720);
+            scene = new Scene(root);
             primaryStage.setScene(scene);
-            primaryStage.sizeToScene();
+            primaryStage.setMaximized(true);
+            primaryStage.setTitle("Gas Simulation");
             // Put this appliation's main window on top of other already-opened windows
             // upon launching the app.
             primaryStage.setAlwaysOnTop(true);

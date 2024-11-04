@@ -8,9 +8,6 @@ import edu.vanier.template.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
@@ -20,11 +17,7 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 /**
  * FXML controller class for a secondary scene.
@@ -64,7 +57,11 @@ public class SecondaryFXMLController {
     @FXML
     Button fastForward;
     @FXML
-    Slider temperatureSlider;
+    Button heatButton;
+    @FXML
+    Button coolButton;
+
+
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -72,14 +69,11 @@ public class SecondaryFXMLController {
     ArrayList<Particle> secondListOfParticles = new ArrayList<>();
     ArrayList<Particle> thirdListOfParticles = new ArrayList<>();
     ArrayList<Particle> fourthListOfParticles = new ArrayList<>();
-
-    double velocityX;
-    double velocityY;
-    double velocity = 5;
-
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
+    private final double baseParticleVelocity = 2;
+    private int numberOfParticles = 0;
 
     @FXML
     public void initialize() {
@@ -103,6 +97,48 @@ public class SecondaryFXMLController {
         resetButton();
         particleCollisionTimeline();
         addToQuadrants();
+        setupTemperatureControls();
+        initializeVolumeSlider();
+    }
+
+    private void setupTemperatureControls() {
+        Timeline heatTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(1)));
+        heatTimeline.setCycleCount(Animation.INDEFINITE);
+
+        heatButton.setOnMousePressed(event -> heatTimeline.play());
+        heatButton.setOnMouseReleased(event -> heatTimeline.stop());
+
+        Timeline coolTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(-1)));
+        coolTimeline.setCycleCount(Animation.INDEFINITE);
+
+        coolButton.setOnMousePressed(event -> coolTimeline.play());
+        coolButton.setOnMouseReleased(event -> coolTimeline.stop());
+    }
+
+    private void updateParticlesWithTemperature(double newTemperature) {
+        if (newTemperature <= 0) {
+            for (Particle particle : allParticles) {
+               particle.setVelocity(0);
+                System.out.println(particle.getVelocity());
+            }
+        } else {
+            for (Particle particle : allParticles) {
+                particle.setVelocity((baseParticleVelocity * calculateRMS(newTemperature)) / calculateRMS(300));
+            }
+        }
+    }
+
+    private void adjustTemperature(int tempChange) {
+        int temperatureIncrement = 10;
+        double newTemperature = pvnrt.getTemperature() + tempChange * temperatureIncrement;
+
+        newTemperature = Math.min(1000, Math.max(0, newTemperature));
+        pvnrt.setTemperature(newTemperature);
+
+        updateParticlesWithTemperature(newTemperature);
+        updatePressure();
+
+        thermometer.updateThermometer();
     }
 
     private void addToQuadrants(){
@@ -114,7 +150,6 @@ public class SecondaryFXMLController {
                     addToSecondThirdFourth(listOfParticles, secondListOfParticles);
                     addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
                     addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
-                    changeVolume();
                 }
         );
         timeline.getKeyFrames().add(kf);
@@ -173,17 +208,20 @@ public class SecondaryFXMLController {
     }
 
     private void addParticle() {
+        numberOfParticles++;
+        updatePressure();
+        thermometer.updateThermometer();
+
         Circle circle = new Circle(11,11,10,Color.RED);
-        velocityX = Math.random()*velocity;
-        velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
-        Particle particle = new Particle(circle, velocityX, velocityY, canvas);
+        double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
+        Particle particle = new Particle(circle, particleVelocity, canvas);
         particle.createTimeline();
         particle.play();
         canvas.getChildren().add(particle.getCircle());
         listOfParticles.add(particle);
         allParticles.add(particle);
-        thermometer.updateThermometer();
-        updatePressure();
+
+
     }
 
     private void particleCollisionTimeline() {
@@ -262,6 +300,7 @@ public class SecondaryFXMLController {
 
     private void remove1(){
         if (!allParticles.isEmpty()) {
+            numberOfParticles--;
             canvas.getChildren().remove(allParticles.getLast().getCircle());
             allParticles.removeLast();
             updatePressure();
@@ -303,22 +342,26 @@ public class SecondaryFXMLController {
         }
     }
 
-    private void changeVolume(){
-        canvas.setPrefWidth((volumeSlider.getValue()/100) * canvas.getMaxWidth());
-    }
-
-    private void changeVelocityByTemperature(){
-        
-    }
-
     private void loadPrimaryScene(Event e) {
         MainApp.switchScene(MainApp.MAINAPP_LAYOUT, new MainAppFXMLController());
         logger.info("Loaded the primary scene...");
     }
 
     private void updatePressure() {
-        pvnrt.setMoles(allParticles.size());
+        pvnrt.setMoles(numberOfParticles);
         pressureGauge.updateGauge();
+    }
+
+    private void initializeVolumeSlider() {
+        volumeSlider.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
+            pvnrt.setVolume(volumeSlider.getValue());
+            updatePressure();
+        } ));
+    }
+
+    private double calculateRMS(double temp) {
+        return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass());
     }
 
 }
