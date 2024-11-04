@@ -247,6 +247,10 @@ public class SecondaryFXMLController {
         reset.setOnAction(event -> {
             for (int i = 0; i < allParticles.size(); i++) canvas.getChildren().remove(allParticles.get(i).getCircle());
             allParticles.clear();
+            firstListOfParticles.clear();
+            secondListOfParticles.clear();
+            thirdListOfParticles.clear();
+            fourthListOfParticles.clear();
             pvnrt.setTemperature(0);
             updatePressure();
             pressureGauge.updateGauge();
