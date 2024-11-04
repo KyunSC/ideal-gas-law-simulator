@@ -100,7 +100,6 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
-        changeMolarMass(1);
     }
 
     private void setupTemperatureControls() {
@@ -146,7 +145,7 @@ public class SecondaryFXMLController {
     private void addToQuadrants(){
         Timeline timeline = new Timeline();
         KeyFrame kf = new KeyFrame(
-                Duration.millis(100),
+                Duration.millis(1),
                 event -> {
                     addFirstQuadrant();
                     addToSecondThirdFourth(listOfParticles, secondListOfParticles);
@@ -213,7 +212,7 @@ public class SecondaryFXMLController {
         if (!paused) {
             totalParticleCount++;
             updatePressure();
-            Circle circle = new Circle(11, 11, 10, Color.RED);
+            Circle circle = new Circle(40, 40, 10, Color.RED);
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
             Particle particle = new Particle(circle, particleVelocity, canvas);
             particle.createTimeline();
@@ -228,7 +227,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(3000),
+                Duration.millis(1),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
