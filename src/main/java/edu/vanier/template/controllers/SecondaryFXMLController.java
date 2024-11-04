@@ -207,9 +207,6 @@ public class SecondaryFXMLController {
     }
 
     private void addParticle() {
-        updatePressure();
-        thermometer.updateThermometer();
-
         Circle circle = new Circle(11,11,10,Color.RED);
         double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
         Particle particle = new Particle(circle, particleVelocity, canvas);
@@ -218,6 +215,8 @@ public class SecondaryFXMLController {
         canvas.getChildren().add(particle.getCircle());
         listOfParticles.add(particle);
         allParticles.add(particle);
+        updatePressure();
+        thermometer.updateThermometer();
     }
 
     private void particleCollisionTimeline() {
@@ -358,7 +357,7 @@ public class SecondaryFXMLController {
     }
 
     private double calculateRMS(double temp) {
-        return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass());
+        return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
     }
 
 }
