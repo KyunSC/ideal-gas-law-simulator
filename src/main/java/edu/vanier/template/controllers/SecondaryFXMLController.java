@@ -223,7 +223,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(4000),
+                Duration.millis(3000),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -343,7 +343,7 @@ public class SecondaryFXMLController {
                 if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
                     targetListOfParticles.get(i).velocityX *= -1;
                     targetListOfParticles.get(j).velocityX *= -1;
-                    targetListOfParticles.get(i).velocityY *= -1;
+                    //targetListOfParticles.get(i).velocityY *= -1;
                     targetListOfParticles.get(j).velocityY *= -1;
                 }
             }
