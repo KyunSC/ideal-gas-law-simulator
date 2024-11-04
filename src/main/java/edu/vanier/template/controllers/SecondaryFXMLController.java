@@ -69,11 +69,11 @@ public class SecondaryFXMLController {
     ArrayList<Particle> secondListOfParticles = new ArrayList<>();
     ArrayList<Particle> thirdListOfParticles = new ArrayList<>();
     ArrayList<Particle> fourthListOfParticles = new ArrayList<>();
-    boolean paused = false;
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
     private double baseParticleVelocity = 3;
+    boolean paused = false;
     private double totalParticleCount;
 
     @FXML
@@ -100,6 +100,7 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
+        changeMolarMass(1);
     }
 
     private void setupTemperatureControls() {
@@ -213,7 +214,7 @@ public class SecondaryFXMLController {
             totalParticleCount++;
             updatePressure();
             Circle circle = new Circle(11, 11, 10, Color.RED);
-            double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature()) / calculateRMS(300));
+            double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
             Particle particle = new Particle(circle, particleVelocity, canvas);
             particle.createTimeline();
             particle.play();
@@ -388,11 +389,13 @@ public class SecondaryFXMLController {
     }
 
     private void changeMolarMass(double molarMass) {
-        double initialMolarMass = pvnrt.getMolarMass();
+        double oldMolarMass = pvnrt.getMolarMass();
         pvnrt.setMolarMass(molarMass);
-        // equation based on RMS gas speed equation. Calculates new base speed
-        baseParticleVelocity = Math.sqrt((Math.pow(baseParticleVelocity, 2) * initialMolarMass) / molarMass);
-        System.out.println(baseParticleVelocity);
+        baseParticleVelocity = 1;
+        for (Particle particle : allParticles) {
+            System.out.println(baseParticleVelocity);
+            particle.setVelocity(1.5);
         }
     }
 
+}
