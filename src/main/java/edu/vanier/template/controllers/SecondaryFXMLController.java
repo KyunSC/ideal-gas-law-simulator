@@ -207,6 +207,8 @@ public class SecondaryFXMLController {
     }
 
     private void addParticle() {
+        if (pvnrt.getTemperature() == 0) pvnrt.setTemperature(300);
+        updatePressure();
         Circle circle = new Circle(11,11,10,Color.RED);
         double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
         Particle particle = new Particle(circle, particleVelocity, canvas);
@@ -215,7 +217,6 @@ public class SecondaryFXMLController {
         canvas.getChildren().add(particle.getCircle());
         listOfParticles.add(particle);
         allParticles.add(particle);
-        updatePressure();
         thermometer.updateThermometer();
     }
 
@@ -300,9 +301,17 @@ public class SecondaryFXMLController {
             allParticles.removeLast();
             updatePressure();
             pressureGauge.updateGauge();
+            if (allParticles.isEmpty()){
+                pvnrt.setPressure(0);
+                pvnrt.setMoles(0);
+                pressureGauge.updateGauge();
+                pvnrt.setTemperature(0);
+                thermometer.updateThermometer();
+            }
         }
         else {
-            updatePressure();
+            pvnrt.setPressure(0);
+            pvnrt.setMoles(0);
             pressureGauge.updateGauge();
             pvnrt.setTemperature(0);
             thermometer.updateThermometer();
@@ -318,7 +327,7 @@ public class SecondaryFXMLController {
     private void remove10Button(){
         remove10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
-                if (!allParticles.isEmpty())remove1();
+                remove1();
             }
             thermometer.updateThermometer();
         });
@@ -327,15 +336,16 @@ public class SecondaryFXMLController {
     public void checkParticleParticleCollision(ArrayList<Particle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
-                if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
+                /*if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
                     targetListOfParticles.get(i).velocityX *= -1;
-                    targetListOfParticles.get(i).getCircle().setCenterX((targetListOfParticles.get(i).getCircle().getCenterX() + 2 * targetListOfParticles.get(i).velocityX));
                     targetListOfParticles.get(j).velocityX *= -1;
                     targetListOfParticles.get(i).velocityY *= -1;
                     targetListOfParticles.get(j).velocityY *= -1;
-                }
+                }*/
             }
         }
+
+
     }
 
     private void loadPrimaryScene(Event e) {
@@ -344,7 +354,8 @@ public class SecondaryFXMLController {
     }
 
     private void updatePressure() {
-        pvnrt.setMoles(allParticles.size());
+        if (allParticles.isEmpty())pvnrt.setMoles(allParticles.size()+1);
+        else pvnrt.setMoles(allParticles.size());
         pressureGauge.updateGauge();
     }
 

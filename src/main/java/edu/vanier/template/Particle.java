@@ -45,8 +45,8 @@ public class Particle {
     public void setVelocity(double velocity) {
         if (velocity == 0) {
             this.velocity = 0;
-            this.velocityX =0;
-            this.velocityY=0;
+            this.velocityX = 0;
+            this.velocityY = 0;
         } else {
             if (this.velocity != 0) {
                 this.particleAngle = Math.atan2(velocityY, velocityX);
