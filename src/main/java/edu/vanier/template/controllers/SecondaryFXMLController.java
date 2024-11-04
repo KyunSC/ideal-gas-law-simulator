@@ -101,6 +101,7 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
+        lid.setEndX(160);
     }
 
     private void setupTemperatureControls() {
@@ -146,7 +147,7 @@ public class SecondaryFXMLController {
     private void addToQuadrants(){
         Timeline timeline = new Timeline();
         KeyFrame kf = new KeyFrame(
-                Duration.millis(100),
+                Duration.millis(1),
                 event -> {
                     addFirstQuadrant();
                     addToSecondThirdFourth(listOfParticles, secondListOfParticles);
@@ -217,7 +218,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(3000),
+                Duration.millis(1),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -370,8 +371,9 @@ public class SecondaryFXMLController {
             canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
+            lid.setLayoutX(260);
             lid.setStartX(-240);
-            lid.setEndX(-240 + (440 * (volumeSlider.getValue()/volumeSlider.getMax())));
+            lid.setEndX(-250 + (430 * (volumeSlider.getValue()/10)) - 20);
         } ));
     }
 
