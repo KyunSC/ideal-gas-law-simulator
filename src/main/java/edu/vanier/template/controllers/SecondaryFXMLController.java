@@ -313,7 +313,6 @@ public class SecondaryFXMLController {
                 pressureGauge.updateGauge();
                 pvnrt.setTemperature(0);
                 thermometer.updateThermometer();
-
             }
         }
         else {
@@ -351,8 +350,6 @@ public class SecondaryFXMLController {
                 }
             }
         }
-
-
     }
 
     private void loadPrimaryScene(Event e) {
@@ -371,8 +368,6 @@ public class SecondaryFXMLController {
             canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
-            lid.setLayoutX(260);
-            lid.setStartX(-240);
             lid.setEndX(-250 + (430 * (volumeSlider.getValue()/10)) - 20);
         } ));
     }
