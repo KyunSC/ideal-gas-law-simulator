@@ -73,7 +73,6 @@ public class SecondaryFXMLController {
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
     private final double baseParticleVelocity = 2;
-    private int numberOfParticles = 0;
 
     @FXML
     public void initialize() {
@@ -208,7 +207,6 @@ public class SecondaryFXMLController {
     }
 
     private void addParticle() {
-        numberOfParticles++;
         updatePressure();
         thermometer.updateThermometer();
 
@@ -220,14 +218,12 @@ public class SecondaryFXMLController {
         canvas.getChildren().add(particle.getCircle());
         listOfParticles.add(particle);
         allParticles.add(particle);
-
-
     }
 
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(2000),
+                Duration.millis(4000),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -251,6 +247,7 @@ public class SecondaryFXMLController {
         reset.setOnAction(event -> {
             for (int i = 0; i < allParticles.size(); i++) canvas.getChildren().remove(allParticles.get(i).getCircle());
             allParticles.clear();
+            pvnrt.setTemperature(0);
             updatePressure();
             pressureGauge.updateGauge();
             thermometer.updateThermometer();
@@ -300,7 +297,6 @@ public class SecondaryFXMLController {
 
     private void remove1(){
         if (!allParticles.isEmpty()) {
-            numberOfParticles--;
             canvas.getChildren().remove(allParticles.getLast().getCircle());
             allParticles.removeLast();
             updatePressure();
@@ -334,6 +330,7 @@ public class SecondaryFXMLController {
             for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
                 if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
                     targetListOfParticles.get(i).velocityX *= -1;
+                    targetListOfParticles.get(i).getCircle().setCenterX((targetListOfParticles.get(i).getCircle().getCenterX() + 2 * targetListOfParticles.get(i).velocityX));
                     targetListOfParticles.get(j).velocityX *= -1;
                     targetListOfParticles.get(i).velocityY *= -1;
                     targetListOfParticles.get(j).velocityY *= -1;
@@ -348,7 +345,7 @@ public class SecondaryFXMLController {
     }
 
     private void updatePressure() {
-        pvnrt.setMoles(numberOfParticles);
+        pvnrt.setMoles(allParticles.size());
         pressureGauge.updateGauge();
     }
 
