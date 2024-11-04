@@ -73,6 +73,7 @@ public class SecondaryFXMLController {
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
     private final double baseParticleVelocity = 3;
+    boolean paused = false;
 
     @FXML
     public void initialize() {
@@ -200,7 +201,6 @@ public class SecondaryFXMLController {
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
-                updatePressure();
                 addParticle();
             }
         });
@@ -208,16 +208,18 @@ public class SecondaryFXMLController {
 
     private void addParticle() {
         if (pvnrt.getTemperature() == 0) pvnrt.setTemperature(300);
-        updatePressure();
-        Circle circle = new Circle(11,11,10,Color.RED);
-        double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
-        Particle particle = new Particle(circle, particleVelocity, canvas);
-        particle.createTimeline();
-        particle.play();
-        canvas.getChildren().add(particle.getCircle());
-        listOfParticles.add(particle);
-        allParticles.add(particle);
-        thermometer.updateThermometer();
+        if (!paused) {
+            updatePressure();
+            Circle circle = new Circle(11, 11, 10, Color.RED);
+            double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
+            Particle particle = new Particle(circle, particleVelocity, canvas);
+            particle.createTimeline();
+            particle.play();
+            canvas.getChildren().add(particle.getCircle());
+            listOfParticles.add(particle);
+            allParticles.add(particle);
+            thermometer.updateThermometer();
+        }
     }
 
     private void particleCollisionTimeline() {
@@ -239,7 +241,6 @@ public class SecondaryFXMLController {
     private void addParticlesButton(){
         add.setOnAction(event -> {
             addParticle();
-            updatePressure();
         });
     }
 
@@ -260,6 +261,7 @@ public class SecondaryFXMLController {
 
     private void pauseFunction(){
         pause.setOnAction(event -> {
+            paused = true;
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).pause();
             }
@@ -268,6 +270,7 @@ public class SecondaryFXMLController {
 
     private void playFunction(){
         play.setOnAction(event -> {
+            paused = false;
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).play();
             }
@@ -290,6 +293,7 @@ public class SecondaryFXMLController {
             }
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).pause();
+                paused = true;
             }
         });
         timeline.getKeyFrames().add(keyFrame);
