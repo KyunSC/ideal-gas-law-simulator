@@ -100,7 +100,6 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
-        changeMolarMass(1);
     }
 
     private void setupTemperatureControls() {
@@ -389,13 +388,10 @@ public class SecondaryFXMLController {
     }
 
     private void changeMolarMass(double molarMass) {
-        double oldMolarMass = pvnrt.getMolarMass();
+        double initialMolarMass = pvnrt.getMolarMass();
         pvnrt.setMolarMass(molarMass);
-        baseParticleVelocity = 1;
-        for (Particle particle : allParticles) {
-            System.out.println(baseParticleVelocity);
-            particle.setVelocity(1.5);
-        }
+        // Calculation based on RMS gas speed equation. Changes base particle velocity
+        baseParticleVelocity = Math.sqrt((Math.pow(baseParticleVelocity, 2) * initialMolarMass) / molarMass);
     }
 
 }
