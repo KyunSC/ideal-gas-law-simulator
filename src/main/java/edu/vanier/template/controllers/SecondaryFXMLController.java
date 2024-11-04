@@ -72,8 +72,9 @@ public class SecondaryFXMLController {
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
-    private final double baseParticleVelocity = 3;
+    private double baseParticleVelocity = 3;
     boolean paused = false;
+    private double totalParticleCount;
 
     @FXML
     public void initialize() {
@@ -99,6 +100,7 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
+        changeMolarMass(1);
     }
 
     private void setupTemperatureControls() {
@@ -209,6 +211,7 @@ public class SecondaryFXMLController {
     private void addParticle() {
         if (pvnrt.getTemperature() == 0) pvnrt.setTemperature(300);
         if (!paused) {
+            totalParticleCount++;
             updatePressure();
             Circle circle = new Circle(11, 11, 10, Color.RED);
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
@@ -311,6 +314,7 @@ public class SecondaryFXMLController {
             if (thirdListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
             if (fourthListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
             allParticles.removeLast();
+            totalParticleCount--;
             updatePressure();
             pressureGauge.updateGauge();
             if (allParticles.isEmpty()){
@@ -319,6 +323,7 @@ public class SecondaryFXMLController {
                 pressureGauge.updateGauge();
                 pvnrt.setTemperature(0);
                 thermometer.updateThermometer();
+
             }
         }
         else {
@@ -366,8 +371,8 @@ public class SecondaryFXMLController {
     }
 
     private void updatePressure() {
-        if (allParticles.isEmpty())pvnrt.setMoles(allParticles.size()+1);
-        else pvnrt.setMoles(allParticles.size());
+        if (allParticles.isEmpty())pvnrt.setMoles(totalParticleCount);
+        else pvnrt.setMoles(totalParticleCount);
         pressureGauge.updateGauge();
     }
 
@@ -381,6 +386,16 @@ public class SecondaryFXMLController {
 
     private double calculateRMS(double temp) {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
+    }
+
+    private void changeMolarMass(double molarMass) {
+        double oldMolarMass = pvnrt.getMolarMass();
+        pvnrt.setMolarMass(molarMass);
+        baseParticleVelocity = 1;
+        for (Particle particle : allParticles) {
+            System.out.println(baseParticleVelocity);
+            particle.setVelocity(1.5);
+        }
     }
 
 }

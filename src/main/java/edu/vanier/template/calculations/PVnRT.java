@@ -76,6 +76,10 @@ public class PVnRT {
         return molarMass;
     }
 
+    public void setMolarMass(double molarMass) {
+        this.molarMass = molarMass;
+    }
+
     public String toString() {
         return "PVnRT{" +
                 "temperature=" + temperature +
