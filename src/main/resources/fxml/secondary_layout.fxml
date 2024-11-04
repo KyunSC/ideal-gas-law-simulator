@@ -8,19 +8,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <HBox fx:id="centerHBox" alignment="CENTER" fillHeight="false" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
          <children>
             <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-radius: 10; -fx-border-style: solid;">
                <children>
                   <Slider fx:id="volumeSlider" blockIncrement="1.0" layoutY="510.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
-<<<<<<< Updated upstream
-=======
                   <Line fx:id="lid" endX="150.0" layoutX="271.0" startX="-195.0" strokeWidth="22.0" />
->>>>>>> Stashed changes
+                  <Line endX="150.0" layoutX="271.0" startX="-195.0" strokeWidth="22.0" />
                </children></Pane>
             <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="271.0" prefWidth="54.0" spacing="10" style="-fx-padding: 0 5 10 5;">
                <children>
@@ -31,8 +30,8 @@
                </children></VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="55.0" spacing="10.0">
                <children>
-                  <Button fx:id="heatButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="45.0" text="Heat" textFill="#dc3030" />
-                  <Button fx:id="coolButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="45.0" text="Cool" textFill="#2689c7" />
+                  <Button fx:id="heatButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="45.0" text="🔥" textFill="#dc3030" />
+                  <Button fx:id="coolButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="45.0" text="❄" textFill="#2689c7" />
                </children>
             </VBox>
 
