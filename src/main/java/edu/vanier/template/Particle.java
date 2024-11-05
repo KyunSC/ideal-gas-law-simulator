@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.BoundingBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 public class Particle {
@@ -17,21 +18,23 @@ public class Particle {
     public double particleAngle;
     Timeline timeline;
     Pane canvas;
+    Line lid;
     BoundingBox boundingBox = new BoundingBox(10, 10, 480,480);
 
     /**
      *
-     * @param circle its the shape of the particle
+     * @param circle it's the shape of the particle
      *
      * @param canvas canvas
      */
-    public Particle(Circle circle, double velocity, Pane canvas){
+    public Particle(Circle circle, double velocity, Pane canvas, Line lid){
         this.circle = circle;
         this.velocity = velocity;
         this.velocityX = Math.random()*velocity;
         this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
+        this.lid = lid;
     }
 
     public double getVelocityX() {
@@ -101,6 +104,7 @@ public class Particle {
      */
     private void moveCircle(Circle particle) {
         if (particle.getBoundsInParent().intersects(boundingBox)){
+            if (canvas.getChildren().contains(lid)){
                 if (particle.getCenterX() <= particle.getRadius() + 2) {
                     velocityX *= -1;
                     particle.setCenterX(particle.getRadius() + 5);
@@ -117,6 +121,26 @@ public class Particle {
                     velocityY *= -1;
                     particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
                 }
+            }
+            else {
+                if (particle.getCenterX() <= particle.getRadius() + 2) {
+                    velocityX *= -1;
+                    particle.setCenterX(particle.getRadius() + 5);
+                }
+                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 2) {
+                    velocityX *= -1;
+                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
+                }
+                /*if (particle.getCenterY() <= particle.getRadius() - 2) {
+                    velocityY *= -1;
+                    particle.setCenterY(particle.getRadius() + 5);
+                }*/
+                if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 2) {
+                    velocityY *= -1;
+                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
+                }
+            }
+
         }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);

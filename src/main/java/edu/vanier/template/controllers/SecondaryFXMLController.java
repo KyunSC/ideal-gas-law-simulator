@@ -79,7 +79,7 @@ public class SecondaryFXMLController {
     boolean paused = false;
     private double totalParticleCount;
     private double maxPressure = 1000;
-    private boolean lidPopped = false;
+    public boolean lidPopped = false;
 
     @FXML
     public void initialize() {
@@ -106,7 +106,6 @@ public class SecondaryFXMLController {
         setupTemperatureControls();
         initializeVolumeSlider();
         lidPopping();
-        //lid.setEndX(160);
     }
 
     private void setupTemperatureControls() {
@@ -210,7 +209,7 @@ public class SecondaryFXMLController {
             updatePressure();
             Circle circle = new Circle(11, 11, 10, Color.RED);
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
-            Particle particle = new Particle(circle, particleVelocity, canvas);
+            Particle particle = new Particle(circle, particleVelocity, canvas, lid);
             particle.createTimeline();
             particle.play();
             canvas.getChildren().add(particle.getCircle());
@@ -229,6 +228,7 @@ public class SecondaryFXMLController {
                     checkParticleParticleCollision(secondListOfParticles);
                     checkParticleParticleCollision(thirdListOfParticles);
                     checkParticleParticleCollision(fourthListOfParticles);
+                    particleEscaped();
                 })
         );
         elasticCollisionTimeline.getKeyFrames().add(keyframe);
@@ -426,6 +426,21 @@ public class SecondaryFXMLController {
         line.setStartX(-240);
         line.setStrokeWidth(22);
         return line;
+    }
+
+    private void particleEscaped(){
+        for (int i = 0; i < allParticles.size(); i++) {
+            if (allParticles.get(i).getCircle().getCenterY() < 0){
+                if (firstListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
+                if (secondListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
+                if (thirdListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
+                if (fourthListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
+                allParticles.remove(i);
+                totalParticleCount--;
+                updatePressure();
+                pressureGauge.updateGauge();
+            }
+        }
     }
 
     private void changeMolarMass(double molarMass) {
