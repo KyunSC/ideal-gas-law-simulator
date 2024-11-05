@@ -8,10 +8,12 @@ import edu.vanier.template.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -258,6 +260,7 @@ public class SecondaryFXMLController {
                 lid = makingLid();
                 canvas.getChildren().add(lid);
                 lidPopped = false;
+                canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
             }
             volumeSlider.setValue(10);
         });
@@ -392,7 +395,7 @@ public class SecondaryFXMLController {
         KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(1000),
                 event -> {
-                    if (pvnrt.getPressure() > 1000 && lidPopped == false) {
+                    if (pvnrt.getPressure() > maxPressure && lidPopped == false) {
                         lidPopped = true;
                         RotateTransition rotate = new RotateTransition(Duration.millis(1000), lid);
                         rotate.setByAngle(100);
@@ -407,6 +410,7 @@ public class SecondaryFXMLController {
                         parallelTransition.setOnFinished(event1 -> {
                             canvas.getChildren().remove(lid);
                         });
+                        canvas.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                     }
                 }
         );
