@@ -76,6 +76,8 @@ public class SecondaryFXMLController {
     private double baseParticleVelocity = 3;
     boolean paused = false;
     private double totalParticleCount;
+    private double maxPressure = 1000;
+    private boolean lidPopped = false;
 
     @FXML
     public void initialize() {
@@ -101,7 +103,8 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
-        lid.setEndX(160);
+        lidPopping();
+        //lid.setEndX(160);
     }
 
     private void setupTemperatureControls() {
@@ -218,7 +221,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(1),
+                Duration.millis(10),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -245,10 +248,18 @@ public class SecondaryFXMLController {
             secondListOfParticles.clear();
             thirdListOfParticles.clear();
             fourthListOfParticles.clear();
-            pvnrt.setTemperature(0);
+            totalParticleCount = 0;
+            pvnrt.setMoles(0);
             updatePressure();
             pressureGauge.updateGauge();
             thermometer.updateThermometer();
+
+            if (lidPopped){
+                lid = makingLid();
+                canvas.getChildren().add(lid);
+                lidPopped = false;
+            }
+            volumeSlider.setValue(10);
         });
     }
 
@@ -374,6 +385,43 @@ public class SecondaryFXMLController {
 
     private double calculateRMS(double temp) {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
+    }
+
+    private void lidPopping(){
+        Timeline timeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(
+                Duration.millis(1000),
+                event -> {
+                    if (pvnrt.getPressure() > 1000 && lidPopped == false) {
+                        lidPopped = true;
+                        RotateTransition rotate = new RotateTransition(Duration.millis(1000), lid);
+                        rotate.setByAngle(100);
+                        rotate.setCycleCount(1);
+                        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(1000), lid);
+                        translateTransition.setToY(-1000);
+                        translateTransition.setToX(1000);
+                        translateTransition.setCycleCount(1);
+                        ParallelTransition parallelTransition = new ParallelTransition(lid, rotate, translateTransition);
+                        parallelTransition.setCycleCount(1);
+                        parallelTransition.play();
+                        parallelTransition.setOnFinished(event1 -> {
+                            canvas.getChildren().remove(lid);
+                        });
+                    }
+                }
+        );
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private Line makingLid(){
+        Line line = new Line();
+        line.setEndX(160);
+        line.setLayoutX(260);
+        line.setStartX(-240);
+        line.setStrokeWidth(22);
+        return line;
     }
 
     private void changeMolarMass(double molarMass) {

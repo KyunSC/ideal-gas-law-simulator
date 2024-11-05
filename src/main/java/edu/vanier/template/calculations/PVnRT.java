@@ -2,7 +2,7 @@ package edu.vanier.template.calculations;
 
 public class PVnRT {
     private double temperature;
-    private double rConstant;
+    final private double rConstant;
     private double volume;
     private double pressure;
     private double moles;
