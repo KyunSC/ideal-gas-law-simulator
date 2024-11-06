@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 public class PressureGauge {
     private Gauge pressureGauge;
     private PVnRT pvnrt;
+    private boolean isKPa = false;
 
     public PressureGauge(PVnRT pvnrt) {
         this.pvnrt = pvnrt;
@@ -34,12 +35,40 @@ public class PressureGauge {
         pressureGauge.setThresholdVisible(true);
         pressureGauge.setInteractive(true);
         pressureGauge.setOnButtonPressed(buttonEvent -> System.out.println("Pressure Gauge button pressed."));
-//        pressureGauge.setAnimated(true);
-//        pressureGauge.setAnimationDuration(500);
+        pressureGauge.setOnButtonPressed(buttonEvent -> togglePressureGauge());
+    }
+
+    private void togglePressureGauge() {
+        if (isKPa) {
+            pressureGauge.setUnit("atm");
+            pressureGauge.setMaxValue(200);
+            pressureGauge.setValue(pvnrt.getPressure());
+            pressureGauge.setMajorTickSpace(20);
+            pressureGauge.setMinorTickSpace(5);
+            pressureGauge.setForegroundBaseColor(Color.WHITE);
+            pressureGauge.setThresholdColor(Color.RED);
+            pressureGauge.setThreshold(170);
+            pressureGauge.setThresholdVisible(true);
+        } else {
+            pressureGauge.setUnit("kPa");
+            pressureGauge.setMaxValue(200 * 101.325);
+            pressureGauge.setValue(pvnrt.getPressure() * 101.325);
+            pressureGauge.setMajorTickSpace(20 * 101.325);
+            pressureGauge.setMinorTickSpace(5 * 101.325);
+            pressureGauge.setForegroundBaseColor(Color.WHITE);
+            pressureGauge.setThresholdColor(Color.RED);
+            pressureGauge.setThreshold(170 * 101.325);
+            pressureGauge.setThresholdVisible(true);
+        }
+        isKPa = !isKPa;
     }
 
     public void updateGauge() {
-        pressureGauge.setValue(pvnrt.getPressure());
+        if (isKPa) {
+            pressureGauge.setValue(pvnrt.getPressure() * 101.325);
+        } else {
+            pressureGauge.setValue(pvnrt.getPressure());
+        }
     }
 
     public StackPane getGaugePane() {

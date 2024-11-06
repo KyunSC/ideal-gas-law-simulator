@@ -137,7 +137,8 @@ public class SecondaryFXMLController {
     }
 
     private void adjustTemperature(int tempChange) {
-        int temperatureIncrement = 10;
+        int temperatureIncrement = (pvnrt.getTemperature() < 100) ? 1 : 10;
+
         double newTemperature = pvnrt.getTemperature() + tempChange * temperatureIncrement;
 
         newTemperature = Math.min(1000, Math.max(0, newTemperature));
