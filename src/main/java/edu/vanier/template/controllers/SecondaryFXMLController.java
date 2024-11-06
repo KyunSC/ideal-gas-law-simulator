@@ -78,8 +78,13 @@ public class SecondaryFXMLController {
     private double baseParticleVelocity = 3;
     boolean paused = false;
     private double totalParticleCount;
+<<<<<<< HEAD
     private double maxPressure = 1000;
     public boolean lidPopped = false;
+=======
+    private double maxPressure = 200;
+    private boolean lidPopped = false;
+>>>>>>> a86307320c7c42529d9b9d031bf2d4827e3e9149
 
     @FXML
     public void initialize() {
@@ -136,7 +141,8 @@ public class SecondaryFXMLController {
     }
 
     private void adjustTemperature(int tempChange) {
-        int temperatureIncrement = 10;
+        int temperatureIncrement = (pvnrt.getTemperature() < 100) ? 1 : 10;
+
         double newTemperature = pvnrt.getTemperature() + tempChange * temperatureIncrement;
 
         newTemperature = Math.min(1000, Math.max(0, newTemperature));
