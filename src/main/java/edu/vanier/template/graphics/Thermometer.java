@@ -25,9 +25,9 @@ public class Thermometer {
         thermometer.setMajorTickSpace(50);
         thermometer.setMinorTickSpace(10);
         thermometer.setTickLabelDecimals(0);
-        thermometer.setPrefSize(125, 125);
-        thermometer.setMinSize(125, 125);
-        thermometer.setMaxSize(125, 125);
+        thermometer.setPrefSize(175, 175);
+        thermometer.setMinSize(175, 175);
+        thermometer.setMaxSize(175, 175);
         thermometer.setSkinType(Gauge.SkinType.MODERN);
         thermometer.setForegroundBaseColor(Color.WHITE);
         thermometer.setThresholdColor(Color.RED);

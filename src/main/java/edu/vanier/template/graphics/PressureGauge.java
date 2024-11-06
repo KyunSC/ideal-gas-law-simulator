@@ -25,9 +25,9 @@ public class PressureGauge {
         pressureGauge.setMajorTickSpace(20);
         pressureGauge.setMinorTickSpace(5);
         pressureGauge.setTickLabelDecimals(0);
-        pressureGauge.setPrefSize(125, 125);
-        pressureGauge.setMinSize(125, 125);
-        pressureGauge.setMaxSize(125, 125);
+        pressureGauge.setPrefSize(175, 175);
+        pressureGauge.setMinSize(175, 175);
+        pressureGauge.setMaxSize(175, 175);
         pressureGauge.setSkinType(Gauge.SkinType.MODERN);
         pressureGauge.setForegroundBaseColor(Color.WHITE);
         pressureGauge.setThresholdColor(Color.RED);

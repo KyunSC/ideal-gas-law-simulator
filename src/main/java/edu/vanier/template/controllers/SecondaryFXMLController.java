@@ -78,7 +78,7 @@ public class SecondaryFXMLController {
     private double baseParticleVelocity = 3;
     boolean paused = false;
     private double totalParticleCount;
-    private double maxPressure = 1000;
+    private double maxPressure = 200;
     private boolean lidPopped = false;
 
     @FXML
