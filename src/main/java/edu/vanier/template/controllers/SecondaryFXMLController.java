@@ -8,13 +8,11 @@ import edu.vanier.template.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -83,8 +81,7 @@ public class SecondaryFXMLController {
     private double totalParticleCount;
     private double maxPressure = 1000;
     public boolean lidPopped = false;
-//    Circle circle = new Circle(11, 11, 10, Color.RED);
-
+    private Color particleColor;
 
     @FXML
     public void initialize() {
@@ -214,8 +211,9 @@ public class SecondaryFXMLController {
         if (!paused) {
             totalParticleCount++;
             updatePressure();
+            setParticleColor(pvnrt.getMolarMass());
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
-            Circle circle = new Circle(11, 11, 10, Color.RED);
+            Circle circle = new Circle(11, 11, 10, particleColor);
             Particle particle = new Particle(circle, particleVelocity, canvas, lid);
             particle.createTimeline();
             particle.play();
@@ -459,15 +457,15 @@ public class SecondaryFXMLController {
         for (Particle particle : allParticles) {
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
             particle.setVelocity(particleVelocity);
-//            changeParticleAppearance(molarMass);
-//            particle.setCircle(circle);
+            setParticleColor(molarMass);
+            particle.setCircleColor(particleColor);
         }
 
     }
 
-    private void changeParticleAppearance(double molarMass) {
-        double hue = (360 * molarMass) / 0.2201;
-//        circle.setFill(Color.hsb(hue, 1, 1));
+    private void setParticleColor(double molarMass) {
+        double hue = (270 * molarMass) / 0.2201;
+        particleColor = Color.hsb(hue, 1, 1);
     }
 
     private void initializeComboBox() {

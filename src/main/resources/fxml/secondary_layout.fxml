@@ -74,7 +74,7 @@
       </VBox>
    </right>
    <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <ComboBox fx:id="comboBox" prefWidth="150.0" promptText="Molar Mass" />
          </children>
