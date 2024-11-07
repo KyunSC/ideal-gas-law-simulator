@@ -87,6 +87,7 @@ public class SecondaryFXMLController {
     private double maxPressure = 1000;
     public boolean lidPopped = false;
     private Color particleColor;
+    private double particleSize;
 
     Image lidImage = new Image("/LidContainer.png");
 
@@ -222,8 +223,9 @@ public class SecondaryFXMLController {
             totalParticleCount++;
             updatePressure();
             setParticleColor(pvnrt.getMolarMass());
+            setParticleSize(pvnrt.getMolarMass());
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
-            Circle circle = new Circle(11, 11, 10, particleColor);
+            Circle circle = new Circle(20, 20, particleSize, particleColor);
             Particle particle = new Particle(circle, particleVelocity, canvas, lid);
             particle.createTimeline();
             particle.play();
@@ -471,6 +473,8 @@ public class SecondaryFXMLController {
             particle.setVelocity(particleVelocity);
             setParticleColor(molarMass);
             particle.setCircleColor(particleColor);
+            setParticleSize(molarMass);
+            particle.setCircleSize(particleSize);
         }
 
     }
@@ -478,6 +482,12 @@ public class SecondaryFXMLController {
     private void setParticleColor(double molarMass) {
         double hue = (270 * molarMass) / 0.2201;
         particleColor = Color.hsb(hue, 1, 1);
+    }
+
+    private void setParticleSize(double molarMass) {
+        //equation found by having the smallest size of particle to be 9 with molar mass of hydrogen 0.00202kg/mol and
+        // largest size fo particle to be 15 with molar mass of radon 0.2201k/mol.
+        particleSize = 27.52 * molarMass + 8.944;
     }
 
     private void initializeComboBox() {

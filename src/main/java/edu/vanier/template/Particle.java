@@ -79,6 +79,10 @@ public class Particle {
         circle.setFill(color);
     }
 
+    public void setCircleSize(double size) {
+        circle.setRadius(size);
+    }
+
     /**
      * Function for playing timeline associated with the specific particle
      */
@@ -113,19 +117,23 @@ public class Particle {
     private void moveCircle(Circle particle) {
         if (particle.getBoundsInParent().intersects(boundingBox)){
             if (canvas.getChildren().contains(lid)){
-                if (particle.getCenterX() <= particle.getRadius() + 2) {
+                //Left wall collision detection
+                if (particle.getCenterX() <= particle.getRadius() + 5) {
                     velocityX *= -1;
                     particle.setCenterX(particle.getRadius() + 5);
                 }
-                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 2) {
+                //Right wall collision detection
+                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 5) {
                     velocityX *= -1;
                     particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
                 }
-                if (particle.getCenterY() <= particle.getRadius() - 2) {
+                //Top wall collision detection
+                if (particle.getCenterY() <= particle.getRadius() + 5) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 5);
                 }
-                if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 2) {
+                //Bottom wall collision detection
+                if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 5) {
                     velocityY *= -1;
                     particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
                 }
