@@ -4,13 +4,14 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.BoundingBox;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
-import java.awt.*;
+
 
 public class Particle {
 
@@ -21,7 +22,7 @@ public class Particle {
     public double particleAngle;
     Timeline timeline;
     Pane canvas;
-    Line lid;
+    ImageView lid;
     BoundingBox boundingBox = new BoundingBox(10, 10, 480,480);
 
     /**
@@ -30,7 +31,7 @@ public class Particle {
      *
      * @param canvas canvas
      */
-    public Particle(Circle circle, double velocity, Pane canvas, Line lid){
+    public Particle(Circle circle, double velocity, Pane canvas, ImageView lid){
         this.circle = circle;
         this.velocity = velocity;
         this.velocityX = Math.random()*velocity;

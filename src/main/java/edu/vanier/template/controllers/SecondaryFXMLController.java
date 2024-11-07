@@ -12,15 +12,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * FXML controller class for a secondary scene.
@@ -64,7 +66,7 @@ public class SecondaryFXMLController {
     @FXML
     Button coolButton;
     @FXML
-    Line lid;
+    ImageView lid;
     @FXML
     ComboBox<String> comboBox;
     @FXML
@@ -86,10 +88,14 @@ public class SecondaryFXMLController {
     public boolean lidPopped = false;
     private Color particleColor;
 
+    Image lidImage = new Image("/LidContainer.png");
+
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
+
+        System.out.println(getClass().getResource("/resources/LidContainer.png"));
 
         pvnrt = new PVnRT();
         pvnrt.setMoles(0);
@@ -112,6 +118,7 @@ public class SecondaryFXMLController {
         initializeVolumeSlider();
         lidPopping();
         initializeComboBox();
+        lid.setImage(lidImage);
     }
 
     private void setupTemperatureControls() {
@@ -348,6 +355,7 @@ public class SecondaryFXMLController {
         }
     }
 
+
     private void remove1Button(){
         remove1.setOnAction(event -> {
             remove1();
@@ -392,7 +400,7 @@ public class SecondaryFXMLController {
             canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
-            lid.setEndX(-250 + (430 * (volumeSlider.getValue()/10)) - 20);
+            lid.setFitWidth((volumeSlider.getValue()/volumeSlider.getMax()) * 500);
         } ));
     }
 
@@ -429,13 +437,13 @@ public class SecondaryFXMLController {
         timeline.play();
     }
 
-    private Line makingLid(){
-        Line line = new Line();
-        line.setEndX(160);
-        line.setLayoutX(260);
-        line.setStartX(-240);
-        line.setStrokeWidth(22);
-        return line;
+    private ImageView makingLid(){
+        ImageView imageView = new ImageView(lidImage);
+        imageView.setFitWidth(500);
+        imageView.setFitHeight(100);
+        imageView.setLayoutY(-45);
+        imageView.setPreserveRatio(false);
+        return imageView;
     }
 
     private void particleEscaped(){
