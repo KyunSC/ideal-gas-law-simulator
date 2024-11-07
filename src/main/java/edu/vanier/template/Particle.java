@@ -71,6 +71,10 @@ public class Particle {
      */
     public Circle getCircle() {return circle;}
 
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+    }
+
     /**
      * Function for playing timeline associated with the specific particle
      */

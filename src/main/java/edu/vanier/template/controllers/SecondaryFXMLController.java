@@ -10,6 +10,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -65,6 +66,8 @@ public class SecondaryFXMLController {
     Button coolButton;
     @FXML
     Line lid;
+    @FXML
+    ComboBox<String> comboBox;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -80,6 +83,7 @@ public class SecondaryFXMLController {
     private double totalParticleCount;
     private double maxPressure = 1000;
     public boolean lidPopped = false;
+//    Circle circle = new Circle(11, 11, 10, Color.RED);
 
 
     @FXML
@@ -107,6 +111,7 @@ public class SecondaryFXMLController {
         setupTemperatureControls();
         initializeVolumeSlider();
         lidPopping();
+        initializeComboBox();
     }
 
     private void setupTemperatureControls() {
@@ -209,8 +214,8 @@ public class SecondaryFXMLController {
         if (!paused) {
             totalParticleCount++;
             updatePressure();
-            Circle circle = new Circle(11, 11, 10, Color.RED);
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
+            Circle circle = new Circle(11, 11, 10, Color.RED);
             Particle particle = new Particle(circle, particleVelocity, canvas, lid);
             particle.createTimeline();
             particle.play();
@@ -230,6 +235,7 @@ public class SecondaryFXMLController {
                     checkParticleParticleCollision(secondListOfParticles);
                     checkParticleParticleCollision(thirdListOfParticles);
                     checkParticleParticleCollision(fourthListOfParticles);
+                    particleEscaped();
                     particleEscaped();
                 })
         );
@@ -450,6 +456,31 @@ public class SecondaryFXMLController {
         pvnrt.setMolarMass(molarMass);
         // Calculation based on RMS gas speed equation. Changes base particle velocity
         baseParticleVelocity = Math.sqrt((Math.pow(baseParticleVelocity, 2) * initialMolarMass) / molarMass);
+        for (Particle particle : allParticles) {
+            double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
+            particle.setVelocity(particleVelocity);
+//            changeParticleAppearance(molarMass);
+//            particle.setCircle(circle);
+        }
+
+    }
+
+    private void changeParticleAppearance(double molarMass) {
+        double hue = (360 * molarMass) / 0.2201;
+//        circle.setFill(Color.hsb(hue, 1, 1));
+    }
+
+    private void initializeComboBox() {
+        comboBox.getItems().addAll("Oxygen", "Radon", "Hydrogen");
+        comboBox.setValue("Oxygen");
+
+        comboBox.setOnAction(event -> {
+            switch (comboBox.getValue()) {
+                case "Oxygen" -> changeMolarMass(0.0320);
+                case "Radon" -> changeMolarMass(0.2201);
+                case "Hydrogen" -> changeMolarMass(0.00202);
+            }
+        });
     }
 
 }
