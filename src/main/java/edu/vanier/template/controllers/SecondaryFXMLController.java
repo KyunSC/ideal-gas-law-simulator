@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -123,17 +124,37 @@ public class SecondaryFXMLController {
     }
 
     private void setupTemperatureControls() {
+        DropShadow heatGlow = new DropShadow();
+        heatGlow.setColor(Color.FIREBRICK);
+        heatGlow.setRadius(25);
+
+        DropShadow coolGlow = new DropShadow();
+        coolGlow.setColor(Color.LIGHTBLUE);
+        coolGlow.setRadius(25);
+
         Timeline heatTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(1)));
         heatTimeline.setCycleCount(Animation.INDEFINITE);
 
-        heatButton.setOnMousePressed(event -> heatTimeline.play());
-        heatButton.setOnMouseReleased(event -> heatTimeline.stop());
+        heatButton.setOnMousePressed(event -> {
+            heatTimeline.play();
+            canvas.setEffect(heatGlow);
+        });
+        heatButton.setOnMouseReleased(event -> {
+            heatTimeline.stop();
+            canvas.setEffect(null);
+        });
 
         Timeline coolTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(-1)));
         coolTimeline.setCycleCount(Animation.INDEFINITE);
 
-        coolButton.setOnMousePressed(event -> coolTimeline.play());
-        coolButton.setOnMouseReleased(event -> coolTimeline.stop());
+        coolButton.setOnMousePressed(event -> {
+            coolTimeline.play();
+            canvas.setEffect(coolGlow);
+        });
+        coolButton.setOnMouseReleased(event -> {
+            coolTimeline.stop();
+            canvas.setEffect(null);
+        });
     }
 
     private void updateParticlesWithTemperature(double newTemperature) {
