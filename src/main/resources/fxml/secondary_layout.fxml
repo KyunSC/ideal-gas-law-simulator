@@ -22,7 +22,7 @@
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="48.0" prefWidth="185.0" style="-fx-padding: 20 10 10 10;" text="Ideal Gas Law Simulation">
+            <Label alignment="CENTER" prefHeight="53.0" prefWidth="196.0" style="-fx-padding: 20 10 10 10; -fx-font-weight: bold;" text="Ideal Gas Law Simulation">
                <font>
                   <Font size="14.0" />
                </font>
@@ -58,7 +58,7 @@
       </HBox>
    </bottom>
    <right>
-      <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="271.0" prefWidth="54.0" spacing="10" style="-fx-padding: 0 5 10 5;" BorderPane.alignment="CENTER">
+      <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="271.0" prefWidth="54.0" spacing="10" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="remove10" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: firebrick;" text="- 10" />
             <Button fx:id="remove1" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: Firebrick;" text="- 1" />
@@ -71,13 +71,25 @@
                </children>
             </VBox>
          </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
       </VBox>
    </right>
    <left>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="595.0" prefWidth="175.0" spacing="10.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
          <children>
-            <ComboBox fx:id="comboBox" prefWidth="150.0" promptText="Molar Mass" />
+            <ComboBox fx:id="comboBox" prefWidth="150.0" promptText="Molar Mass" style="-fx-background-color: lightblue;" />
+            <VBox alignment="CENTER" prefHeight="54.0" prefWidth="154.0" style="-fx-background-color: lightblue;">
+               <children>
+                  <Label style="-fx-font-weight: bold;" text="Average Particle Velocity:" />
+                  <Label fx:id="velocityLabel" text="0.00m/s" />
+               </children>
+            </VBox>
          </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
       </VBox>
    </left>
 </BorderPane>

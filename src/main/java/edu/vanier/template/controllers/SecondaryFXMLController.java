@@ -10,6 +10,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -66,6 +67,8 @@ public class SecondaryFXMLController {
     Line lid;
     @FXML
     ComboBox<String> comboBox;
+    @FXML
+    Label velocityLabel;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -235,6 +238,7 @@ public class SecondaryFXMLController {
                     checkParticleParticleCollision(fourthListOfParticles);
                     particleEscaped();
                     particleEscaped();
+                    changeVelocityLabel();
                 })
         );
         elasticCollisionTimeline.getKeyFrames().add(keyframe);
@@ -479,6 +483,16 @@ public class SecondaryFXMLController {
                 case "Hydrogen" -> changeMolarMass(0.00202);
             }
         });
+    }
+
+    private void changeVelocityLabel() {
+        String velocityValue;
+        if (totalParticleCount == 0) {
+            velocityValue = "0.00";
+        } else {
+            velocityValue = String.format("%.2f", calculateRMS(pvnrt.getTemperature()));;
+        }
+        velocityLabel.setText(velocityValue + "m/s");
     }
 
 }
