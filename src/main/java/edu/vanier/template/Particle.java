@@ -156,7 +156,6 @@ public class Particle {
                     particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
                 }
             }
-
         }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);

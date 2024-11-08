@@ -86,7 +86,7 @@ public class SecondaryFXMLController {
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
-    private double baseParticleVelocity = 3;
+    private double baseParticleVelocity = 1;
     boolean paused = false;
     private double totalParticleCount;
     private double maxPressure = 1000;
@@ -110,6 +110,11 @@ public class SecondaryFXMLController {
         thermometer = new Thermometer(pvnrt);
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
+        lid.setImage(lidImage);
+        initialFunctions();
+    }
+
+    private void initialFunctions(){
         addParticlesButton();
         add10ParticlesButton();
         remove1Button();
@@ -124,7 +129,6 @@ public class SecondaryFXMLController {
         initializeVolumeSlider();
         lidPopping();
         initializeComboBox();
-        lid.setImage(lidImage);
         returnLid();
     }
 
@@ -272,7 +276,6 @@ public class SecondaryFXMLController {
                     checkParticleParticleCollision(thirdListOfParticles);
                     checkParticleParticleCollision(fourthListOfParticles);
                     particleEscaped();
-                    //particleEscaped();
                     changeVelocityLabel();
                     changeVolumeLabel();
                 })
@@ -475,7 +478,7 @@ public class SecondaryFXMLController {
         ImageView imageView = new ImageView(lidImage);
         imageView.setFitWidth(500);
         imageView.setFitHeight(100);
-        imageView.setLayoutY(-45);
+        imageView.setLayoutY(-60);
         imageView.setPreserveRatio(false);
         return imageView;
     }
@@ -488,6 +491,16 @@ public class SecondaryFXMLController {
                 for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
                 canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
+            }
+            else {
+                lidPopped = true;
+                ParallelTransition parallelTransition = getParallelTransition();
+                parallelTransition.setCycleCount(1);
+                parallelTransition.play();
+                parallelTransition.setOnFinished(event1 -> {
+                    canvas.getChildren().remove(lid);
+                });
+                canvas.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
             }
         });
     }
@@ -529,9 +542,12 @@ public class SecondaryFXMLController {
         particleColor = Color.hsb(hue, 1, 1);
     }
 
+    /**
+     * //equation found by having the smallest size of particle to be 9 with molar mass of hydrogen 0.00202kg/mol and
+     *         // largest size fo particle to be 15 with molar mass of radon 0.2201k/mol.
+     * @param molarMass
+     */
     private void setParticleSize(double molarMass) {
-        //equation found by having the smallest size of particle to be 9 with molar mass of hydrogen 0.00202kg/mol and
-        // largest size fo particle to be 15 with molar mass of radon 0.2201k/mol.
         particleSize = 27.52 * molarMass + 8.944;
     }
 
@@ -555,7 +571,7 @@ public class SecondaryFXMLController {
         } else {
             velocityValue = String.format("%.2f", calculateRMS(pvnrt.getTemperature()));;
         }
-        velocityLabel.setText(velocityValue + "m/s");
+        velocityLabel.setText(velocityValue + " m/s");
     }
 
     private void changeVolumeLabel() {
@@ -565,7 +581,7 @@ public class SecondaryFXMLController {
         } else {
             volumeValue = String.format("%.2f", calculateRMS(pvnrt.getVolume()));;
         }
-        volumeLabel.setText(volumeValue + "m/s");
+        volumeLabel.setText(volumeValue + " L");
     }
 
 }
