@@ -310,7 +310,7 @@ public class SecondaryFXMLController {
                 canvas.getChildren().add(lid);
                 for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
-                canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
+                canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
             }
             volumeSlider.setValue(10);
         });
@@ -486,21 +486,25 @@ public class SecondaryFXMLController {
     private void returnLid(){
         lidButton.setOnAction(event -> {
             if (lidPopped){
-                lid = makingLid();
-                canvas.getChildren().add(lid);
-                for (Particle allParticle : allParticles) allParticle.setLid(lid);
-                lidPopped = false;
-                canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
+                if (!canvas.getChildren().contains(lid)){
+                    lid = makingLid();
+                    canvas.getChildren().add(lid);
+                    for (Particle allParticle : allParticles) allParticle.setLid(lid);
+                    canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
+                    lidPopped = false;
+                }
             }
             else {
-                lidPopped = true;
-                ParallelTransition parallelTransition = getParallelTransition();
-                parallelTransition.setCycleCount(1);
-                parallelTransition.play();
-                parallelTransition.setOnFinished(event1 -> {
-                    canvas.getChildren().remove(lid);
-                });
-                canvas.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                if (canvas.getChildren().contains(lid)){
+                    ParallelTransition parallelTransition = getParallelTransition();
+                    parallelTransition.setCycleCount(1);
+                    parallelTransition.play();
+                    parallelTransition.setOnFinished(event1 -> {
+                        canvas.getChildren().remove(lid);
+                    });
+                    canvas.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                    lidPopped = true;
+                }
             }
         });
     }
