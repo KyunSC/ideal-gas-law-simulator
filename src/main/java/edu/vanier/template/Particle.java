@@ -161,4 +161,6 @@ public class Particle {
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
     }
+
+    public void setLid(ImageView lid) {this.lid = lid;}
 }

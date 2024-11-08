@@ -72,6 +72,10 @@ public class SecondaryFXMLController {
     ComboBox<String> comboBox;
     @FXML
     Label velocityLabel;
+    @FXML
+    Button lidButton;
+    @FXML
+    Label volumeLabel;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -121,6 +125,7 @@ public class SecondaryFXMLController {
         lidPopping();
         initializeComboBox();
         lid.setImage(lidImage);
+        returnLid();
     }
 
     private void setupTemperatureControls() {
@@ -267,8 +272,9 @@ public class SecondaryFXMLController {
                     checkParticleParticleCollision(thirdListOfParticles);
                     checkParticleParticleCollision(fourthListOfParticles);
                     particleEscaped();
-                    particleEscaped();
+                    //particleEscaped();
                     changeVelocityLabel();
+                    changeVolumeLabel();
                 })
         );
         elasticCollisionTimeline.getKeyFrames().add(keyframe);
@@ -299,6 +305,7 @@ public class SecondaryFXMLController {
             if (lidPopped){
                 lid = makingLid();
                 canvas.getChildren().add(lid);
+                for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
                 canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
             }
@@ -436,16 +443,9 @@ public class SecondaryFXMLController {
         KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(1000),
                 event -> {
-                    if (pvnrt.getPressure() > maxPressure && lidPopped == false) {
+                    if (pvnrt.getPressure() > maxPressure && !lidPopped) {
                         lidPopped = true;
-                        RotateTransition rotate = new RotateTransition(Duration.millis(1000), lid);
-                        rotate.setByAngle(100);
-                        rotate.setCycleCount(1);
-                        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(1000), lid);
-                        translateTransition.setToY(-1000);
-                        translateTransition.setToX(1000);
-                        translateTransition.setCycleCount(1);
-                        ParallelTransition parallelTransition = new ParallelTransition(lid, rotate, translateTransition);
+                        ParallelTransition parallelTransition = getParallelTransition();
                         parallelTransition.setCycleCount(1);
                         parallelTransition.play();
                         parallelTransition.setOnFinished(event1 -> {
@@ -460,6 +460,17 @@ public class SecondaryFXMLController {
         timeline.play();
     }
 
+    private ParallelTransition getParallelTransition() {
+        RotateTransition rotate = new RotateTransition(Duration.millis(1000), lid);
+        rotate.setByAngle(100);
+        rotate.setCycleCount(1);
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(1000), lid);
+        translateTransition.setToY(-1000);
+        translateTransition.setToX(1000);
+        translateTransition.setCycleCount(1);
+        return new ParallelTransition(lid, rotate, translateTransition);
+    }
+
     private ImageView makingLid(){
         ImageView imageView = new ImageView(lidImage);
         imageView.setFitWidth(500);
@@ -469,13 +480,26 @@ public class SecondaryFXMLController {
         return imageView;
     }
 
+    private void returnLid(){
+        lidButton.setOnAction(event -> {
+            if (lidPopped){
+                lid = makingLid();
+                canvas.getChildren().add(lid);
+                for (Particle allParticle : allParticles) allParticle.setLid(lid);
+                lidPopped = false;
+                canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
+            }
+        });
+    }
+
     private void particleEscaped(){
         for (int i = 0; i < allParticles.size(); i++) {
-            if (allParticles.get(i).getCircle().getCenterY() < 0){
+            if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > 600){
                 if (firstListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
                 if (secondListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
                 if (thirdListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
                 if (fourthListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
+                canvas.getChildren().remove(allParticles.get(i).getCircle());
                 allParticles.remove(i);
                 totalParticleCount--;
                 updatePressure();
@@ -532,6 +556,16 @@ public class SecondaryFXMLController {
             velocityValue = String.format("%.2f", calculateRMS(pvnrt.getTemperature()));;
         }
         velocityLabel.setText(velocityValue + "m/s");
+    }
+
+    private void changeVolumeLabel() {
+        String volumeValue;
+        if (pvnrt.getVolume() == 0) {
+            volumeValue = "0.00";
+        } else {
+            volumeValue = String.format("%.2f", calculateRMS(pvnrt.getVolume()));;
+        }
+        volumeLabel.setText(volumeValue + "m/s");
     }
 
 }

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <HBox fx:id="centerHBox" alignment="CENTER" fillHeight="false" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
          <children>
@@ -60,6 +66,7 @@
    <right>
       <VBox fx:id="gaugeVBox" alignment="CENTER" prefHeight="595.0" prefWidth="83.0" spacing="10" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="lidButton" mnemonicParsing="false" text="Lid" />
             <Button fx:id="remove10" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: firebrick;" text="- 10">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -90,6 +97,12 @@
                <children>
                   <Label style="-fx-font-weight: bold;" text="Average Particle Velocity:" />
                   <Label fx:id="velocityLabel" text="0.00m/s" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="54.0" prefWidth="154.0" style="-fx-background-color: lightblue;">
+               <children>
+                  <Label style="-fx-font-weight: bold;" text="Volume:" />
+                  <Label fx:id="volumeLabel" text="0.00 L" />
                </children>
             </VBox>
          </children>
