@@ -100,9 +100,7 @@ public class SecondaryFXMLController {
     public void initialize() {
         logger.info("Initializing MainAppController...");
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
-
-        System.out.println(getClass().getResource("/resources/LidContainer.png"));
-
+        
         pvnrt = new PVnRT();
         pvnrt.setMoles(0);
 
@@ -556,7 +554,7 @@ public class SecondaryFXMLController {
     }
 
     private void initializeComboBox() {
-        comboBox.getItems().addAll("Oxygen", "Radon", "Hydrogen");
+        comboBox.getItems().addAll("Oxygen", "Radon", "Hydrogen", "Bromine");
         comboBox.setValue("Oxygen");
 
         comboBox.setOnAction(event -> {
@@ -564,6 +562,7 @@ public class SecondaryFXMLController {
                 case "Oxygen" -> changeMolarMass(0.0320);
                 case "Radon" -> changeMolarMass(0.2201);
                 case "Hydrogen" -> changeMolarMass(0.00202);
+                case "Bromine" -> changeMolarMass(0.0799);
             }
         });
     }
@@ -583,7 +582,7 @@ public class SecondaryFXMLController {
         if (pvnrt.getVolume() == 0) {
             volumeValue = "0.00";
         } else {
-            volumeValue = String.format("%.2f", calculateRMS(pvnrt.getVolume()));;
+            volumeValue = String.format("%.2f", pvnrt.getVolume());;
         }
         volumeLabel.setText(volumeValue + " L");
     }
