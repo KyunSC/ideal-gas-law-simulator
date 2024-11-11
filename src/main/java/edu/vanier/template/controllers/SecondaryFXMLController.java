@@ -198,7 +198,9 @@ public class SecondaryFXMLController {
         KeyFrame kf = new KeyFrame(
                 Duration.millis(1),
                 event -> {
-                    addFirstQuadrant();
+                    addFirstQuadrant(listOfParticles, secondListOfParticles);
+                    addFirstQuadrant(listOfParticles, thirdListOfParticles);
+                    addFirstQuadrant(listOfParticles, fourthListOfParticles);
                     addToSecondThirdFourth(listOfParticles, secondListOfParticles);
                     addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
                     addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
@@ -209,23 +211,11 @@ public class SecondaryFXMLController {
         timeline.play();
     }
 
-    private void addFirstQuadrant(){
-        for (int i = 0; i < secondListOfParticles.size(); i++) {
-            if (secondListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && secondListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                firstListOfParticles.add(secondListOfParticles.get(i));
-                secondListOfParticles.remove(i);
-            }
-        }
-        for (int i = 0; i < thirdListOfParticles.size(); i++) {
-            if (thirdListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && thirdListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                firstListOfParticles.add(thirdListOfParticles.get(i));
-                thirdListOfParticles.remove(i);
-            }
-        }
-        for (int i = 0; i < fourthListOfParticles.size(); i++) {
-            if (fourthListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && fourthListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                firstListOfParticles.add(fourthListOfParticles.get(i));
-                fourthListOfParticles.remove(i);
+    private void addFirstQuadrant(ArrayList<Particle> firstListOfParticles, ArrayList<Particle> targetListOfParticles){
+        for (int i = 0; i < targetListOfParticles.size(); i++) {
+            if (targetListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && targetListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
+                firstListOfParticles.add(targetListOfParticles.get(i));
+                targetListOfParticles.remove(i);
             }
         }
     }
@@ -488,6 +478,7 @@ public class SecondaryFXMLController {
             if (lidPopped){
                 if (!canvas.getChildren().contains(lid)){
                     lid = makingLid();
+                    lid.setFitWidth(lid.getFitWidth() * volumeSlider.getValue() / 10);
                     canvas.getChildren().add(lid);
                     for (Particle allParticle : allParticles) allParticle.setLid(lid);
                     canvas.setBorder(new Border(new BorderStroke(null, null, null, null, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(10), null, null)));
