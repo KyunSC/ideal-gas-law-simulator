@@ -23,7 +23,8 @@ public class Particle {
     Timeline timeline;
     Pane canvas;
     ImageView lid;
-    BoundingBox boundingBox = new BoundingBox(10, 10, 480,480);
+    BoundingBox boundingBox = new BoundingBox(30, 30, 470,470);
+    boolean collisionDelay = false;
 
     /**
      *
@@ -115,27 +116,26 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
-        if (particle.getBoundsInParent().intersects(boundingBox)){
             if (canvas.getChildren().contains(lid)){
                 //Left wall collision detection
-                if (particle.getCenterX() <= particle.getRadius() + 5) {
+                if (particle.getCenterX() <= particle.getRadius() + 10) {
                     velocityX *= -1;
-                    particle.setCenterX(particle.getRadius() + 5);
+                    particle.setCenterX(particle.getRadius() + 10);
                 }
                 //Right wall collision detection
-                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 5) {
+                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 10) {
                     velocityX *= -1;
-                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
+                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 10);
                 }
                 //Top wall collision detection
-                if (particle.getCenterY() <= particle.getRadius() + 5) {
+                if (particle.getCenterY() <= particle.getRadius() + 10) {
                     velocityY *= -1;
-                    particle.setCenterY(particle.getRadius() + 5);
+                    particle.setCenterY(particle.getRadius() + 10);
                 }
                 //Bottom wall collision detection
-                if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 5) {
+                if (particle.getCenterY() >= canvas.getHeight() - particle.getRadius() - 10) {
                     velocityY *= -1;
-                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
+                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 10);
                 }
             }
             else {
@@ -156,10 +156,13 @@ public class Particle {
                     particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
                 }
             }
-        }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
     }
 
     public void setLid(ImageView lid) {this.lid = lid;}
+
+    public void setCollisionDelay(Boolean collisionDelay){this.collisionDelay = collisionDelay;}
+
+    public boolean isCollisionDelay() {return collisionDelay;}
 }

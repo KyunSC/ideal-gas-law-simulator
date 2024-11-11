@@ -86,7 +86,7 @@ public class SecondaryFXMLController {
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
-    private double baseParticleVelocity = 1;
+    private double baseParticleVelocity = 3;
     boolean paused = false;
     private double totalParticleCount;
     private double maxPressure = 1000;
@@ -394,14 +394,28 @@ public class SecondaryFXMLController {
 
     public void checkParticleParticleCollision(ArrayList<Particle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
-            for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
-                if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
-                    targetListOfParticles.get(i).velocityX *= -1;
-                    targetListOfParticles.get(j).velocityX *= -1;
-                    //targetListOfParticles.get(i).velocityY *= -1;
-                    targetListOfParticles.get(j).velocityY *= -1;
+            if (!targetListOfParticles.get(i).isCollisionDelay()){
+                for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
+                    if (!targetListOfParticles.get(j).isCollisionDelay()){
+                        if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
+                            targetListOfParticles.get(i).velocityX *= -1;
+                            targetListOfParticles.get(j).velocityX *= -1;
+                            //targetListOfParticles.get(i).velocityY *= -1;
+                            targetListOfParticles.get(j).velocityY *= -1;
+                            if (!targetListOfParticles.get(i).isCollisionDelay()) {
+                                targetListOfParticles.get(i).setCollisionDelay(true);
+                                delayCollision(targetListOfParticles.get(i));
+                            }
+                            if (!targetListOfParticles.get(j).isCollisionDelay()) {
+                                targetListOfParticles.get(j).setCollisionDelay(true);
+                                delayCollision(targetListOfParticles.get(j));
+                            }
+
+                        }
+                    }
                 }
             }
+
         }
     }
 
@@ -578,6 +592,16 @@ public class SecondaryFXMLController {
             volumeValue = String.format("%.2f", pvnrt.getVolume());;
         }
         volumeLabel.setText(volumeValue + " L");
+    }
+
+    private void delayCollision(Particle particle){
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
+        timeline.setOnFinished(event -> {
+            particle.setCollisionDelay(false);
+        });
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 
 }
