@@ -168,7 +168,6 @@ public class SecondaryFXMLController {
         if (newTemperature <= 0) {
             for (Particle particle : allParticles) {
                particle.setVelocity(0);
-                System.out.println(particle.getVelocity());
             }
         } else {
             for (Particle particle : allParticles) {
@@ -257,7 +256,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(50),
+                Duration.millis(1),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -397,11 +396,26 @@ public class SecondaryFXMLController {
             if (!targetListOfParticles.get(i).isCollisionDelay()){
                 for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
                     if (!targetListOfParticles.get(j).isCollisionDelay()){
-                        if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent()) ){
-                            targetListOfParticles.get(i).velocityX *= -1;
+                        if (targetListOfParticles.get(i).getCircle().getBoundsInParent().intersects(targetListOfParticles.get(j).getCircle().getBoundsInParent())){
+                            if (targetListOfParticles.get(i).getCircle().getCenterX() < targetListOfParticles.get(j).getCircle().getCenterX()){
+                                targetListOfParticles.get(i).velocityX = (Math.abs(targetListOfParticles.get(i).velocityX) * -1);
+                                targetListOfParticles.get(j).velocityX = (Math.abs(targetListOfParticles.get(j).velocityX));
+                            }
+                            else {
+                                targetListOfParticles.get(j).velocityX = (Math.abs(targetListOfParticles.get(j).velocityX) * -1);
+                                targetListOfParticles.get(i).velocityX = (Math.abs(targetListOfParticles.get(i).velocityX));
+                            }
+                            if (targetListOfParticles.get(i).getCircle().getCenterY() < targetListOfParticles.get(j).getCircle().getCenterY()){
+                                targetListOfParticles.get(i).velocityY = (Math.abs(targetListOfParticles.get(i).velocityY) * -1);
+                                targetListOfParticles.get(j).velocityY = (Math.abs(targetListOfParticles.get(j).velocityY));
+                            }
+                            else {
+                                targetListOfParticles.get(j).velocityY = (Math.abs(targetListOfParticles.get(j).velocityY) * -1);
+                                targetListOfParticles.get(i).velocityY = (Math.abs(targetListOfParticles.get(i).velocityY));
+                            }
+                            /*targetListOfParticles.get(i).velocityX *= -1;
                             targetListOfParticles.get(j).velocityX *= -1;
-                            //targetListOfParticles.get(i).velocityY *= -1;
-                            targetListOfParticles.get(j).velocityY *= -1;
+                            targetListOfParticles.get(i).velocityY *= -1;*/
                             if (!targetListOfParticles.get(i).isCollisionDelay()) {
                                 targetListOfParticles.get(i).setCollisionDelay(true);
                                 delayCollision(targetListOfParticles.get(i));

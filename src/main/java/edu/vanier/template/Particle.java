@@ -118,24 +118,24 @@ public class Particle {
     private void moveCircle(Circle particle) {
             if (canvas.getChildren().contains(lid)){
                 //Left wall collision detection
-                if (particle.getCenterX() <= particle.getRadius() + 10) {
+                if (particle.getCenterX() <= particle.getRadius() + 15) {
                     velocityX *= -1;
-                    particle.setCenterX(particle.getRadius() + 10);
+                    particle.setCenterX(particle.getRadius() + 15);
                 }
                 //Right wall collision detection
-                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 10) {
+                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 15) {
                     velocityX *= -1;
-                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 10);
+                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 15);
                 }
                 //Top wall collision detection
-                if (particle.getCenterY() <= particle.getRadius() + 10) {
+                if (particle.getCenterY() <= particle.getRadius() + 15) {
                     velocityY *= -1;
-                    particle.setCenterY(particle.getRadius() + 10);
+                    particle.setCenterY(particle.getRadius() + 15);
                 }
                 //Bottom wall collision detection
-                if (particle.getCenterY() >= canvas.getHeight() - particle.getRadius() - 10) {
+                if (particle.getCenterY() >= canvas.getHeight() - particle.getRadius() - 15) {
                     velocityY *= -1;
-                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 10);
+                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 15);
                 }
             }
             else {
