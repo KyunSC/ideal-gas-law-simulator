@@ -267,7 +267,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(10),
+                Duration.millis(50),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
@@ -452,7 +452,7 @@ public class SecondaryFXMLController {
                         parallelTransition.setOnFinished(event1 -> {
                             canvas.getChildren().remove(lid);
                         });
-                        canvas.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                        canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                     }
                 }
         );
@@ -554,6 +554,7 @@ public class SecondaryFXMLController {
     }
 
     private void initializeComboBox() {
+        comboBox.setStyle("-fx-text-fill : white");
         comboBox.getItems().addAll("Oxygen", "Radon", "Hydrogen", "Bromine");
         comboBox.setValue("Oxygen");
 
