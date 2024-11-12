@@ -347,13 +347,22 @@ public class SecondaryFXMLController {
         });
     }
 
+    /**
+     * Function reused by the buttons remove 1 and 10
+     * Checks if there are any particles available to delete
+     * If so, it removes the last circle in the list
+     * Checks for the deleted particle to delete from its quadrant
+     * Then it removes it from the general list
+     * Updates the particle count, temperature and pressure
+     * If the general list is empty, then the all variables should be at 0
+     */
     private void remove1(){
         if (!allParticles.isEmpty()) {
             canvas.getChildren().remove(allParticles.getLast().getCircle());
-            if (firstListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
-            if (secondListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
-            if (thirdListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
-            if (fourthListOfParticles.contains(allParticles.getLast())) firstListOfParticles.remove(allParticles.getLast());
+            firstListOfParticles.remove(allParticles.getLast());
+            secondListOfParticles.remove(allParticles.getLast());
+            thirdListOfParticles.remove(allParticles.getLast());
+            fourthListOfParticles.remove(allParticles.getLast());
             allParticles.removeLast();
             totalParticleCount--;
             updatePressure();
@@ -364,6 +373,11 @@ public class SecondaryFXMLController {
                 pressureGauge.updateGauge();
                 pvnrt.setTemperature(0);
                 thermometer.updateThermometer();
+                allParticles.clear();
+                firstListOfParticles.clear();
+                secondListOfParticles.clear();
+                thirdListOfParticles.clear();
+                fourthListOfParticles.clear();
             }
         }
         else {
@@ -372,16 +386,33 @@ public class SecondaryFXMLController {
             pressureGauge.updateGauge();
             pvnrt.setTemperature(0);
             thermometer.updateThermometer();
+            allParticles.clear();
+            firstListOfParticles.clear();
+            secondListOfParticles.clear();
+            thirdListOfParticles.clear();
+            fourthListOfParticles.clear();
         }
+        System.out.println(allParticles);
+        System.out.println(firstListOfParticles);
+        System.out.println(secondListOfParticles);
+        System.out.println(thirdListOfParticles);
+        System.out.println(fourthListOfParticles);
     }
 
 
+    /**
+     * When the button is pressed, it plays an event containing the function remove1() once
+     */
     private void remove1Button(){
         remove1.setOnAction(event -> {
             remove1();
         });
     }
 
+    /**
+     * When the button is pressed, it repeats the function remove1() 10 times,
+     * Then, it updates the thermometer
+     */
     private void remove10Button(){
         remove10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
@@ -424,12 +455,10 @@ public class SecondaryFXMLController {
                                 targetListOfParticles.get(j).setCollisionDelay(true);
                                 delayCollision(targetListOfParticles.get(j));
                             }
-
                         }
                     }
                 }
             }
-
         }
     }
 
