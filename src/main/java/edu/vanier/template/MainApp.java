@@ -35,6 +35,8 @@ public class MainApp extends Application {
             scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true);
+            primaryStage.setMinHeight(720);
+            primaryStage.setMinWidth(1280);
             primaryStage.setTitle("Gas Simulation");
             // Put this appliation's main window on top of other already-opened windows
             // upon launching the app.
