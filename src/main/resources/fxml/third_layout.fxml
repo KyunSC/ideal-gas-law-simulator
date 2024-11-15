@@ -12,7 +12,7 @@
             <children>
                 <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-radius: 20; -fx-background-color: black; -fx-background-radius: 20;">
                     <children>
-                        <Circle fx:id="circleCnvas" fill="DODGERBLUE" layoutX="247.0" layoutY="255.0" radius="245.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Circle fx:id="circleCanvas" fill="DODGERBLUE" layoutX="247.0" layoutY="255.0" radius="245.0" stroke="BLACK" strokeType="INSIDE" />
                     </children></Pane>
 
             </children>
@@ -70,7 +70,6 @@
             <children>
                 <VBox alignment="CENTER" prefHeight="274.0" prefWidth="128.0" spacing="10.0" style="-fx-background-color: #333333; -fx-border-radius: 100; -fx-background-radius: 20;">
                     <children>
-                        <Button fx:id="lidButton" mnemonicParsing="false" style="-fx-background-color: teal;" text="± Lid" textFill="WHITE" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                             <children>
                                 <Button fx:id="remove10" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: red; -fx-background-radius: 10;" text="- 10" textFill="WHITE">

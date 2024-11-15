@@ -76,10 +76,6 @@ public class ThirdFXMLController {
 
     ArrayList<BalloonParticle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
-    ArrayList<Particle> firstListOfParticles = new ArrayList<>();
-    ArrayList<Particle> secondListOfParticles = new ArrayList<>();
-    ArrayList<Particle> thirdListOfParticles = new ArrayList<>();
-    ArrayList<Particle> fourthListOfParticles = new ArrayList<>();
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
@@ -120,7 +116,6 @@ public class ThirdFXMLController {
         fastForwardFunction();
         resetButton();
         particleCollisionTimeline();
-        addToQuadrants();
         setupTemperatureControls();
         initializeComboBox();
     }
@@ -185,48 +180,6 @@ public class ThirdFXMLController {
         thermometer.updateThermometer();
     }
 
-    private void addToQuadrants(){
-        Timeline timeline = new Timeline();
-        KeyFrame kf = new KeyFrame(
-                Duration.millis(1),
-                event -> {
-                    addFirstQuadrant(secondListOfParticles);
-                    addFirstQuadrant(thirdListOfParticles);
-                    addFirstQuadrant(fourthListOfParticles);
-                    addToSecondThirdFourth(listOfParticles);
-                }
-        );
-        timeline.getKeyFrames().add(kf);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-    }
-
-    private void addFirstQuadrant(ArrayList<Particle> targetListOfParticles){
-        for (int i = 0; i < targetListOfParticles.size(); i++) {
-            if (targetListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && targetListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                firstListOfParticles.add(targetListOfParticles.get(i));
-                targetListOfParticles.remove(targetListOfParticles.get(i));
-            }
-        }
-    }
-
-    private void addToSecondThirdFourth(ArrayList<Particle> listOfParticles){
-        for (int i = 0; i < listOfParticles.size(); i++) {
-            if (listOfParticles.get(i).getCircle().getCenterX() > canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                secondListOfParticles.add(listOfParticles.get(i));
-                listOfParticles.remove(listOfParticles.get(i));
-            }
-            if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() > canvas.getHeight() / 2){
-                thirdListOfParticles.add(listOfParticles.get(i));
-                listOfParticles.remove(listOfParticles.get(i));
-            }
-            if (listOfParticles.get(i).getCircle().getCenterX() > canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() > canvas.getHeight() / 2){
-                fourthListOfParticles.add(listOfParticles.get(i));
-                listOfParticles.remove(listOfParticles.get(i));
-            }
-        }
-    }
-
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
@@ -247,10 +200,11 @@ public class ThirdFXMLController {
 
             Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
             BalloonParticle balloonParticle = new BalloonParticle(circle2, particleVelocity, canvas);
-            particleVelocity *= -1;
-            balloonParticle.setVelocityX(balloonParticle.velocityX * randomNegative);
-            balloonParticle.setVelocityY(balloonParticle.velocityY * randomNegative);
-            randomNegative *= -1;
+            balloonParticle.setVelocityY(balloonParticle.getVelocityY() * randomNegative);
+            randomNegative = randomNegative * -1;
+            System.out.println(balloonParticle.velocityY);
+            System.out.println(randomNegative);
+            balloonParticle.setVelocityX(balloonParticle.getVelocityX() * randomNegative);
             balloonParticle.createTimeline();
             balloonParticle.play();
             canvas.getChildren().add(balloonParticle.getCircle());
@@ -284,10 +238,6 @@ public class ThirdFXMLController {
         reset.setOnAction(event -> {
             for (int i = 0; i < allParticles.size(); i++) canvas.getChildren().remove(allParticles.get(i).getCircle());
             allParticles.clear();
-            firstListOfParticles.clear();
-            secondListOfParticles.clear();
-            thirdListOfParticles.clear();
-            fourthListOfParticles.clear();
             totalParticleCount = 0;
             pvnrt.setMoles(0);
             updatePressure();
@@ -357,10 +307,6 @@ public class ThirdFXMLController {
     private void remove1(){
         if (!allParticles.isEmpty()) {
             canvas.getChildren().remove(allParticles.getLast().getCircle());
-            firstListOfParticles.remove(allParticles.getLast());
-            secondListOfParticles.remove(allParticles.getLast());
-            thirdListOfParticles.remove(allParticles.getLast());
-            fourthListOfParticles.remove(allParticles.getLast());
             allParticles.removeLast();
             totalParticleCount--;
             updatePressure();
@@ -372,10 +318,6 @@ public class ThirdFXMLController {
                 pvnrt.setTemperature(0);
                 thermometer.updateThermometer();
                 allParticles.clear();
-                firstListOfParticles.clear();
-                secondListOfParticles.clear();
-                thirdListOfParticles.clear();
-                fourthListOfParticles.clear();
             }
         }
         else {
@@ -385,16 +327,7 @@ public class ThirdFXMLController {
             pvnrt.setTemperature(0);
             thermometer.updateThermometer();
             allParticles.clear();
-            firstListOfParticles.clear();
-            secondListOfParticles.clear();
-            thirdListOfParticles.clear();
-            fourthListOfParticles.clear();
         }
-        System.out.println(allParticles);
-        System.out.println(firstListOfParticles);
-        System.out.println(secondListOfParticles);
-        System.out.println(thirdListOfParticles);
-        System.out.println(fourthListOfParticles);
     }
 
 
@@ -442,9 +375,6 @@ public class ThirdFXMLController {
                                 targetListOfParticles.get(j).velocityY = (Math.abs(targetListOfParticles.get(j).velocityY) * -1);
                                 targetListOfParticles.get(i).velocityY = (Math.abs(targetListOfParticles.get(i).velocityY));
                             }
-                            /*targetListOfParticles.get(i).velocityX *= -1;
-                            targetListOfParticles.get(j).velocityX *= -1;
-                            targetListOfParticles.get(i).velocityY *= -1;*/
                             if (!targetListOfParticles.get(i).isCollisionDelay()) {
                                 targetListOfParticles.get(i).setCollisionDelay(true);
                                 delayCollision(targetListOfParticles.get(i));
@@ -475,25 +405,11 @@ public class ThirdFXMLController {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
     }
 
-    private ImageView makingLid(){
-        ImageView imageView = new ImageView(lidImage);
-        imageView.setFitWidth(500);
-        imageView.setFitHeight(100);
-        imageView.setLayoutY(-60);
-        imageView.setPreserveRatio(false);
-
-        return imageView;
-    }
-
     private void particleEscaped(){
         for (int i = 0; i < allParticles.size(); i++) {
             if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > 600){
-                if (firstListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
-                if (secondListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
-                if (thirdListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
-                if (fourthListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
                 canvas.getChildren().remove(allParticles.get(i).getCircle());
-                allParticles.remove(i);
+                allParticles.remove(allParticles.get(i));
                 totalParticleCount--;
                 updatePressure();
                 pressureGauge.updateGauge();
@@ -514,7 +430,6 @@ public class ThirdFXMLController {
             setParticleSize(molarMass);
             particle.setCircleSize(particleSize);
         }
-
     }
 
     private void setParticleColor(double molarMass) {
@@ -568,7 +483,7 @@ public class ThirdFXMLController {
 
     private void delayCollision(BalloonParticle particle){
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000)));
         timeline.setOnFinished(event -> {
             particle.setCollisionDelay(false);
         });
