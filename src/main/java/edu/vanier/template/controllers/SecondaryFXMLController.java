@@ -1,5 +1,6 @@
 package edu.vanier.template.controllers;
 
+import edu.vanier.template.BalloonParticle;
 import edu.vanier.template.MainApp;
 import edu.vanier.template.Particle;
 import edu.vanier.template.calculations.PVnRT;
@@ -253,10 +254,22 @@ public class SecondaryFXMLController {
             Particle particle = new Particle(circle, particleVelocity, canvas, lid);
             particle.createTimeline();
             particle.play();
-            canvas.getChildren().add(particle.getCircle());
+            //canvas.getChildren().add(particle.getCircle());
             firstListOfParticles.add(particle);
             allParticles.add(particle);
             thermometer.updateThermometer();
+
+            Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
+            BalloonParticle balloonParticle = new BalloonParticle(circle2, particleVelocity, canvas);
+            balloonParticle.createTimeline();
+            balloonParticle.play();
+            canvas.getChildren().add(balloonParticle.getCircle());
+            Circle circle3 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
+            particleVelocity *= -1;
+            BalloonParticle balloonParticle2 = new BalloonParticle(circle3, particleVelocity, canvas);
+            balloonParticle.createTimeline();
+            balloonParticle.play();
+            canvas.getChildren().add(balloonParticle2.getCircle());
         }
     }
 

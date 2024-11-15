@@ -23,6 +23,7 @@ public class BalloonParticle {
     Timeline timeline;
     Pane canvas;
     boolean collisionDelay = false;
+    double max;
 
     /**
      *
@@ -37,6 +38,9 @@ public class BalloonParticle {
         this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
+
+        max = (canvas.getWidth()) / 2;
+
     }
 
     public double getVelocityX() {
@@ -113,7 +117,7 @@ public class BalloonParticle {
      *
      */
     private void moveCircle(Circle particle) {
-
+/*
             //Left wall collision detection
             if (particle.getCenterX() <= particle.getRadius() + 15) {
                 velocityX *= -1;
@@ -144,14 +148,18 @@ public class BalloonParticle {
                 velocityX *= -1;
                 particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
             }
-                /*if (particle.getCenterY() <= particle.getRadius() - 2) {
+                *//*if (particle.getCenterY() <= particle.getRadius() - 2) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 5);
-                }*/
+                }*//*
             if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 2) {
                 velocityY *= -1;
                 particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
             }
+        }*/
+        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow(canvas.getWidth()/2, 2)){
+            velocityX *= -1;
+            velocityY *= -1;
         }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
