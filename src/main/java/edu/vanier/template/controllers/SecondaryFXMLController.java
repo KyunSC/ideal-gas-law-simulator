@@ -253,7 +253,7 @@ public class SecondaryFXMLController {
             particle.createTimeline();
             particle.play();
             canvas.getChildren().add(particle.getCircle());
-            listOfParticles.add(particle);
+            firstListOfParticles.add(particle);
             allParticles.add(particle);
             thermometer.updateThermometer();
         }
