@@ -198,9 +198,7 @@ public class SecondaryFXMLController {
                     addFirstQuadrant(listOfParticles, secondListOfParticles);
                     addFirstQuadrant(listOfParticles, thirdListOfParticles);
                     addFirstQuadrant(listOfParticles, fourthListOfParticles);
-                    addToSecondThirdFourth(listOfParticles, secondListOfParticles);
-                    addToSecondThirdFourth(listOfParticles, thirdListOfParticles);
-                    addToSecondThirdFourth(listOfParticles, fourthListOfParticles);
+                    addToSecondThirdFourth(listOfParticles);
                 }
         );
         timeline.getKeyFrames().add(kf);
@@ -212,16 +210,28 @@ public class SecondaryFXMLController {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             if (targetListOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && targetListOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
                 firstListOfParticles.add(targetListOfParticles.get(i));
-                targetListOfParticles.remove(i);
+                targetListOfParticles.remove(targetListOfParticles.get(i));
             }
         }
     }
 
-    private void addToSecondThirdFourth(ArrayList<Particle> listOfParticles, ArrayList<Particle> targetList){
+    private void addToSecondThirdFourth(ArrayList<Particle> listOfParticles){
         for (int i = 0; i < listOfParticles.size(); i++) {
-            if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
-                targetList.add(listOfParticles.get(i));
-                listOfParticles.remove(i);
+            if (listOfParticles.get(i).getCircle().getCenterX() > canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() < canvas.getHeight() / 2){
+                secondListOfParticles.add(listOfParticles.get(i));
+                listOfParticles.remove(listOfParticles.get(i));
+            }
+        }
+        for (int i = 0; i < listOfParticles.size(); i++) {
+            if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() > canvas.getHeight() / 2){
+                thirdListOfParticles.add(listOfParticles.get(i));
+                listOfParticles.remove(listOfParticles.get(i));
+            }
+        }
+        for (int i = 0; i < listOfParticles.size(); i++) {
+            if (listOfParticles.get(i).getCircle().getCenterX() > canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() > canvas.getHeight() / 2){
+                fourthListOfParticles.add(listOfParticles.get(i));
+                listOfParticles.remove(listOfParticles.get(i));
             }
         }
     }
