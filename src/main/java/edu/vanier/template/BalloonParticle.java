@@ -33,7 +33,7 @@ public class BalloonParticle {
     public BalloonParticle(Circle circle, double velocity, Pane canvas){
         this.circle = circle;
         this.velocity = velocity;
-        this.velocityX = Math.random()*velocity;
+        this.velocityX = ((Math.random()*(2 * velocity)) - velocity);
         this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
@@ -46,6 +46,11 @@ public class BalloonParticle {
     public double getVelocityY() {
         return velocityY;
     }
+
+    public void setVelocityX(Double velocityX){this.velocityX = velocityX;}
+
+    public void setVelocityY(Double velocityY){this.velocityY = velocityY;}
+
 
     public void setVelocity(double velocity) {
         if (velocity == 0) {
@@ -114,49 +119,11 @@ public class BalloonParticle {
      *
      */
     private void moveCircle(Circle particle) {
-/*
-            //Left wall collision detection
-            if (particle.getCenterX() <= particle.getRadius() + 15) {
-                velocityX *= -1;
-                particle.setCenterX(particle.getRadius() + 15);
-            }
-            //Right wall collision detection
-            if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 15) {
-                velocityX *= -1;
-                particle.setCenterX(canvas.getWidth() - particle.getRadius() - 15);
-            }
-            //Top wall collision detection
-            if (particle.getCenterY() <= particle.getRadius() + 15) {
-                velocityY *= -1;
-                particle.setCenterY(particle.getRadius() + 15);
-            }
-            //Bottom wall collision detection
-            if (particle.getCenterY() >= canvas.getHeight() - particle.getRadius() - 15) {
-                velocityY *= -1;
-                particle.setCenterY(canvas.getHeight() - particle.getRadius() - 15);
-
-        }
-        else {
-            if (particle.getCenterX() <= particle.getRadius() + 2) {
-                velocityX *= -1;
-                particle.setCenterX(particle.getRadius() + 5);
-            }
-            if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 2) {
-                velocityX *= -1;
-                particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
-            }
-                *//*if (particle.getCenterY() <= particle.getRadius() - 2) {
-                    velocityY *= -1;
-                    particle.setCenterY(particle.getRadius() + 5);
-                }*//*
-            if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 2) {
-                velocityY *= -1;
-                particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
-            }
-        }*/
-        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow((canvas.getWidth()/2) - circle.getRadius() - 5, 2)){
+        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow((canvas.getWidth()/2) - circle.getRadius() - 15, 2)){
             velocityX *= -1;
             velocityY *= -1;
+            circle.setCenterX(circle.getCenterX() + velocityX);
+            circle.setCenterY(circle.getCenterY() + velocityY);
         }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);

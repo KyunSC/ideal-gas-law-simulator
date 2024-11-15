@@ -76,7 +76,7 @@ public class ThirdFXMLController {
     @FXML
     Label volumeLabel;
 
-    ArrayList<Particle> allParticles = new ArrayList<>();
+    ArrayList<BalloonParticle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
     ArrayList<Particle> firstListOfParticles = new ArrayList<>();
     ArrayList<Particle> secondListOfParticles = new ArrayList<>();
@@ -92,6 +92,7 @@ public class ThirdFXMLController {
     public boolean lidPopped = false;
     private Color particleColor;
     private double particleSize;
+    private double randomNegative = 1;
 
     Image lidImage = new Image("/LidContainer.png");
 
@@ -163,11 +164,11 @@ public class ThirdFXMLController {
 
     private void updateParticlesWithTemperature(double newTemperature) {
         if (newTemperature <= 0) {
-            for (Particle particle : allParticles) {
+            for (BalloonParticle particle : allParticles) {
                 particle.setVelocity(0);
             }
         } else {
-            for (Particle particle : allParticles) {
+            for (BalloonParticle particle : allParticles) {
                 particle.setVelocity((baseParticleVelocity * calculateRMS(newTemperature)) / calculateRMS(300));
             }
         }
@@ -249,16 +250,14 @@ public class ThirdFXMLController {
 
             Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
             BalloonParticle balloonParticle = new BalloonParticle(circle2, particleVelocity, canvas);
+            particleVelocity *= -1;
+            balloonParticle.setVelocityX(balloonParticle.velocityX * randomNegative);
+            balloonParticle.setVelocityY(balloonParticle.velocityY * randomNegative);
+            randomNegative *= -1;
             balloonParticle.createTimeline();
             balloonParticle.play();
             canvas.getChildren().add(balloonParticle.getCircle());
-            Circle circle3 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
-            particleVelocity *= -1;
-            BalloonParticle balloonParticle2 = new BalloonParticle(circle3, particleVelocity, canvas);
-            balloonParticle2.setVelocity(-1 * balloonParticle2.getVelocity());
-            balloonParticle2.createTimeline();
-            balloonParticle2.play();
-            canvas.getChildren().add(balloonParticle2.getCircle());
+            allParticles.add(balloonParticle);
         }
     }
 
@@ -267,10 +266,7 @@ public class ThirdFXMLController {
         KeyFrame keyframe = new KeyFrame(
                 Duration.millis(0.1),
                 (event -> {
-                    checkParticleParticleCollision(firstListOfParticles);
-                    checkParticleParticleCollision(secondListOfParticles);
-                    checkParticleParticleCollision(thirdListOfParticles);
-                    checkParticleParticleCollision(fourthListOfParticles);
+                    checkParticleParticleCollision(allParticles);
                     particleEscaped();
                     changeVelocityLabel();
                     changeVolumeLabel();
@@ -332,13 +328,13 @@ public class ThirdFXMLController {
         KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(1),
                 event1 -> {
-                    for (Particle allParticle : allParticles) {
+                    for (BalloonParticle allParticle : allParticles) {
                         allParticle.play();
                     }
                 }
         );
         timeline.setOnFinished(event1 -> {
-            for (Particle allParticle : allParticles) {
+            for (BalloonParticle allParticle : allParticles) {
                 allParticle.play();
             }
             for (int i = 0; i < allParticles.size(); i++) {
@@ -428,7 +424,7 @@ public class ThirdFXMLController {
         });
     }
 
-    public void checkParticleParticleCollision(ArrayList<Particle> targetListOfParticles) {
+    public void checkParticleParticleCollision(ArrayList<BalloonParticle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             if (!targetListOfParticles.get(i).isCollisionDelay()){
                 for (int j = (i+1); j < targetListOfParticles.size() ; j++) {
@@ -522,7 +518,7 @@ public class ThirdFXMLController {
         pvnrt.setMolarMass(molarMass);
         // Calculation based on RMS gas speed equation. Changes base particle velocity
         baseParticleVelocity = Math.sqrt((Math.pow(baseParticleVelocity, 2) * initialMolarMass) / molarMass);
-        for (Particle particle : allParticles) {
+        for (BalloonParticle particle : allParticles) {
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
             particle.setVelocity(particleVelocity);
             setParticleColor(molarMass);
@@ -582,7 +578,7 @@ public class ThirdFXMLController {
         volumeLabel.setText(volumeValue + " L");
     }
 
-    private void delayCollision(Particle particle){
+    private void delayCollision(BalloonParticle particle){
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
         timeline.setOnFinished(event -> {
