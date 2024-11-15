@@ -221,14 +221,10 @@ public class SecondaryFXMLController {
                 secondListOfParticles.add(listOfParticles.get(i));
                 listOfParticles.remove(listOfParticles.get(i));
             }
-        }
-        for (int i = 0; i < listOfParticles.size(); i++) {
             if (listOfParticles.get(i).getCircle().getCenterX() < canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() > canvas.getHeight() / 2){
                 thirdListOfParticles.add(listOfParticles.get(i));
                 listOfParticles.remove(listOfParticles.get(i));
             }
-        }
-        for (int i = 0; i < listOfParticles.size(); i++) {
             if (listOfParticles.get(i).getCircle().getCenterX() > canvas.getWidth()/2 && listOfParticles.get(i).getCircle().getCenterY() > canvas.getHeight() / 2){
                 fourthListOfParticles.add(listOfParticles.get(i));
                 listOfParticles.remove(listOfParticles.get(i));
