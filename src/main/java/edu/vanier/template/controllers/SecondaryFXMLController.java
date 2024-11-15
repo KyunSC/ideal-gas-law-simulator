@@ -110,6 +110,7 @@ public class SecondaryFXMLController {
 
         lid.setImage(lidImage);
         initialFunctions();
+
     }
 
     private void initialFunctions(){
