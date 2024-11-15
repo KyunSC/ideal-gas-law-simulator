@@ -29,7 +29,7 @@ public class MainAppFXMLController {
     }
 
     private void handleClickMe(Event e) {
-        System.out.println("Click me called.");
+        MainApp.switchScene(MainApp.THIRD_LAYOUT, new ThirdFXMLController());
         logger.info("Click me button has been pressed...");
     }
 

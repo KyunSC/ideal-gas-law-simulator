@@ -35,7 +35,7 @@ import java.util.Objects;
  * Quadrants are used to be more effective when detecting collisions between Particles
  *
  */
-public class SecondaryFXMLController {
+public class ThirdFXMLController {
 
     private final static Logger logger = LoggerFactory.getLogger(SecondaryFXMLController.class);
 
@@ -68,8 +68,6 @@ public class SecondaryFXMLController {
     @FXML
     Button coolButton;
     @FXML
-    ImageView lid;
-    @FXML
     ComboBox<String> comboBox;
     @FXML
     Label velocityLabel;
@@ -101,7 +99,7 @@ public class SecondaryFXMLController {
     public void initialize() {
         logger.info("Initializing MainAppController...");
         btnSwitchScene.setOnAction(this::loadPrimaryScene);
-        
+
         pvnrt = new PVnRT();
         pvnrt.setMoles(0);
 
@@ -109,7 +107,6 @@ public class SecondaryFXMLController {
         thermometer = new Thermometer(pvnrt);
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
-        lid.setImage(lidImage);
         initialFunctions();
 
     }
@@ -127,9 +124,7 @@ public class SecondaryFXMLController {
         addToQuadrants();
         setupTemperatureControls();
         initializeVolumeSlider();
-        lidPopping();
         initializeComboBox();
-        returnLid();
     }
 
     private void setupTemperatureControls() {
@@ -169,7 +164,7 @@ public class SecondaryFXMLController {
     private void updateParticlesWithTemperature(double newTemperature) {
         if (newTemperature <= 0) {
             for (Particle particle : allParticles) {
-               particle.setVelocity(0);
+                particle.setVelocity(0);
             }
         } else {
             for (Particle particle : allParticles) {
@@ -250,16 +245,9 @@ public class SecondaryFXMLController {
             setParticleColor(pvnrt.getMolarMass());
             setParticleSize(pvnrt.getMolarMass());
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
-            Circle circle = new Circle(20, 20, particleSize, particleColor);
-            Particle particle = new Particle(circle, particleVelocity, canvas, lid);
-            particle.createTimeline();
-            particle.play();
-            canvas.getChildren().add(particle.getCircle());
-            firstListOfParticles.add(particle);
-            allParticles.add(particle);
             thermometer.updateThermometer();
 
-            /*Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
+            Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
             BalloonParticle balloonParticle = new BalloonParticle(circle2, particleVelocity, canvas);
             balloonParticle.createTimeline();
             balloonParticle.play();
@@ -270,7 +258,7 @@ public class SecondaryFXMLController {
             balloonParticle2.setVelocity(-1 * balloonParticle2.getVelocity());
             balloonParticle2.createTimeline();
             balloonParticle2.play();
-            canvas.getChildren().add(balloonParticle2.getCircle());*/
+            canvas.getChildren().add(balloonParticle2.getCircle());
         }
     }
 
@@ -314,9 +302,6 @@ public class SecondaryFXMLController {
             thermometer.updateThermometer();
 
             if (lidPopped){
-                lid = makingLid();
-                canvas.getChildren().add(lid);
-                for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
                 canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
             }
@@ -499,45 +484,11 @@ public class SecondaryFXMLController {
             canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
-            lid.setFitWidth((volumeSlider.getValue()/volumeSlider.getMax()) * 500);
         } ));
     }
 
     private double calculateRMS(double temp) {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
-    }
-
-    private void lidPopping(){
-        Timeline timeline = new Timeline();
-        KeyFrame keyFrame = new KeyFrame(
-                Duration.millis(1000),
-                event -> {
-                    if (pvnrt.getPressure() > maxPressure && !lidPopped) {
-                        canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
-                        lidPopped = true;
-                        ParallelTransition parallelTransition = getParallelTransition();
-                        parallelTransition.setCycleCount(1);
-                        parallelTransition.play();
-                        parallelTransition.setOnFinished(event1 -> {
-                            canvas.getChildren().remove(lid);
-                        });
-                    }
-                }
-        );
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-    }
-
-    private ParallelTransition getParallelTransition() {
-        RotateTransition rotate = new RotateTransition(Duration.millis(1000), lid);
-        rotate.setByAngle(100);
-        rotate.setCycleCount(1);
-        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(1000), lid);
-        translateTransition.setToY(-1000);
-        translateTransition.setToX(1000);
-        translateTransition.setCycleCount(1);
-        return new ParallelTransition(lid, rotate, translateTransition);
     }
 
     private ImageView makingLid(){
@@ -548,33 +499,6 @@ public class SecondaryFXMLController {
         imageView.setPreserveRatio(false);
 
         return imageView;
-    }
-
-    private void returnLid(){
-        lidButton.setOnAction(event -> {
-            if (lidPopped){
-                if (!canvas.getChildren().contains(lid)){
-                    lid = makingLid();
-                    lid.setFitWidth(lid.getFitWidth() * volumeSlider.getValue() / 10);
-                    canvas.getChildren().add(lid);
-                    for (Particle allParticle : allParticles) allParticle.setLid(lid);
-                    canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
-                    lidPopped = false;
-                }
-            }
-            else {
-                if (canvas.getChildren().contains(lid)){
-                    ParallelTransition parallelTransition = getParallelTransition();
-                    parallelTransition.setCycleCount(1);
-                    parallelTransition.play();
-                    parallelTransition.setOnFinished(event1 -> {
-                        canvas.getChildren().remove(lid);
-                    });
-                    canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
-                    lidPopped = true;
-                }
-            }
-        });
     }
 
     private void particleEscaped(){

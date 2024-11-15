@@ -23,7 +23,6 @@ public class BalloonParticle {
     Timeline timeline;
     Pane canvas;
     boolean collisionDelay = false;
-    double max;
 
     /**
      *
@@ -38,9 +37,6 @@ public class BalloonParticle {
         this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
-
-        max = (canvas.getWidth()) / 2;
-
     }
 
     public double getVelocityX() {
@@ -64,6 +60,7 @@ public class BalloonParticle {
 
             velocityX = velocity * Math.cos(particleAngle); // New x velocity
             velocityY = velocity * Math.sin(particleAngle); // New y velocity
+
         }
     }
 
@@ -157,7 +154,7 @@ public class BalloonParticle {
                 particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
             }
         }*/
-        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow(canvas.getWidth()/2, 2)){
+        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow((canvas.getWidth()/2) - circle.getRadius() - 5, 2)){
             velocityX *= -1;
             velocityY *= -1;
         }

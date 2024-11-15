@@ -23,6 +23,7 @@ public class MainApp extends Application {
 
     public static final String MAINAPP_LAYOUT = "MainApp_layout";
     public static final String SECONDARY_LAYOUT = "secondary_layout";
+    public static final String THIRD_LAYOUT = "third_layout";
     private final static Logger logger = LoggerFactory.getLogger(MainApp.class);
     private static Scene scene;
 
@@ -58,7 +59,6 @@ public class MainApp extends Application {
     public static void switchScene(String fxmlFile, Object fxmlController) {
         try {
             scene.setRoot(loadFXML(fxmlFile, fxmlController));
-
 
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
