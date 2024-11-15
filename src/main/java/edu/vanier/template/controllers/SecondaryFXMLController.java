@@ -262,7 +262,7 @@ public class SecondaryFXMLController {
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
-                Duration.millis(1),
+                Duration.millis(0.1),
                 (event -> {
                     checkParticleParticleCollision(firstListOfParticles);
                     checkParticleParticleCollision(secondListOfParticles);
