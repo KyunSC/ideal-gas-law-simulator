@@ -86,7 +86,6 @@ public class ThirdFXMLController {
     public boolean lidPopped = false;
     private Color particleColor;
     private double particleSize;
-    private double randomNegative = 1;
 
     Image lidImage = new Image("/LidContainer.png");
 
@@ -183,12 +182,12 @@ public class ThirdFXMLController {
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
-                addParticle();
+                addBalloonParticle();
             }
         });
     }
 
-    private void addParticle() {
+    private void addBalloonParticle() {
         if (pvnrt.getTemperature() == 0) pvnrt.setTemperature(300);
         if (!paused) {
             totalParticleCount++;
@@ -198,17 +197,13 @@ public class ThirdFXMLController {
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
             thermometer.updateThermometer();
 
-            Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
-            BalloonParticle balloonParticle = new BalloonParticle(circle2, particleVelocity, canvas);
-            balloonParticle.setVelocityY(balloonParticle.getVelocityY() * randomNegative);
-            randomNegative = randomNegative * -1;
-            System.out.println(balloonParticle.velocityY);
-            System.out.println(randomNegative);
-            balloonParticle.setVelocityX(balloonParticle.getVelocityX() * randomNegative);
+            Circle circle = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
+            BalloonParticle balloonParticle = new BalloonParticle(circle, particleVelocity, canvas);
             balloonParticle.createTimeline();
             balloonParticle.play();
             canvas.getChildren().add(balloonParticle.getCircle());
             allParticles.add(balloonParticle);
+            System.out.println(balloonParticle.velocityX + " " + balloonParticle.velocityY);
         }
     }
 
@@ -230,7 +225,7 @@ public class ThirdFXMLController {
 
     private void addParticlesButton(){
         add.setOnAction(event -> {
-            addParticle();
+            addBalloonParticle();
         });
     }
 

@@ -22,7 +22,7 @@ public class BalloonParticle {
     public double particleAngle;
     Timeline timeline;
     Pane canvas;
-    boolean collisionDelay = false;
+    boolean collisionDelay = true;
 
     /**
      *
@@ -33,10 +33,16 @@ public class BalloonParticle {
     public BalloonParticle(Circle circle, double velocity, Pane canvas){
         this.circle = circle;
         this.velocity = velocity;
-        this.velocityX = ((Math.random()*(2 * velocity)) - velocity);
-        this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
+        double angle = Math.floor(Math.random()*360);
+        this.velocityX = velocity * Math.sin(angle);
+        this.velocityY = velocity * Math.cos(angle);
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
+        Timeline timeline1 = new Timeline();
+        timeline1.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
+        timeline1.setOnFinished(event -> collisionDelay = false);
+        timeline1.setCycleCount(1);
+        timeline1.play();
     }
 
     public double getVelocityX() {
