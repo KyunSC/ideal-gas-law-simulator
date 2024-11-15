@@ -10,10 +10,9 @@
     <center>
         <HBox fx:id="centerHBox" alignment="CENTER" fillHeight="false" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="434.0" BorderPane.alignment="CENTER">
             <children>
-                <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: white; -fx-border-radius: 20; -fx-border-style: solid; -fx-background-color: black; -fx-background-radius: 20;">
+                <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="193.0" minWidth="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-radius: 20; -fx-background-color: black; -fx-background-radius: 20;">
                     <children>
-                        <Slider fx:id="volumeSlider" blockIncrement="1.0" layoutY="510.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
-                        <Circle fill="DODGERBLUE" layoutX="247.0" layoutY="255.0" radius="245.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Circle fx:id="circleCnvas" fill="DODGERBLUE" layoutX="247.0" layoutY="255.0" radius="245.0" stroke="BLACK" strokeType="INSIDE" />
                     </children></Pane>
 
             </children>

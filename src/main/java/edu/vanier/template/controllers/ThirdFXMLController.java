@@ -56,8 +56,6 @@ public class ThirdFXMLController {
     @FXML
     Button reset;
     @FXML
-    Slider volumeSlider;
-    @FXML
     Button pause;
     @FXML
     Button play;
@@ -72,9 +70,9 @@ public class ThirdFXMLController {
     @FXML
     Label velocityLabel;
     @FXML
-    Button lidButton;
-    @FXML
     Label volumeLabel;
+    @FXML
+    Circle circleCanvas;
 
     ArrayList<BalloonParticle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -109,7 +107,7 @@ public class ThirdFXMLController {
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
         initialFunctions();
-
+        circleCanvas = new Circle();
     }
 
     private void initialFunctions(){
@@ -124,7 +122,6 @@ public class ThirdFXMLController {
         particleCollisionTimeline();
         addToQuadrants();
         setupTemperatureControls();
-        initializeVolumeSlider();
         initializeComboBox();
     }
 
@@ -142,11 +139,11 @@ public class ThirdFXMLController {
 
         heatButton.setOnMousePressed(event -> {
             heatTimeline.play();
-            canvas.setEffect(heatGlow);
+            circleCanvas.setEffect(heatGlow);
         });
         heatButton.setOnMouseReleased(event -> {
             heatTimeline.stop();
-            canvas.setEffect(null);
+            circleCanvas.setEffect(null);
         });
 
         Timeline coolTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(-1)));
@@ -154,11 +151,11 @@ public class ThirdFXMLController {
 
         coolButton.setOnMousePressed(event -> {
             coolTimeline.play();
-            canvas.setEffect(coolGlow);
+            circleCanvas.setEffect(coolGlow);
         });
         coolButton.setOnMouseReleased(event -> {
             coolTimeline.stop();
-            canvas.setEffect(null);
+            circleCanvas.setEffect(null);
         });
     }
 
@@ -301,7 +298,6 @@ public class ThirdFXMLController {
                 lidPopped = false;
                 canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
             }
-            volumeSlider.setValue(10);
         });
     }
 
@@ -473,14 +469,6 @@ public class ThirdFXMLController {
         if (allParticles.isEmpty())pvnrt.setMoles(totalParticleCount);
         else pvnrt.setMoles(totalParticleCount);
         pressureGauge.updateGauge();
-    }
-
-    private void initializeVolumeSlider() {
-        volumeSlider.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            canvas.setPrefWidth((volumeSlider.getValue()/volumeSlider.getMax()) * canvas.getMaxWidth());
-            pvnrt.setVolume(volumeSlider.getValue());
-            updatePressure();
-        } ));
     }
 
     private double calculateRMS(double temp) {
