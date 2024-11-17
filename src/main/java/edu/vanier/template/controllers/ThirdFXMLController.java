@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +88,7 @@ public class ThirdFXMLController {
     private Color particleColor;
     private double particleSize;
     private ImageView backgroundImageView;
+    private ImageView backgroundImageView2;
     private TranslateTransition scrollAnimation;
 
     @FXML
@@ -101,12 +103,14 @@ public class ThirdFXMLController {
         thermometer = new Thermometer(pvnrt);
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
+        circleCanvas = new Circle(250, 250, 250, Color.WHITE);
         initialFunctions();
-        circleCanvas = new Circle();
-        setupScrollingBackground();
+
+
     }
 
     private void initialFunctions(){
+        setupScrollingBackground();
         addParticlesButton();
         add10ParticlesButton();
         remove1Button();
@@ -120,23 +124,34 @@ public class ThirdFXMLController {
         initializeComboBox();
     }
     private void setupScrollingBackground() {
-        backgroundImageView = new ImageView(new Image(Objects.requireNonNull
-                (getClass().getResource("/sky-with-clouds.jpg")).toExternalForm()));
-        backgroundImageView.setFitHeight(canvas.getHeight());
-        backgroundImageView.setFitWidth(canvas.getWidth());
+        Image image = new Image(Objects.requireNonNull
+                (getClass().getResource("/sky-with-clouds.jpg")).toExternalForm());
 
+        backgroundImageView = new ImageView(image);
+        backgroundImageView.setFitHeight(500);
+        backgroundImageView.setFitWidth(500);
         backgroundImageView.setLayoutX(0);
         backgroundImageView.setLayoutY(0);
 
-        canvas.getChildren().add(backgroundImageView);
+        backgroundImageView2 = new ImageView(image);
+        backgroundImageView2.setFitHeight(500);
+        backgroundImageView2.setFitWidth(500);
+        backgroundImageView2.setLayoutX(0);
+        backgroundImageView2.setLayoutY(500);
+
+        Rectangle upperRectangleBorder = new Rectangle(0, -500, 500, 500);
+        Rectangle lowerRectangleBorder = new Rectangle(0, 500, 500, 500);
+
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
 
         Timeline scrollingTimeline = new Timeline();
 
-        double scrollDuration = 10.0;
+        double scrollDuration = 10;
 
         KeyFrame keyFrame = new KeyFrame(
                 Duration.seconds(scrollDuration),
-                new KeyValue(backgroundImageView.layoutYProperty(), canvas.getHeight())
+                new KeyValue(backgroundImageView.layoutYProperty(), -500),
+                new KeyValue(backgroundImageView2.layoutYProperty(), 0)
         );
 
         scrollingTimeline.getKeyFrames().add(keyFrame);
