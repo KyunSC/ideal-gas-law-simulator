@@ -243,7 +243,10 @@ public class SecondaryFXMLController {
     }
 
     private void addParticle() {
-        if (pvnrt.getTemperature() == 0) pvnrt.setTemperature(300);
+        if (pvnrt.getTemperature() == 0) {
+            pvnrt.setTemperature(300);
+            updateParticlesWithTemperature(300);
+        }
         if (!paused) {
             totalParticleCount++;
             updatePressure();
