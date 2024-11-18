@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,12 @@ public class MainApp extends Application {
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
+
+            scene.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.F) {
+                    primaryStage.setFullScreen(true);
+                }
+            });
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }

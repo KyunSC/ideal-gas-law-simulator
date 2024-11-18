@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -89,7 +89,10 @@ public class ThirdFXMLController {
     private double particleSize;
     private ImageView backgroundImageView;
     private ImageView backgroundImageView2;
+    private ImageView backgroundImageView3;
     private TranslateTransition scrollAnimation;
+    private TranslateTransition scrollAnimation2;
+    private TranslateTransition scrollAnimation3;
 
     @FXML
     public void initialize() {
@@ -98,6 +101,7 @@ public class ThirdFXMLController {
 
         pvnrt = new PVnRT();
         pvnrt.setMoles(0);
+        pvnrt.setVolume(700);
 
         pressureGauge = new PressureGauge(pvnrt);
         thermometer = new Thermometer(pvnrt);
@@ -105,11 +109,9 @@ public class ThirdFXMLController {
 
         circleCanvas = new Circle(250, 250, 250, Color.WHITE);
         initialFunctions();
-
-
     }
 
-    private void initialFunctions(){
+    private void initialFunctions() {
         setupScrollingBackground();
         addParticlesButton();
         add10ParticlesButton();
@@ -122,31 +124,50 @@ public class ThirdFXMLController {
         particleCollisionTimeline();
         setupTemperatureControls();
         initializeComboBox();
+        initializeComboBox();
+        for (int i = 0; i < 29; i++) {
+            addBalloonParticle();
+        }
     }
+
     private void setupScrollingBackground() {
         Image image = new Image(Objects.requireNonNull
                 (getClass().getResource("/sky-with-clouds.jpg")).toExternalForm());
 
         backgroundImageView = new ImageView(image);
-        backgroundImageView.setFitHeight(500);
-        backgroundImageView.setFitWidth(500);
-        backgroundImageView.setLayoutX(0);
-        backgroundImageView.setLayoutY(0);
+        backgroundImageView.setFitHeight(1100);
+        backgroundImageView.setFitWidth(900);
+        backgroundImageView.setLayoutX(-200);
+        backgroundImageView.setLayoutY(-300);
 
         backgroundImageView2 = new ImageView(image);
-        backgroundImageView2.setFitHeight(500);
-        backgroundImageView2.setFitWidth(500);
-        backgroundImageView2.setLayoutX(0);
-        backgroundImageView2.setLayoutY(-500);
+        backgroundImageView2.setFitHeight(1100);
+        backgroundImageView2.setFitWidth(900);
+        backgroundImageView2.setLayoutX(-200);
+        backgroundImageView2.setLayoutY(795);
 
-        Rectangle upperRectangleBorder = new Rectangle(0, -500, 500, 500);
-        Rectangle lowerRectangleBorder = new Rectangle(0, 500, 500, 500);
+        backgroundImageView3 = new ImageView(image);
+        backgroundImageView3.setFitHeight(1100);
+        backgroundImageView3.setFitWidth(900);
+        backgroundImageView3.setLayoutX(-200);
+        backgroundImageView3.setLayoutY(-1395);
 
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+        Rectangle upperRectanlgeBorder = new Rectangle(-200, -300, 900, 100);
+        Rectangle lowerRectangleBorder = new Rectangle(-200, 725, 900, 100);
+
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectanlgeBorder, lowerRectangleBorder);
 
         scrollAnimation = new TranslateTransition();
         scrollAnimation.setInterpolator(Interpolator.LINEAR);
         scrollAnimation.setCycleCount(Animation.INDEFINITE);
+
+        scrollAnimation2 = new TranslateTransition();
+        scrollAnimation2.setInterpolator(Interpolator.LINEAR);
+        scrollAnimation2.setCycleCount(Animation.INDEFINITE);
+
+        scrollAnimation3 = new TranslateTransition();
+        scrollAnimation3.setInterpolator(Interpolator.LINEAR);
+        scrollAnimation3.setCycleCount(Animation.INDEFINITE);
 
         updateScrollingBackground(300);
     }
@@ -168,6 +189,18 @@ public class ThirdFXMLController {
         scrollAnimation.setNode(backgroundImageView);
         scrollAnimation.setByY(scrollSpeed);
         scrollAnimation.play();
+
+        scrollAnimation2.stop();
+        scrollAnimation2.setDuration(Duration.seconds(10));
+        scrollAnimation2.setNode(backgroundImageView2);
+        scrollAnimation2.setByY(scrollSpeed);
+        scrollAnimation2.play();
+
+        scrollAnimation3.stop();
+        scrollAnimation3.setDuration(Duration.seconds(10));
+        scrollAnimation3.setNode(backgroundImageView3);
+        scrollAnimation3.setByY(scrollSpeed);
+        scrollAnimation3.play();
     }
 
     private void setupTemperatureControls() {
@@ -236,7 +269,10 @@ public class ThirdFXMLController {
     }
 
     private void addBalloonParticle() {
-        if (pvnrt.getTemperature() == 0) pvnrt.setTemperature(300);
+        if (pvnrt.getTemperature() == 0) {
+            pvnrt.setTemperature(300);
+            updateParticlesWithTemperature(300);
+        }
         if (!paused) {
             totalParticleCount++;
             updatePressure();
@@ -245,7 +281,7 @@ public class ThirdFXMLController {
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
             thermometer.updateThermometer();
 
-            Circle circle = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
+            Circle circle = new Circle(canvas.getMaxWidth()/2, canvas.getMaxHeight()/2, particleSize, particleColor);
             BalloonParticle balloonParticle = new BalloonParticle(circle, particleVelocity, canvas);
             balloonParticle.createTimeline();
             balloonParticle.play();
@@ -482,7 +518,7 @@ public class ThirdFXMLController {
 
     /**
      * //equation found by having the smallest size of particle to be 9 with molar mass of hydrogen 0.00202kg/mol and
-     *         // largest size fo particle to be 15 with molar mass of radon 0.2201k/mol.
+     *         // Largest size of particle to be 15 with molar mass of radon 0.2201k/mol.
      * @param molarMass
      */
     private void setParticleSize(double molarMass) {
@@ -533,5 +569,4 @@ public class ThirdFXMLController {
         timeline.setCycleCount(1);
         timeline.play();
     }
-
 }
