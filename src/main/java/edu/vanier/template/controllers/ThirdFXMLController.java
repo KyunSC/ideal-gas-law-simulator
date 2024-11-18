@@ -137,47 +137,36 @@ public class ThirdFXMLController {
         backgroundImageView2.setFitHeight(500);
         backgroundImageView2.setFitWidth(500);
         backgroundImageView2.setLayoutX(0);
-        backgroundImageView2.setLayoutY(500);
+        backgroundImageView2.setLayoutY(-500);
 
         Rectangle upperRectangleBorder = new Rectangle(0, -500, 500, 500);
         Rectangle lowerRectangleBorder = new Rectangle(0, 500, 500, 500);
 
         canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
 
-        Timeline scrollingTimeline = new Timeline();
+        scrollAnimation = new TranslateTransition();
+        scrollAnimation.setInterpolator(Interpolator.LINEAR);
+        scrollAnimation.setCycleCount(Animation.INDEFINITE);
 
-        double scrollDuration = 10;
-
-        KeyFrame keyFrame = new KeyFrame(
-                Duration.seconds(scrollDuration),
-                new KeyValue(backgroundImageView.layoutYProperty(), -500),
-                new KeyValue(backgroundImageView2.layoutYProperty(), 0)
-        );
-
-        scrollingTimeline.getKeyFrames().add(keyFrame);
-        scrollingTimeline.setCycleCount(Timeline.INDEFINITE);
-        scrollingTimeline.play();
+        updateScrollingBackground(300);
     }
 
     public void updateScrollingBackground(double temperature) {
-        if (temperature >= 473.15) {
-            scrollDownBackground();
-        } else if (temperature <= 300) {
-            scrollUpBackground();
+        double scrollSpeed;
+
+        if (temperature <= 300) {
+            scrollSpeed = -300;
+        } else if (temperature >= 393.15) {
+            scrollSpeed = 300;
+        } else {
+            double normalizedTemp = (temperature - 300) / (393.15 - 300);
+            scrollSpeed = 300 * (2 * normalizedTemp - 1);
         }
-    }
 
-    private void scrollDownBackground() {
         scrollAnimation.stop();
-        scrollAnimation.setFromY(backgroundImageView.getTranslateY());
-        scrollAnimation.setToY(-canvas.getHeight());
-        scrollAnimation.play();
-    }
-
-    private void scrollUpBackground() {
-        scrollAnimation.stop();
-        scrollAnimation.setFromY(backgroundImageView.getTranslateY());
-        scrollAnimation.setToY(0);
+        scrollAnimation.setDuration(Duration.seconds(10));
+        scrollAnimation.setNode(backgroundImageView);
+        scrollAnimation.setByY(scrollSpeed);
         scrollAnimation.play();
     }
 
@@ -229,7 +218,7 @@ public class ThirdFXMLController {
 
     private void adjustTemperature(double tempChange) {
         double newTemperature = pvnrt.getTemperature() + tempChange;
-        if (newTemperature <=473.15 && newTemperature >= 300) {
+        if (newTemperature <=394.15 && newTemperature >= 300) {
             pvnrt.setTemperature(newTemperature);
             thermometer.updateThermometer();
             updateParticlesWithTemperature(newTemperature);
