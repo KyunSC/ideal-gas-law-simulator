@@ -3,12 +3,9 @@ package edu.vanier.template;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.BoundingBox;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 
@@ -23,14 +20,14 @@ public class BalloonParticle {
     Timeline timeline;
     Pane canvas;
     boolean collisionDelay = true;
+    Circle circleCanvas;
 
     /**
-     *
-     * @param circle it's the shape of the particle
-     *
-     * @param canvas canvas
+     * @param circle       it's the shape of the particle
+     * @param canvas       canvas
+     * @param circleCanvas
      */
-    public BalloonParticle(Circle circle, double velocity, Pane canvas){
+    public BalloonParticle(Circle circle, double velocity, Pane canvas, Circle circleCanvas){
         this.circle = circle;
         this.velocity = velocity;
         double angle = Math.floor(Math.random()*360);
@@ -38,6 +35,7 @@ public class BalloonParticle {
         this.velocityY = velocity * Math.cos(angle);
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
+        this.circleCanvas = circleCanvas;
         Timeline timeline1 = new Timeline();
         timeline1.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
         timeline1.setOnFinished(event -> collisionDelay = false);
@@ -125,11 +123,11 @@ public class BalloonParticle {
      *
      */
     private void moveCircle(Circle particle) {
-        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow((canvas.getWidth()/2) - circle.getRadius() - 15, 2)){
+        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow((circleCanvas.getRadius()) - circle.getRadius() - 20, 2)){
             velocityX *= -1;
             velocityY *= -1;
-            circle.setCenterX(circle.getCenterX() + velocityX);
-            circle.setCenterY(circle.getCenterY() + velocityY);
+            circle.setCenterX(circle.getCenterX() + 2 * velocityX);
+            circle.setCenterY(circle.getCenterY() + 2 * velocityY);
         }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
@@ -137,5 +135,9 @@ public class BalloonParticle {
     public void setCollisionDelay(Boolean collisionDelay){this.collisionDelay = collisionDelay;}
 
     public boolean isCollisionDelay() {return collisionDelay;}
+
+    public void setCircleCanvas(Circle circleCanvas){
+        this.circleCanvas = circleCanvas;
+    }
 }
 

@@ -94,6 +94,8 @@ public class ThirdFXMLController {
     private TranslateTransition scrollAnimation2;
     private TranslateTransition scrollAnimation3;
 
+    private double backgroundVelocity = 1;
+
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
@@ -112,7 +114,8 @@ public class ThirdFXMLController {
     }
 
     private void initialFunctions() {
-        setupScrollingBackground();
+        //setupScrollingBackground();
+        initScrollingBackground();
         addParticlesButton();
         add10ParticlesButton();
         remove1Button();
@@ -125,9 +128,60 @@ public class ThirdFXMLController {
         setupTemperatureControls();
         initializeComboBox();
         initializeComboBox();
-        for (int i = 0; i < 29; i++) {
-            addBalloonParticle();
+        for (int i = 0; i < 29; i++) addBalloonParticle();
+    }
+
+    private void initScrollingBackground(){
+        Image image = new Image(Objects.requireNonNull
+                (getClass().getResource("/sky-with-clouds.jpg")).toExternalForm());
+        backgroundImageView = new ImageView(image);
+        backgroundImageView.setFitHeight(1100);
+        backgroundImageView.setFitWidth(900);
+        backgroundImageView.setLayoutX(-200);
+        backgroundImageView.setLayoutY(-300);
+
+        backgroundImageView2 = new ImageView(image);
+        backgroundImageView2.setFitHeight(1100);
+        backgroundImageView2.setFitWidth(900);
+        backgroundImageView2.setLayoutX(-200);
+        backgroundImageView2.setLayoutY(-1400);
+
+        backgroundImageView3 = new ImageView(image);
+        backgroundImageView3.setFitHeight(1100);
+        backgroundImageView3.setFitWidth(900);
+        backgroundImageView3.setLayoutX(-200);
+        backgroundImageView3.setLayoutY(800);
+
+        Rectangle upperRectangleBorder = new Rectangle(-200, -300, 900, 100);
+        Rectangle lowerRectangleBorder = new Rectangle(-200, 725, 900, 100);
+
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+
+        Timeline timeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
+            moveBackground();
+        });
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private void moveBackground(){
+        if (backgroundVelocity != 300) backgroundVelocity = (300 - pvnrt.getTemperature()) / 100;
+        circleCanvas.setRadius(250 + (pvnrt.getTemperature() - 300));
+        for (int i = 0; i < allParticles.size(); i++) {
+            allParticles.get(i).setCircleCanvas(circleCanvas);
         }
+
+        if (backgroundImageView3.getLayoutY() <= -300 || backgroundImageView2.getLayoutY() >= -300){
+            backgroundImageView.setLayoutY(-300);
+            backgroundImageView2.setLayoutY(-1400);
+            backgroundImageView3.setLayoutY(800);
+        }
+
+        backgroundImageView.setLayoutY(backgroundImageView.getLayoutY() - backgroundVelocity);
+        backgroundImageView2.setLayoutY(backgroundImageView2.getLayoutY() - backgroundVelocity);
+        backgroundImageView3.setLayoutY(backgroundImageView3.getLayoutY() - backgroundVelocity);
     }
 
     private void setupScrollingBackground() {
@@ -184,7 +238,7 @@ public class ThirdFXMLController {
             scrollSpeed = 300 * (2 * normalizedTemp - 1);
         }
 
-        scrollAnimation.stop();
+/*        scrollAnimation.stop();
         scrollAnimation.setDuration(Duration.seconds(10));
         scrollAnimation.setNode(backgroundImageView);
         scrollAnimation.setFromY(-300);
@@ -206,7 +260,7 @@ public class ThirdFXMLController {
         scrollAnimation3.setFromY(-1395);
         scrollAnimation3.setToY(-295);
 //        scrollAnimation3.setByY(scrollSpeed);
-        scrollAnimation3.play();
+        scrollAnimation3.play();*/
     }
 
     private void setupTemperatureControls() {
@@ -262,7 +316,7 @@ public class ThirdFXMLController {
             thermometer.updateThermometer();
             updateParticlesWithTemperature(newTemperature);
             updatePressure();
-            updateScrollingBackground(newTemperature);
+//            updateScrollingBackground(newTemperature);
         }
     }
 
@@ -288,7 +342,7 @@ public class ThirdFXMLController {
             thermometer.updateThermometer();
 
             Circle circle = new Circle(canvas.getMaxWidth()/2, canvas.getMaxHeight()/2, particleSize, particleColor);
-            BalloonParticle balloonParticle = new BalloonParticle(circle, particleVelocity, canvas);
+            BalloonParticle balloonParticle = new BalloonParticle(circle, particleVelocity, canvas, circleCanvas);
             balloonParticle.createTimeline();
             balloonParticle.play();
             canvas.getChildren().add(balloonParticle.getCircle());
@@ -303,7 +357,7 @@ public class ThirdFXMLController {
                 Duration.millis(0.1),
                 (event -> {
                     checkParticleParticleCollision(allParticles);
-                    particleEscaped();
+                    //particleEscaped();
                     changeVelocityLabel();
                     changeVolumeLabel();
                 })
