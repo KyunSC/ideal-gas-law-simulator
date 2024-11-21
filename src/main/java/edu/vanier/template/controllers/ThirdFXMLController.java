@@ -138,19 +138,19 @@ public class ThirdFXMLController {
         backgroundImageView.setFitHeight(1100);
         backgroundImageView.setFitWidth(900);
         backgroundImageView.setLayoutX(-200);
-        backgroundImageView.setLayoutY(-300);
+        backgroundImageView.setLayoutY(0);
 
         backgroundImageView2 = new ImageView(image);
         backgroundImageView2.setFitHeight(1100);
         backgroundImageView2.setFitWidth(900);
         backgroundImageView2.setLayoutX(-200);
-        backgroundImageView2.setLayoutY(795);
+        backgroundImageView2.setLayoutY(0);
 
         backgroundImageView3 = new ImageView(image);
         backgroundImageView3.setFitHeight(1100);
         backgroundImageView3.setFitWidth(900);
         backgroundImageView3.setLayoutX(-200);
-        backgroundImageView3.setLayoutY(-1395);
+        backgroundImageView3.setLayoutY(0);
 
         Rectangle upperRectanlgeBorder = new Rectangle(-200, -300, 900, 100);
         Rectangle lowerRectangleBorder = new Rectangle(-200, 725, 900, 100);
@@ -187,19 +187,25 @@ public class ThirdFXMLController {
         scrollAnimation.stop();
         scrollAnimation.setDuration(Duration.seconds(10));
         scrollAnimation.setNode(backgroundImageView);
-        scrollAnimation.setByY(scrollSpeed);
+        scrollAnimation.setFromY(-300);
+        scrollAnimation.setToY(800);
+//        scrollAnimation.setByY(scrollSpeed);
         scrollAnimation.play();
 
         scrollAnimation2.stop();
         scrollAnimation2.setDuration(Duration.seconds(10));
         scrollAnimation2.setNode(backgroundImageView2);
-        scrollAnimation2.setByY(scrollSpeed);
+        scrollAnimation2.setFromY(795);
+        scrollAnimation2.setToY(1895);
+//        scrollAnimation2.setByY(scrollSpeed);
         scrollAnimation2.play();
 
         scrollAnimation3.stop();
         scrollAnimation3.setDuration(Duration.seconds(10));
         scrollAnimation3.setNode(backgroundImageView3);
-        scrollAnimation3.setByY(scrollSpeed);
+        scrollAnimation3.setFromY(-1395);
+        scrollAnimation3.setToY(-295);
+//        scrollAnimation3.setByY(scrollSpeed);
         scrollAnimation3.play();
     }
 
