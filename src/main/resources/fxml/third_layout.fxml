@@ -7,24 +7,6 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-    <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label alignment="CENTER" prefHeight="53.0" prefWidth="196.0" style="-fx-padding: 20 10 10 10; -fx-font-weight: bold;" text="Ideal Gas Law Simulation" textFill="WHITE">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Label>
-                <Button fx:id="btnSwitchScene" alignment="CENTER" prefHeight="20.0" prefWidth="143.0" style="-fx-background-color: teal;" text="Back to Menu" textFill="WHITE" />
-            </children>
-            <opaqueInsets>
-                <Insets />
-            </opaqueInsets>
-            <padding>
-                <Insets left="10.0" />
-            </padding>
-        </HBox>
-    </top>
     <bottom>
         <HBox alignment="CENTER_LEFT" prefHeight="75.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
@@ -146,4 +128,20 @@
          </children>
       </StackPane>
    </center>
+   <top>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+                <Label alignment="CENTER" prefHeight="53.0" prefWidth="196.0" style="-fx-padding: 20 10 10 10; -fx-font-weight: bold;" text="Ideal Gas Law Simulation" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Button fx:id="btnSwitchScene" alignment="CENTER" prefHeight="20.0" prefWidth="143.0" style="-fx-background-color: teal;" text="Back to Menu" textFill="WHITE">
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </top>
 </BorderPane>
