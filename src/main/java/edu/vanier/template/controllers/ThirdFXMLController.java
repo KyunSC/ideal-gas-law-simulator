@@ -152,9 +152,10 @@ public class ThirdFXMLController {
         backgroundImageView3.setLayoutX(-200);
         backgroundImageView3.setLayoutY(800);
 
-        Rectangle upperRectangleBorder = new Rectangle(-200, -300, 900, 100);
+        Rectangle upperRectangleBorder = new Rectangle(-200, -400, 900, 100);
+        upperRectangleBorder.setFill(Color.BLACK);
         Rectangle lowerRectangleBorder = new Rectangle(-200, 725, 900, 100);
-
+        lowerRectangleBorder.setFill(Color.BLACK);
         canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
 
         Timeline timeline = new Timeline();
