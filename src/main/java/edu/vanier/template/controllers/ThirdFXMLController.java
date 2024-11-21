@@ -168,7 +168,7 @@ public class ThirdFXMLController {
     }
 
     private void moveBackground(){
-        if (backgroundVelocity != 300) backgroundVelocity = (300.5 - pvnrt.getTemperature()) / 100;
+        if (backgroundVelocity != 300) backgroundVelocity = (300.5 - pvnrt.getTemperature()) / 200;
         circleCanvas.setRadius(250 + (pvnrt.getTemperature() - 300));
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
 
