@@ -133,7 +133,7 @@ public class ThirdFXMLController {
 
     private void initScrollingBackground(){
         Image image = new Image(Objects.requireNonNull
-                (getClass().getResource("/sky-with-clouds.jpg")).toExternalForm());
+                (getClass().getResource("/seamless-clouds.jpg")).toExternalForm());
         backgroundImageView = new ImageView(image);
         backgroundImageView.setFitHeight(1100);
         backgroundImageView.setFitWidth(900);
