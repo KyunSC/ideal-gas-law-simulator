@@ -133,21 +133,24 @@ public class ThirdFXMLController {
     }
 
     private void initScrollingBackground(){
-        Image image = new Image(Objects.requireNonNull
+        Image backgroundImage = new Image(Objects.requireNonNull
                 (getClass().getResource("/seamless-clouds.jpg")).toExternalForm());
-        backgroundImageView = new ImageView(image);
+        Image basketImage = new Image(Objects.requireNonNull(getClass().getResource("/balloonbasket.png")).toExternalForm());
+        ImageView basketImageView = new ImageView(basketImage);
+
+        backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(1100);
         backgroundImageView.setFitWidth(1100);
         backgroundImageView.setLayoutX(-300);
         backgroundImageView.setLayoutY(-300);
 
-        backgroundImageView2 = new ImageView(image);
+        backgroundImageView2 = new ImageView(backgroundImage);
         backgroundImageView2.setFitHeight(1100);
         backgroundImageView2.setFitWidth(1100);
         backgroundImageView2.setLayoutX(-300);
         backgroundImageView2.setLayoutY(-1400);
 
-        backgroundImageView3 = new ImageView(image);
+        backgroundImageView3 = new ImageView(backgroundImage);
         backgroundImageView3.setFitHeight(1100);
         backgroundImageView3.setFitWidth(1100);
         backgroundImageView3.setLayoutX(-300);
@@ -157,7 +160,7 @@ public class ThirdFXMLController {
         upperRectangleBorder.setFill(Color.BLACK);
         Rectangle lowerRectangleBorder = new Rectangle(-300, 765, 1100, 200);
         lowerRectangleBorder.setFill(Color.BLACK);
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectangleBorder, lowerRectangleBorder, basketImageView);
 
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
