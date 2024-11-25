@@ -1,16 +1,19 @@
-package edu.vanier.template;
+package edu.vanier.gaslaw;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.BoundingBox;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 
 
-public class BalloonParticle {
+public class Particle {
 
     Circle circle;
     public double velocityX;
@@ -19,28 +22,24 @@ public class BalloonParticle {
     public double particleAngle;
     Timeline timeline;
     Pane canvas;
-    boolean collisionDelay = true;
-    Circle circleCanvas;
+    ImageView lid;
+    BoundingBox boundingBox = new BoundingBox(30, 30, 470,470);
+    boolean collisionDelay = false;
 
     /**
-     * @param circle       it's the shape of the particle
-     * @param canvas       canvas
-     * @param circleCanvas
+     *
+     * @param circle it's the shape of the particle
+     *
+     * @param canvas canvas
      */
-    public BalloonParticle(Circle circle, double velocity, Pane canvas, Circle circleCanvas){
+    public Particle(Circle circle, double velocity, Pane canvas, ImageView lid){
         this.circle = circle;
         this.velocity = velocity;
-        double angle = Math.floor(Math.random()*360);
-        this.velocityX = velocity * Math.sin(angle);
-        this.velocityY = velocity * Math.cos(angle);
+        this.velocityX = Math.random()*velocity;
+        this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
         this.canvas = canvas;
-        this.circleCanvas = circleCanvas;
-        Timeline timeline1 = new Timeline();
-        timeline1.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
-        timeline1.setOnFinished(event -> collisionDelay = false);
-        timeline1.setCycleCount(1);
-        timeline1.play();
+        this.lid = lid;
     }
 
     public double getVelocityX() {
@@ -50,11 +49,6 @@ public class BalloonParticle {
     public double getVelocityY() {
         return velocityY;
     }
-
-    public void setVelocityX(Double velocityX){this.velocityX = velocityX;}
-
-    public void setVelocityY(Double velocityY){this.velocityY = velocityY;}
-
 
     public void setVelocity(double velocity) {
         if (velocity == 0) {
@@ -69,7 +63,6 @@ public class BalloonParticle {
 
             velocityX = velocity * Math.cos(particleAngle); // New x velocity
             velocityY = velocity * Math.sin(particleAngle); // New y velocity
-
         }
     }
 
@@ -123,21 +116,53 @@ public class BalloonParticle {
      *
      */
     private void moveCircle(Circle particle) {
-        if (Math.abs((Math.pow(circle.getCenterX() - canvas.getWidth()/2, 2)) + Math.pow(circle.getCenterY() - canvas.getHeight()/2, 2)) >= Math.pow((circleCanvas.getRadius()) - circle.getRadius() - 20, 2)){
-            velocityX *= -1;
-            velocityY *= -1;
-            circle.setCenterX(circle.getCenterX() + 2 * velocityX);
-            circle.setCenterY(circle.getCenterY() + 2 * velocityY);
-        }
+            if (canvas.getChildren().contains(lid)){
+                //Left wall collision detection
+                if (particle.getCenterX() <= particle.getRadius() + 15) {
+                    velocityX *= -1;
+                    particle.setCenterX(particle.getRadius() + 15);
+                }
+                //Right wall collision detection
+                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 15) {
+                    velocityX *= -1;
+                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 15);
+                }
+                //Top wall collision detection
+                if (particle.getCenterY() <= particle.getRadius() + 15) {
+                    velocityY *= -1;
+                    particle.setCenterY(particle.getRadius() + 15);
+                }
+                //Bottom wall collision detection
+                if (particle.getCenterY() >= canvas.getHeight() - particle.getRadius() - 15) {
+                    velocityY *= -1;
+                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 15);
+                }
+            }
+            else {
+                if (particle.getCenterX() <= particle.getRadius() + 2) {
+                    velocityX *= -1;
+                    particle.setCenterX(particle.getRadius() + 5);
+                }
+                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 2) {
+                    velocityX *= -1;
+                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
+                }
+                /*if (particle.getCenterY() <= particle.getRadius() - 2) {
+                    velocityY *= -1;
+                    particle.setCenterY(particle.getRadius() + 5);
+                }*/
+                if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 2) {
+                    velocityY *= -1;
+                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
+                }
+            }
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
     }
+
+    public void setLid(ImageView lid) {this.lid = lid;}
+
     public void setCollisionDelay(Boolean collisionDelay){this.collisionDelay = collisionDelay;}
 
     public boolean isCollisionDelay() {return collisionDelay;}
-
-    public void setCircleCanvas(Circle circleCanvas){
-        this.circleCanvas = circleCanvas;
-    }
 }
-

@@ -1,7 +1,7 @@
-package edu.vanier.template.graphics;
+package edu.vanier.gaslaw.graphics;
 
 import eu.hansolo.medusa.Gauge;
-import edu.vanier.template.calculations.PVnRT;
+import edu.vanier.gaslaw.calculations.PVnRT;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 

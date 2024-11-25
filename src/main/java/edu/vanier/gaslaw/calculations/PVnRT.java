@@ -1,4 +1,4 @@
-package edu.vanier.template.calculations;
+package edu.vanier.gaslaw.calculations;
 
 public class PVnRT {
     private double temperature;

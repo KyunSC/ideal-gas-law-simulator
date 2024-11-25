@@ -1,11 +1,11 @@
-package edu.vanier.template.controllers;
+package edu.vanier.gaslaw.controllers;
 
-import edu.vanier.template.BalloonParticle;
-import edu.vanier.template.MainApp;
-import edu.vanier.template.Particle;
-import edu.vanier.template.calculations.PVnRT;
-import edu.vanier.template.graphics.PressureGauge;
-import edu.vanier.template.graphics.Thermometer;
+import edu.vanier.gaslaw.BalloonParticle;
+import edu.vanier.gaslaw.MainApp;
+import edu.vanier.gaslaw.Particle;
+import edu.vanier.gaslaw.calculations.PVnRT;
+import edu.vanier.gaslaw.graphics.PressureGauge;
+import edu.vanier.gaslaw.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;

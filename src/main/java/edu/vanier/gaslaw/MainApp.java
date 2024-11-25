@@ -1,6 +1,6 @@
-package edu.vanier.template;
+package edu.vanier.gaslaw;
 
-import edu.vanier.template.controllers.MainAppFXMLController;
+import edu.vanier.gaslaw.controllers.MainAppFXMLController;
 import java.io.IOException;
 import java.util.logging.Level;
 import javafx.application.Application;
