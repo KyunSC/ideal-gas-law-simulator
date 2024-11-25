@@ -169,7 +169,7 @@ public class ThirdFXMLController {
     }
 
     private void moveBackground(){
-        if (pvnrt.getTemperature() != 300) backgroundVelocity = (301 - pvnrt.getTemperature()) / 2000;
+        if (pvnrt.getTemperature() != 300) backgroundVelocity = (301.95 - pvnrt.getTemperature()) / 2000;
         else backgroundVelocity = 0.007;
         if (pvnrt.getTemperature() < 330) circleCanvas.setRadius(250 + ((pvnrt.getTemperature() - 300) / 1.5));
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
@@ -268,7 +268,7 @@ public class ThirdFXMLController {
             InnerShadow innerShadow = new InnerShadow();
             innerShadow.setOffsetX(-4);
             innerShadow.setOffsetY(-4);
-            innerShadow.setColor(Color.GRAY);
+            innerShadow.setColor(Color.LIGHTBLUE);
             circle.setEffect(innerShadow);
 
             BalloonParticle balloonParticle = new BalloonParticle(circle, particleVelocity, canvas, circleCanvas);
@@ -501,8 +501,8 @@ public class ThirdFXMLController {
     }
 
     private void setParticleColor(double molarMass) {
-        double hue = (270 * molarMass) / 0.2201;
-        particleColor = Color.hsb(hue, 1, 1);
+        double hue = (270 * molarMass) / 0.03200;
+        particleColor = Color.hsb(hue, 0.8, 1);
     }
 
     /**
@@ -516,15 +516,15 @@ public class ThirdFXMLController {
 
     private void initializeComboBox() {
         comboBox.setStyle("-fx-text-fill : white");
-        comboBox.getItems().addAll("Oxygen", "Radon", "Hydrogen", "Bromine");
+        comboBox.getItems().addAll("Oxygen", "Nitrogen", "Hydrogen", "Helium");
         comboBox.setValue("Oxygen");
 
         comboBox.setOnAction(event -> {
             switch (comboBox.getValue()) {
                 case "Oxygen" -> changeMolarMass(0.0320);
-                case "Radon" -> changeMolarMass(0.2201);
+                case "Helium" -> changeMolarMass(0.004001);
                 case "Hydrogen" -> changeMolarMass(0.00202);
-                case "Bromine" -> changeMolarMass(0.0799);
+                case "Nitrogen" -> changeMolarMass(0.02502);
             }
         });
     }
