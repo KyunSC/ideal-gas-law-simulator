@@ -95,7 +95,7 @@ public class ThirdFXMLController {
     private TranslateTransition scrollAnimation2;
     private TranslateTransition scrollAnimation3;
 
-    private double backgroundVelocity = 0.015;
+    private double backgroundVelocity = 0.007;
 
     @FXML
     public void initialize() {
@@ -111,6 +111,7 @@ public class ThirdFXMLController {
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
         circleCanvas = new Circle(250, 250, 250, Color.WHITE);
+        circleCanvas.setStroke(Color.GRAY);
         initialFunctions();
     }
 
@@ -168,8 +169,8 @@ public class ThirdFXMLController {
     }
 
     private void moveBackground(){
-        if (pvnrt.getTemperature() != 300) backgroundVelocity = (301 - pvnrt.getTemperature()) / 250;
-        else backgroundVelocity = 0.015;
+        if (pvnrt.getTemperature() != 300) backgroundVelocity = (301 - pvnrt.getTemperature()) / 2000;
+        else backgroundVelocity = 0.007;
         circleCanvas.setRadius(250 + ((pvnrt.getTemperature() - 300) / 2.5));
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
 
