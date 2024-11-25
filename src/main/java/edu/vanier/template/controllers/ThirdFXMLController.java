@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -94,7 +95,7 @@ public class ThirdFXMLController {
     private TranslateTransition scrollAnimation2;
     private TranslateTransition scrollAnimation3;
 
-    private double backgroundVelocity = 100;
+    private double backgroundVelocity = 0.015;
 
     @FXML
     public void initialize() {
@@ -126,7 +127,6 @@ public class ThirdFXMLController {
         resetButton();
         particleCollisionTimeline();
         setupTemperatureControls();
-        initializeComboBox();
         initializeComboBox();
         for (int i = 0; i < 29; i++) addBalloonParticle();
     }
@@ -168,9 +168,11 @@ public class ThirdFXMLController {
     }
 
     private void moveBackground(){
-        if (backgroundVelocity != 300) backgroundVelocity = (300.5 - pvnrt.getTemperature()) / 200;
-        circleCanvas.setRadius(250 + (pvnrt.getTemperature() - 300));
+        if (pvnrt.getTemperature() != 300) backgroundVelocity = (301 - pvnrt.getTemperature()) / 250;
+        else backgroundVelocity = 0.015;
+        circleCanvas.setRadius(250 + ((pvnrt.getTemperature() - 300) / 2.5));
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
+
 
         if (backgroundImageView3.getLayoutY() <= -300 || backgroundImageView2.getLayoutY() >= -300){
             backgroundImageView.setLayoutY(-300);
@@ -262,6 +264,12 @@ public class ThirdFXMLController {
             thermometer.updateThermometer();
 
             Circle circle = new Circle(canvas.getMaxWidth()/2, canvas.getMaxHeight()/2, particleSize, particleColor);
+            InnerShadow innerShadow = new InnerShadow();
+            innerShadow.setOffsetX(-4);
+            innerShadow.setOffsetY(-4);
+            innerShadow.setColor(Color.GRAY);
+            circle.setEffect(innerShadow);
+
             BalloonParticle balloonParticle = new BalloonParticle(circle, particleVelocity, canvas, circleCanvas);
             balloonParticle.createTimeline();
             balloonParticle.play();

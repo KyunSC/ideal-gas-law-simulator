@@ -14,6 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -253,7 +254,14 @@ public class SecondaryFXMLController {
             setParticleColor(pvnrt.getMolarMass());
             setParticleSize(pvnrt.getMolarMass());
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
+
             Circle circle = new Circle(20, 20, particleSize, particleColor);
+            InnerShadow innerShadow = new InnerShadow();
+            innerShadow.setOffsetX(-4);
+            innerShadow.setOffsetY(-4);
+            innerShadow.setColor(Color.BLACK);
+            circle.setEffect(innerShadow);
+
             Particle particle = new Particle(circle, particleVelocity, canvas, lid);
             particle.createTimeline();
             particle.play();
