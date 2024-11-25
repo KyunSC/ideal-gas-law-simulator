@@ -136,25 +136,25 @@ public class ThirdFXMLController {
                 (getClass().getResource("/seamless-clouds.jpg")).toExternalForm());
         backgroundImageView = new ImageView(image);
         backgroundImageView.setFitHeight(1100);
-        backgroundImageView.setFitWidth(900);
-        backgroundImageView.setLayoutX(-200);
+        backgroundImageView.setFitWidth(1100);
+        backgroundImageView.setLayoutX(-300);
         backgroundImageView.setLayoutY(-300);
 
         backgroundImageView2 = new ImageView(image);
         backgroundImageView2.setFitHeight(1100);
-        backgroundImageView2.setFitWidth(900);
-        backgroundImageView2.setLayoutX(-200);
+        backgroundImageView2.setFitWidth(1100);
+        backgroundImageView2.setLayoutX(-300);
         backgroundImageView2.setLayoutY(-1400);
 
         backgroundImageView3 = new ImageView(image);
         backgroundImageView3.setFitHeight(1100);
-        backgroundImageView3.setFitWidth(900);
-        backgroundImageView3.setLayoutX(-200);
+        backgroundImageView3.setFitWidth(1100);
+        backgroundImageView3.setLayoutX(-300);
         backgroundImageView3.setLayoutY(800);
 
-        Rectangle upperRectangleBorder = new Rectangle(-200, -400, 900, 100);
+        Rectangle upperRectangleBorder = new Rectangle(-300, -300, 1100, 150);
         upperRectangleBorder.setFill(Color.BLACK);
-        Rectangle lowerRectangleBorder = new Rectangle(-200, 725, 900, 100);
+        Rectangle lowerRectangleBorder = new Rectangle(-300, 765, 1100, 200);
         lowerRectangleBorder.setFill(Color.BLACK);
         canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
 

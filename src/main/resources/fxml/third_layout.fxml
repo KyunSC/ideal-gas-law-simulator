@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <bottom>
         <HBox alignment="CENTER_LEFT" prefHeight="75.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
@@ -117,14 +117,13 @@
         </VBox>
     </left>
    <center>
-      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <StackPane alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Pane fx:id="canvas" maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0">
                <children>
                   <Circle fx:id="circleCanvas" fill="DODGERBLUE" layoutX="250.0" layoutY="250.0" radius="240.0" stroke="BLACK" strokeType="INSIDE" />
                </children>
             </Pane>
-            <Pane fx:id="backgroundPane" maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" />
          </children>
       </StackPane>
    </center>
