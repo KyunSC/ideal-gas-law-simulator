@@ -21,7 +21,7 @@ public class Particle {
     public double velocity;
     public double particleAngle;
     Timeline timeline;
-    Pane canvas;
+    Pane animationPanel;
     ImageView lid;
     BoundingBox boundingBox = new BoundingBox(30, 30, 470,470);
     boolean collisionDelay = false;
@@ -30,15 +30,14 @@ public class Particle {
      *
      * @param circle it's the shape of the particle
      *
-     * @param canvas canvas
      */
-    public Particle(Circle circle, double velocity, Pane canvas, ImageView lid){
+    public Particle(Circle circle, double velocity, Pane animationPanel, ImageView lid){
         this.circle = circle;
         this.velocity = velocity;
         this.velocityX = Math.random()*velocity;
         this.velocityY = Math.sqrt(Math.pow(velocity, 2) - Math.pow(velocityX, 2));
         this.particleAngle = Math.acos(velocityX / this.velocity);
-        this.canvas = canvas;
+        this.animationPanel = animationPanel;
         this.lid = lid;
     }
 
@@ -116,44 +115,44 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
-            if (canvas.getChildren().contains(lid)){
+            if (animationPanel.getChildren().contains(lid)){
                 //Left wall collision detection
-                if (particle.getCenterX() <= particle.getRadius() + 15) {
+                if (particle.getCenterX() <= animationPanel.getLayoutX() + particle.getRadius() + 15) {
                     velocityX *= -1;
                     particle.setCenterX(particle.getRadius() + 15);
                 }
                 //Right wall collision detection
-                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 15) {
+                if (particle.getCenterX() >= animationPanel.getWidth() - particle.getRadius() - 15) {
                     velocityX *= -1;
-                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 15);
+                    particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 15);
                 }
                 //Top wall collision detection
-                if (particle.getCenterY() <= particle.getRadius() + 15) {
+                if (particle.getCenterY() <= animationPanel.getLayoutY() + particle.getRadius() + 15) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 15);
                 }
                 //Bottom wall collision detection
-                if (particle.getCenterY() >= canvas.getHeight() - particle.getRadius() - 15) {
+                if (particle.getCenterY() >= animationPanel.getHeight() - particle.getRadius() - 15) {
                     velocityY *= -1;
-                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 15);
+                    particle.setCenterY(animationPanel.getHeight() - particle.getRadius() - 15);
                 }
             }
             else {
-                if (particle.getCenterX() <= particle.getRadius() + 2) {
+                if (particle.getCenterX() <= animationPanel.getLayoutX() + particle.getRadius() + 15) {
                     velocityX *= -1;
-                    particle.setCenterX(particle.getRadius() + 5);
+                    particle.setCenterX(particle.getRadius() + 15);
                 }
-                if (particle.getCenterX() >= canvas.getWidth() - particle.getRadius() - 2) {
+                if (particle.getCenterX() >= animationPanel.getWidth() - particle.getRadius() - 2) {
                     velocityX *= -1;
-                    particle.setCenterX(canvas.getWidth() - particle.getRadius() - 5);
+                    particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 5);
                 }
                 /*if (particle.getCenterY() <= particle.getRadius() - 2) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 5);
                 }*/
-                if (particle.getCenterY() >= canvas.getHeight()-particle.getRadius() - 2) {
+                if (particle.getCenterY() >= animationPanel.getHeight()-particle.getRadius() - 2) {
                     velocityY *= -1;
-                    particle.setCenterY(canvas.getHeight() - particle.getRadius() - 5);
+                    particle.setCenterY(animationPanel.getHeight() - particle.getRadius() - 5);
                 }
             }
         particle.setCenterX(particle.getCenterX() + velocityX);

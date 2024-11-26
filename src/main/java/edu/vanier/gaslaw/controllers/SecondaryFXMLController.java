@@ -112,21 +112,8 @@ public class SecondaryFXMLController {
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
         lid.setImage(lidImage);
+        animationPane.getChildren().add(lid);
         initialFunctions();
-        borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("----------------- resize pane -------------- " + newValue);
-            //animationPane.setPrefWidth(newValue.doubleValue());
-            animationPane.setMaxWidth(newValue.doubleValue());
-            //animationPane.setMinWidth(newValue.doubleValue());            
-        });
-        borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("----------------- resize pane -------------- " + newValue);
-            //animationPane.setPrefHeight(newValue.doubleValue());
-            animationPane.setMaxHeight(newValue.doubleValue());
-            //animationPane.setMinHeight(newValue.doubleValue());
-            animationPane.setMaxHeight(newValue.doubleValue());
-        });
-
     }
 
     private void initialFunctions() {
@@ -145,6 +132,23 @@ public class SecondaryFXMLController {
         lidPopping();
         initializeComboBox();
         returnLid();
+
+        borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("----------------- resize pane -------------- " + newValue);
+            animationPane.setPrefWidth(newValue.doubleValue() * volumeSlider.getValue() / 10);
+            animationPane.setMaxWidth(newValue.doubleValue() * (volumeSlider.getValue() / 10));
+            //animationPane.setMinWidth(newValue.doubleValue());
+        });
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            animationPane.setPrefWidth((animationPane.getWidth() * newValue.doubleValue()));
+        });
+        borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("----------------- resize pane -------------- " + newValue);
+            //animationPane.setPrefHeight(newValue.doubleValue());
+            animationPane.setMaxHeight(newValue.doubleValue());
+            //animationPane.setMinHeight(newValue.doubleValue());
+            animationPane.setMaxHeight(newValue.doubleValue());
+        });
     }
 
     private void setupTemperatureControls() {
@@ -283,19 +287,6 @@ public class SecondaryFXMLController {
             firstListOfParticles.add(particle);
             allParticles.add(particle);
             thermometer.updateThermometer();
-
-            /*Circle circle2 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
-            BalloonParticle balloonParticle = new BalloonParticle(circle2, particleVelocity, canvas);
-            balloonParticle.createTimeline();
-            balloonParticle.play();
-            canvas.getChildren().add(balloonParticle.getCircle());
-            Circle circle3 = new Circle(canvas.getWidth()/2, canvas.getHeight()/2, particleSize, particleColor);
-            particleVelocity *= -1;
-            BalloonParticle balloonParticle2 = new BalloonParticle(circle3, particleVelocity, canvas);
-            balloonParticle2.setVelocity(-1 * balloonParticle2.getVelocity());
-            balloonParticle2.createTimeline();
-            balloonParticle2.play();
-            canvas.getChildren().add(balloonParticle2.getCircle());*/
         }
     }
 
@@ -343,9 +334,7 @@ public class SecondaryFXMLController {
             if (lidPopped) {
                 lid = makingLid();
                 animationPane.getChildren().add(lid);
-                for (Particle allParticle : allParticles) {
-                    allParticle.setLid(lid);
-                }
+                for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
                 animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
             }
@@ -527,7 +516,7 @@ public class SecondaryFXMLController {
             animationPane.setPrefWidth((volumeSlider.getValue() / volumeSlider.getMax()) * animationPane.getMaxWidth());
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
-            lid.setFitWidth((volumeSlider.getValue() / volumeSlider.getMax()) * 500);
+            lid.setFitWidth((volumeSlider.getValue() / volumeSlider.getMax()) * animationPane.getWidth() - 10 );
         }));
     }
 
@@ -570,7 +559,7 @@ public class SecondaryFXMLController {
 
     private ImageView makingLid() {
         ImageView imageView = new ImageView(lidImage);
-        imageView.setFitWidth(500);
+        imageView.setFitWidth(animationPane.getWidth() - 100);
         imageView.setFitHeight(100);
         imageView.setLayoutY(-60);
         imageView.setPreserveRatio(false);
@@ -608,7 +597,7 @@ public class SecondaryFXMLController {
 
     private void particleEscaped() {
         for (int i = 0; i < allParticles.size(); i++) {
-            if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > 600) {
+            if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() + 100) {
                 if (firstListOfParticles.contains(allParticles.get(i))) {
                     firstListOfParticles.remove(allParticles.get(i));
                 }
