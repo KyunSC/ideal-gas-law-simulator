@@ -91,9 +91,6 @@ public class ThirdFXMLController {
     private ImageView backgroundImageView;
     private ImageView backgroundImageView2;
     private ImageView backgroundImageView3;
-    private TranslateTransition scrollAnimation;
-    private TranslateTransition scrollAnimation2;
-    private TranslateTransition scrollAnimation3;
 
     private double backgroundVelocity = 0.007;
 
@@ -116,7 +113,6 @@ public class ThirdFXMLController {
     }
 
     private void initialFunctions() {
-        //setupScrollingBackground();
         initScrollingBackground();
         addParticlesButton();
         add10ParticlesButton();
@@ -242,7 +238,6 @@ public class ThirdFXMLController {
             thermometer.updateThermometer();
             updateParticlesWithTemperature(newTemperature);
             updatePressure();
-//            updateScrollingBackground(newTemperature);
         }
     }
 
@@ -289,7 +284,6 @@ public class ThirdFXMLController {
                 Duration.millis(0.1),
                 (event -> {
                     checkParticleParticleCollision(allParticles);
-                    //particleEscaped();
                     changeVelocityLabel();
                     changeVolumeLabel();
                 })
@@ -474,18 +468,6 @@ public class ThirdFXMLController {
 
     private double calculateRMS(double temp) {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
-    }
-
-    private void particleEscaped(){
-        for (int i = 0; i < allParticles.size(); i++) {
-            if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > 600){
-                canvas.getChildren().remove(allParticles.get(i).getCircle());
-                allParticles.remove(allParticles.get(i));
-                totalParticleCount--;
-                updatePressure();
-                pressureGauge.updateGauge();
-            }
-        }
     }
 
     private void changeMolarMass(double molarMass) {

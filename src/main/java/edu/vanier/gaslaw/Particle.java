@@ -115,7 +115,6 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
-        System.out.println(animationPanel.getWidth());
             if (animationPanel.getChildren().contains(lid)){
                 //Left wall collision detection
                 if (particle.getCenterX() <= particle.getRadius() + 15) {
