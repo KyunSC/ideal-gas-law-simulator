@@ -136,18 +136,14 @@ public class SecondaryFXMLController {
         borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("----------------- resize pane -------------- " + newValue);
             animationPane.setPrefWidth(newValue.doubleValue() * volumeSlider.getValue() / 10);
-            animationPane.setMaxWidth(newValue.doubleValue() * (volumeSlider.getValue() / 10));
+            //animationPane.setMaxWidth(newValue.doubleValue() * (volumeSlider.getValue() / 10));
             //animationPane.setMinWidth(newValue.doubleValue());
-        });
-        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            animationPane.setPrefWidth((animationPane.getWidth() * newValue.doubleValue()));
-        });
+        });;
         borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("----------------- resize pane -------------- " + newValue);
             //animationPane.setPrefHeight(newValue.doubleValue());
             animationPane.setMaxHeight(newValue.doubleValue());
             //animationPane.setMinHeight(newValue.doubleValue());
-            animationPane.setMaxHeight(newValue.doubleValue());
         });
     }
 
@@ -513,10 +509,10 @@ public class SecondaryFXMLController {
 
     private void initializeVolumeSlider() {
         volumeSlider.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            animationPane.setPrefWidth((volumeSlider.getValue() / volumeSlider.getMax()) * animationPane.getMaxWidth());
+            animationPane.setMaxWidth(1400 * volumeSlider.getValue() / 10);
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
-            lid.setFitWidth((volumeSlider.getValue() / volumeSlider.getMax()) * animationPane.getWidth() - 10 );
+            lid.setFitWidth((volumeSlider.getValue() / (volumeSlider.getMax())) * 1300 );
         }));
     }
 
