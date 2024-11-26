@@ -425,11 +425,6 @@ public class SecondaryFXMLController {
             thirdListOfParticles.clear();
             fourthListOfParticles.clear();
         }
-        System.out.println(allParticles);
-        System.out.println(firstListOfParticles);
-        System.out.println(secondListOfParticles);
-        System.out.println(thirdListOfParticles);
-        System.out.println(fourthListOfParticles);
     }
 
     /**
@@ -513,6 +508,9 @@ public class SecondaryFXMLController {
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
             lid.setFitWidth((volumeSlider.getValue() / (volumeSlider.getMax())) * 1300 );
+            for (int i = 0; i < allParticles.size(); i++) {
+                allParticles.get(i).setAnimationPanel(animationPane);
+            }
         }));
     }
 
@@ -555,7 +553,7 @@ public class SecondaryFXMLController {
 
     private ImageView makingLid() {
         ImageView imageView = new ImageView(lidImage);
-        imageView.setFitWidth(animationPane.getWidth() - 100);
+        imageView.setFitWidth(1300);
         imageView.setFitHeight(100);
         imageView.setLayoutY(-60);
         imageView.setPreserveRatio(false);

@@ -115,9 +115,10 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
+        System.out.println(animationPanel.getWidth());
             if (animationPanel.getChildren().contains(lid)){
                 //Left wall collision detection
-                if (particle.getCenterX() <= animationPanel.getLayoutX() + particle.getRadius() + 15) {
+                if (particle.getCenterX() <= particle.getRadius() + 15) {
                     velocityX *= -1;
                     particle.setCenterX(particle.getRadius() + 15);
                 }
@@ -138,21 +139,25 @@ public class Particle {
                 }
             }
             else {
-                if (particle.getCenterX() <= animationPanel.getLayoutX() + particle.getRadius() + 15) {
+                //Left wall collision detection
+                if (particle.getCenterX() <= particle.getRadius() + 15) {
                     velocityX *= -1;
                     particle.setCenterX(particle.getRadius() + 15);
                 }
-                if (particle.getCenterX() >= animationPanel.getWidth() - particle.getRadius() - 2) {
+                //Right wall collision detection
+                if (particle.getCenterX() >= animationPanel.getWidth() - particle.getRadius() - 15) {
                     velocityX *= -1;
-                    particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 5);
+                    particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 15);
                 }
-                /*if (particle.getCenterY() <= particle.getRadius() - 2) {
+                /*//Top wall collision detection
+                if (particle.getCenterY() <= animationPanel.getLayoutY() + particle.getRadius() + 15) {
                     velocityY *= -1;
-                    particle.setCenterY(particle.getRadius() + 5);
+                    particle.setCenterY(particle.getRadius() + 15);
                 }*/
-                if (particle.getCenterY() >= animationPanel.getHeight()-particle.getRadius() - 2) {
+                //Bottom wall collision detection
+                if (particle.getCenterY() >= animationPanel.getHeight() - particle.getRadius() - 15) {
                     velocityY *= -1;
-                    particle.setCenterY(animationPanel.getHeight() - particle.getRadius() - 5);
+                    particle.setCenterY(animationPanel.getHeight() - particle.getRadius() - 15);
                 }
             }
         particle.setCenterX(particle.getCenterX() + velocityX);
@@ -164,4 +169,8 @@ public class Particle {
     public void setCollisionDelay(Boolean collisionDelay){this.collisionDelay = collisionDelay;}
 
     public boolean isCollisionDelay() {return collisionDelay;}
+
+    public void setAnimationPanel(Pane animationPanel){
+        this.animationPanel = animationPanel;
+    }
 }
