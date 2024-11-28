@@ -73,17 +73,17 @@ public class ThirdFXMLController {
     @FXML
     Label volumeLabel;
     @FXML
+    Label altitudeLabel;
+    @FXML
     Circle circleCanvas;
 
     ArrayList<BalloonParticle> allParticles = new ArrayList<>();
-    ArrayList<Particle> listOfParticles = new ArrayList<>();
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
     private double baseParticleVelocity = 3;
     boolean paused = false;
     private double totalParticleCount;
-    private double maxPressure = 1000;
     public boolean lidPopped = false;
     private Color particleColor;
     private double particleSize;
@@ -91,8 +91,9 @@ public class ThirdFXMLController {
     private ImageView backgroundImageView2;
     private ImageView backgroundImageView3;
     private ImageView flameImageView;
-
     private double backgroundVelocity = 0.007;
+    private Timeline decreaseTempTimeline;
+    private double altitude = 1;
 
     @FXML
     public void initialize() {
@@ -126,6 +127,7 @@ public class ThirdFXMLController {
         setupTemperatureControls();
         initializeComboBox();
         gradualTemperatureDecrease();
+        altitude();
         for (int i = 0; i < 29; i++) addBalloonParticle();
     }
 
@@ -181,7 +183,7 @@ public class ThirdFXMLController {
     }
 
     private void gradualTemperatureDecrease() {
-        Timeline decreaseTempTimeline  = new Timeline();
+        decreaseTempTimeline  = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
             if (pvnrt.getTemperature() > 300) {
@@ -191,7 +193,6 @@ public class ThirdFXMLController {
                 thermometer.updateThermometer();
             }
         });
-
         decreaseTempTimeline.getKeyFrames().add(keyFrame);
         decreaseTempTimeline.setCycleCount(Animation.INDEFINITE);
         decreaseTempTimeline.play();
@@ -215,6 +216,19 @@ public class ThirdFXMLController {
         backgroundImageView3.setLayoutY(backgroundImageView3.getLayoutY() - backgroundVelocity);
     }
 
+    private void altitude() {
+        Timeline altitudeTimeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
+            altitude = altitude - backgroundVelocity;
+            String altitudeString;
+            altitudeString = String.format("%.2f", altitude);
+            altitudeLabel.setText(altitudeString);
+        });
+        altitudeTimeline.getKeyFrames().add(keyFrame);
+        altitudeTimeline.setCycleCount(Animation.INDEFINITE);
+        altitudeTimeline.play();
+    }
+
     private void setupTemperatureControls() {
         DropShadow heatGlow = new DropShadow();
         heatGlow.setColor(Color.FIREBRICK);
@@ -231,11 +245,13 @@ public class ThirdFXMLController {
             heatTimeline.play();
             circleCanvas.setEffect(heatGlow);
             canvas.getChildren().add(flameImageView);
+            decreaseTempTimeline.stop();
         });
         heatButton.setOnMouseReleased(event -> {
             heatTimeline.stop();
             circleCanvas.setEffect(null);
             canvas.getChildren().remove(flameImageView);
+            decreaseTempTimeline.play();
         });
 
         Timeline coolTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(-1)));
@@ -561,7 +577,7 @@ public class ThirdFXMLController {
         if (pvnrt.getVolume() == 0) {
             volumeValue = "0.00";
         } else {
-            volumeValue = String.format("%.2f", pvnrt.getVolume());;
+            volumeValue = String.format("%.2f", pvnrt.getVolume());
         }
         volumeLabel.setText(volumeValue + " L");
     }
