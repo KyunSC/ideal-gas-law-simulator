@@ -519,10 +519,7 @@ public class SecondaryFXMLController {
                 double mouseX = event.getX();
                 if (event.getX() > 200 && event.getY() > 100) {
                     animationPane.setMaxWidth(event.getX());
-                    if (lid.getFitWidth() > animationPane.getMinWidth() - 100) {
-                        System.out.println("hellsds");
-                        lid.setFitWidth(mouseX);
-                    }
+                    if (lid.getFitWidth() > animationPane.getMinWidth() - 100) lid.setFitWidth(mouseX);
                 }
             }
         });
