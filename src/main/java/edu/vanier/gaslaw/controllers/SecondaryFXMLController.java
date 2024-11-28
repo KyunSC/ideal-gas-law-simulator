@@ -136,6 +136,7 @@ public class SecondaryFXMLController {
         borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("----------------- resize pane -------------- " + newValue);
             animationPane.setPrefWidth(newValue.doubleValue() * volumeSlider.getValue() / 10);
+            lid.setFitWidth(animationPane.getWidth() - 100);
             //animationPane.setMaxWidth(newValue.doubleValue() * (volumeSlider.getValue() / 10));
             //animationPane.setMinWidth(newValue.doubleValue());
         });;
@@ -313,9 +314,7 @@ public class SecondaryFXMLController {
 
     private void resetButton() {
         reset.setOnAction(event -> {
-            for (int i = 0; i < allParticles.size(); i++) {
-                animationPane.getChildren().remove(allParticles.get(i).getCircle());
-            }
+            for (int i = 0; i < allParticles.size(); i++) animationPane.getChildren().remove(allParticles.get(i).getCircle());
             allParticles.clear();
             firstListOfParticles.clear();
             secondListOfParticles.clear();
@@ -470,9 +469,6 @@ public class SecondaryFXMLController {
                                 targetListOfParticles.get(j).velocityY = (Math.abs(targetListOfParticles.get(j).velocityY) * -1);
                                 targetListOfParticles.get(i).velocityY = (Math.abs(targetListOfParticles.get(i).velocityY));
                             }
-                            /*targetListOfParticles.get(i).velocityX *= -1;
-                            targetListOfParticles.get(j).velocityX *= -1;
-                            targetListOfParticles.get(i).velocityY *= -1;*/
                             if (!targetListOfParticles.get(i).isCollisionDelay()) {
                                 targetListOfParticles.get(i).setCollisionDelay(true);
                                 delayCollision(targetListOfParticles.get(i));
@@ -494,11 +490,8 @@ public class SecondaryFXMLController {
     }
 
     private void updatePressure() {
-        if (allParticles.isEmpty()) {
-            pvnrt.setMoles(totalParticleCount);
-        } else {
-            pvnrt.setMoles(totalParticleCount);
-        }
+        if (allParticles.isEmpty()) pvnrt.setMoles(totalParticleCount);
+        else pvnrt.setMoles(totalParticleCount);
         pressureGauge.updateGauge();
     }
 
@@ -507,10 +500,8 @@ public class SecondaryFXMLController {
             animationPane.setMaxWidth(1400 * volumeSlider.getValue() / 10);
             pvnrt.setVolume(volumeSlider.getValue());
             updatePressure();
-            lid.setFitWidth((volumeSlider.getValue() / (volumeSlider.getMax())) * 1300 );
-            for (int i = 0; i < allParticles.size(); i++) {
-                allParticles.get(i).setAnimationPanel(animationPane);
-            }
+            lid.setFitWidth((volumeSlider.getValue() / (volumeSlider.getMax())) * 1300 * (animationPane.getWidth() / 1400) + 100);
+            for (Particle allParticle : allParticles) allParticle.setAnimationPanel(animationPane);
         }));
     }
 
