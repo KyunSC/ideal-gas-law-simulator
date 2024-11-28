@@ -23,7 +23,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -91,6 +90,7 @@ public class ThirdFXMLController {
     private ImageView backgroundImageView;
     private ImageView backgroundImageView2;
     private ImageView backgroundImageView3;
+    private ImageView flameImageView;
 
     private double backgroundVelocity = 0.007;
 
@@ -107,13 +107,13 @@ public class ThirdFXMLController {
         thermometer = new Thermometer(pvnrt);
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
-        circleCanvas = new Circle(250, 250, 250, Color.WHITE);
+        circleCanvas = new Circle(250, 250, 250, Color.LIGHTYELLOW);
         circleCanvas.setStroke(Color.GRAY);
         initialFunctions();
     }
 
     private void initialFunctions() {
-        initScrollingBackground();
+        initBackground();
         addParticlesButton();
         add10ParticlesButton();
         remove1Button();
@@ -125,14 +125,27 @@ public class ThirdFXMLController {
         particleCollisionTimeline();
         setupTemperatureControls();
         initializeComboBox();
+        gradualTemperatureDecrease();
         for (int i = 0; i < 29; i++) addBalloonParticle();
     }
 
-    private void initScrollingBackground(){
+    private void initBackground(){
         Image backgroundImage = new Image(Objects.requireNonNull
                 (getClass().getResource("/seamless-clouds.jpg")).toExternalForm());
         Image basketImage = new Image(Objects.requireNonNull(getClass().getResource("/balloonbasket.png")).toExternalForm());
         ImageView basketImageView = new ImageView(basketImage);
+        Image flame = new Image(Objects.requireNonNull(getClass().getResource("/flame-gif.gif")).toExternalForm());
+        flameImageView = new ImageView(flame);
+
+        basketImageView.setX(150);
+        basketImageView.setY(480);
+        basketImageView.setFitWidth(200);
+        basketImageView.setFitHeight(300);
+
+        flameImageView.setX(220);
+        flameImageView.setY(480);
+        flameImageView.setFitWidth(60);
+        flameImageView.setFitHeight(60);
 
         backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(1100);
@@ -156,7 +169,7 @@ public class ThirdFXMLController {
         upperRectangleBorder.setFill(Color.BLACK);
         Rectangle lowerRectangleBorder = new Rectangle(-300, 765, 1100, 200);
         lowerRectangleBorder.setFill(Color.BLACK);
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, circleCanvas, upperRectangleBorder, lowerRectangleBorder, basketImageView);
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, basketImageView, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
 
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
@@ -165,6 +178,23 @@ public class ThirdFXMLController {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    private void gradualTemperatureDecrease() {
+        Timeline decreaseTempTimeline  = new Timeline();
+
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
+            if (pvnrt.getTemperature() > 300) {
+                pvnrt.setTemperature(pvnrt.getTemperature() - 1);
+                updatePressure();
+                updateParticlesWithTemperature(pvnrt.getTemperature());
+                thermometer.updateThermometer();
+            }
+        });
+
+        decreaseTempTimeline.getKeyFrames().add(keyFrame);
+        decreaseTempTimeline.setCycleCount(Animation.INDEFINITE);
+        decreaseTempTimeline.play();
     }
 
     private void moveBackground(){
@@ -200,10 +230,12 @@ public class ThirdFXMLController {
         heatButton.setOnMousePressed(event -> {
             heatTimeline.play();
             circleCanvas.setEffect(heatGlow);
+            canvas.getChildren().add(flameImageView);
         });
         heatButton.setOnMouseReleased(event -> {
             heatTimeline.stop();
             circleCanvas.setEffect(null);
+            canvas.getChildren().remove(flameImageView);
         });
 
         Timeline coolTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> adjustTemperature(-1)));
