@@ -118,7 +118,7 @@ public class SecondaryFXMLController {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getX() < animationPane.getWidth() && event.getX() > 200 && event.getY() < 100) lid.setFitWidth(event.getX());
+                if (event.getX() < animationPane.getWidth() && event.getX() > 200 && event.getY() < 100) lid.setFitWidth(event.getX() + 100);
             }
         });
 
@@ -516,7 +516,14 @@ public class SecondaryFXMLController {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getX() > 200 && event.getY() > 100) animationPane.setMaxWidth(event.getX());
+                double mouseX = event.getX();
+                if (event.getX() > 200 && event.getY() > 100) {
+                    animationPane.setMaxWidth(event.getX());
+                    if (lid.getFitWidth() > animationPane.getMinWidth() - 100) {
+                        System.out.println("hellsds");
+                        lid.setFitWidth(mouseX);
+                    }
+                }
             }
         });
     }
