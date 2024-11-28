@@ -8,6 +8,8 @@ import edu.vanier.gaslaw.graphics.PressureGauge;
 import edu.vanier.gaslaw.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -17,6 +19,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -112,6 +115,13 @@ public class SecondaryFXMLController {
         gaugeVBox.getChildren().addAll(pressureGauge.getGaugePane(), thermometer.getThermometerPane());
 
         lid.setImage(lidImage);
+        animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getX() < animationPane.getWidth() && event.getX() > 200 && event.getY() < 100) lid.setFitWidth(event.getX());
+            }
+        });
+
         animationPane.getChildren().add(lid);
         initialFunctions();
     }
@@ -134,14 +144,14 @@ public class SecondaryFXMLController {
         returnLid();
 
         borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("----------------- resize pane -------------- " + newValue);
+            //System.out.println("----------------- resize pane -------------- " + newValue);
             animationPane.setPrefWidth(newValue.doubleValue() * volumeSlider.getValue() / 10);
             lid.setFitWidth(animationPane.getWidth() - 100);
-            //animationPane.setMaxWidth(newValue.doubleValue() * (volumeSlider.getValue() / 10));
+            animationPane.setMaxWidth(newValue.doubleValue() * (volumeSlider.getValue() / 10));
             //animationPane.setMinWidth(newValue.doubleValue());
         });;
         borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("----------------- resize pane -------------- " + newValue);
+            //System.out.println("----------------- resize pane -------------- " + newValue);
             //animationPane.setPrefHeight(newValue.doubleValue());
             animationPane.setMaxHeight(newValue.doubleValue());
             //animationPane.setMinHeight(newValue.doubleValue());
@@ -503,6 +513,12 @@ public class SecondaryFXMLController {
             lid.setFitWidth((volumeSlider.getValue() / (volumeSlider.getMax())) * 1300 * (animationPane.getWidth() / 1400) + 100);
             for (Particle allParticle : allParticles) allParticle.setAnimationPanel(animationPane);
         }));
+        animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getX() > 200 && event.getY() > 100) animationPane.setMaxWidth(event.getX());
+            }
+        });
     }
 
     private double calculateRMS(double temp) {
