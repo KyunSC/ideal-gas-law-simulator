@@ -100,6 +100,7 @@ public class ThirdFXMLController {
     private Timeline decreaseTempTimeline;
     private Timeline backgroundTimeline;
     private double altitude = 5;
+    private boolean isGroundPresent = false;
 
     @FXML
     public void initialize() {
@@ -156,7 +157,7 @@ public class ThirdFXMLController {
         flameImageView.setFitHeight(60);
 
         groundRectangle = new Rectangle(1100, 200, Color.GREEN);
-        groundRectangle.setLayoutY(750);
+        groundRectangle.setLayoutY(900);
         groundRectangle.widthProperty().bind(borderPane.widthProperty().multiply(0.65));
         groundRectangle.layoutXProperty().bind(canvas.widthProperty().subtract(groundRectangle.widthProperty()).divide(2));
 
@@ -192,7 +193,7 @@ public class ThirdFXMLController {
         upperRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
         upperRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(upperRectangleBorder.widthProperty()).divide(2));
 
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, basketImageView, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, basketImageView, groundRectangle, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
 
         Timeline backgroundVelocityTimeline = new Timeline();
         KeyFrame kf = new KeyFrame(Duration.millis(0.1), event -> {
@@ -205,6 +206,7 @@ public class ThirdFXMLController {
         backgroundTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
             moveBackground();
+            System.out.println(altitude + "altitude");
         });
         backgroundTimeline.getKeyFrames().add(keyFrame);
         backgroundTimeline.setCycleCount(Animation.INDEFINITE);
@@ -251,31 +253,58 @@ public class ThirdFXMLController {
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
             if (altitude > 0) {
                 altitude = altitude - (backgroundVelocity * 100);
-                if (altitude < 0) {
+                if (altitude <= 0) {
                     altitudeLabel.setText("0.00 m");
                     altitude = 0;
-                    backgroundTimeline.stop();
+                    if (!isGroundPresent){
+                        spawnGround();
+                        isGroundPresent = true;
+                    }
                 } else {
                     String altitudeString;
                     altitudeString = String.format("%.2f", altitude);
                     altitudeLabel.setText(altitudeString + " m");
                     backgroundTimeline.play();
+                    if (isGroundPresent) {
+                        removeGround();
+                        isGroundPresent = false;
+                    }
                 }
             } else if (altitude == 0 && backgroundVelocity < 0){
                 altitude = altitude - (backgroundVelocity * 100);
                 String altitudeString;
                 altitudeString = String.format("%.2f", altitude);
                 altitudeLabel.setText(altitudeString + " m");
-                backgroundTimeline.play();
+            } else if (altitude == 0) {
+                backgroundTimeline.stop();
             }
         });
-
         altitudeTimeline.getKeyFrames().add(keyFrame);
         altitudeTimeline.setCycleCount(Animation.INDEFINITE);
         altitudeTimeline.play();
     }
 
     private void spawnGround() {
+        groundRectangle.setLayoutY(900);
+        Timeline groundTimeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
+            groundRectangle.setLayoutY(groundRectangle.getLayoutY() - 5);
+        });
+        groundTimeline.getKeyFrames().add(keyFrame);
+        groundTimeline.setCycleCount(30);
+        groundTimeline.play();
+
+    }
+
+    private void removeGround() {
+        groundRectangle.setLayoutY(750);
+        Timeline groundTimeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
+            groundRectangle.setLayoutY(groundRectangle.getLayoutY() + 5);
+        });
+        groundTimeline.getKeyFrames().add(keyFrame);
+        groundTimeline.setCycleCount(30);
+        groundTimeline.play();
 
     }
 
