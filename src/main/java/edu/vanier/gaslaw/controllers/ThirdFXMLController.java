@@ -75,8 +75,6 @@ public class ThirdFXMLController {
     @FXML
     Label volumeLabel;
     @FXML
-    Label altitudeLabel;
-    @FXML
     Circle circleCanvas;
     @FXML
     StackPane stackPane;
@@ -101,6 +99,7 @@ public class ThirdFXMLController {
     private Timeline backgroundTimeline;
     private double altitude = 0;
     private boolean isGroundPresent = true;
+    private Label altitudeLabel;
 
     @FXML
     public void initialize() {
@@ -145,6 +144,9 @@ public class ThirdFXMLController {
         ImageView basketImageView = new ImageView(basketImage);
         Image flame = new Image(Objects.requireNonNull(getClass().getResource("/flame-gif.gif")).toExternalForm());
         flameImageView = new ImageView(flame);
+        groundRectangle = new Rectangle(1100, 300, Color.GREEN);
+        Label altitudeTitleLabel = new Label();
+        altitudeLabel = new Label();
 
         basketImageView.setX(150);
         basketImageView.setY(480);
@@ -156,10 +158,19 @@ public class ThirdFXMLController {
         flameImageView.setFitWidth(60);
         flameImageView.setFitHeight(60);
 
-        groundRectangle = new Rectangle(1100, 200, Color.GREEN);
         groundRectangle.setLayoutY(750);
         groundRectangle.widthProperty().bind(borderPane.widthProperty().multiply(0.65));
         groundRectangle.layoutXProperty().bind(canvas.widthProperty().subtract(groundRectangle.widthProperty()).divide(2));
+
+        altitudeTitleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 23px;;");
+        altitudeTitleLabel.setText("Altitude:");
+        altitudeTitleLabel.setLayoutX(-150);
+        altitudeTitleLabel.setLayoutY(-25);
+
+        altitudeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 28px;;");
+        altitudeLabel.setText("0.00m");
+        altitudeLabel.setLayoutX(-150);
+        altitudeLabel.setLayoutY(0);
 
         backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(1200);
@@ -193,7 +204,7 @@ public class ThirdFXMLController {
         upperRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
         upperRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(upperRectangleBorder.widthProperty()).divide(2));
 
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, basketImageView, groundRectangle, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, basketImageView, groundRectangle, circleCanvas, upperRectangleBorder, lowerRectangleBorder, altitudeTitleLabel, altitudeLabel);
 
         Timeline backgroundVelocityTimeline = new Timeline();
         KeyFrame kf = new KeyFrame(Duration.millis(0.1), event -> {
@@ -206,7 +217,6 @@ public class ThirdFXMLController {
         backgroundTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
             moveBackground();
-            System.out.println(altitude + "altitude");
         });
         backgroundTimeline.getKeyFrames().add(keyFrame);
         backgroundTimeline.setCycleCount(Animation.INDEFINITE);
@@ -216,7 +226,7 @@ public class ThirdFXMLController {
     private void gradualTemperatureDecrease() {
         decreaseTempTimeline  = new Timeline();
 
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(500), event -> {
             if (pvnrt.getTemperature() > 300) {
                 pvnrt.setTemperature(pvnrt.getTemperature() - 1);
                 updatePressure();
@@ -252,7 +262,7 @@ public class ThirdFXMLController {
         Timeline altitudeTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
             if (altitude > 0) {
-                altitude = altitude - (backgroundVelocity * 100);
+                altitude = altitude - (backgroundVelocity * 300);
                 if (altitude <= 0) {
                     altitudeLabel.setText("0.00 m");
                     altitude = 0;
