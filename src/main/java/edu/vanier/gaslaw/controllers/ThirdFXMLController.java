@@ -6,6 +6,7 @@ import edu.vanier.gaslaw.calculations.PVnRT;
 import edu.vanier.gaslaw.graphics.PressureGauge;
 import edu.vanier.gaslaw.graphics.Thermometer;
 import javafx.animation.*;
+import javafx.beans.binding.Bindings;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -96,7 +97,8 @@ public class ThirdFXMLController {
     private ImageView flameImageView;
     private double backgroundVelocity = 0.007;
     private Timeline decreaseTempTimeline;
-    private double altitude = 1;
+    private Timeline backgroundTimeline;
+    private double altitude = 5;
 
     @FXML
     public void initialize() {
@@ -153,19 +155,16 @@ public class ThirdFXMLController {
         flameImageView.setFitHeight(60);
 
         backgroundImageView = new ImageView(backgroundImage);
-        backgroundImageView.setFitHeight(1100);
-//        backgroundImageView.setLayoutX(-200);
+        backgroundImageView.setFitHeight(1200);
         backgroundImageView.setLayoutY(-300);
 
         backgroundImageViewTop = new ImageView(backgroundImage);
-        backgroundImageViewTop.setFitHeight(1100);
-//        backgroundImageViewTop.setLayoutX(-200);
-        backgroundImageViewTop.setLayoutY(-1400);
+        backgroundImageViewTop.setFitHeight(1200);
+        backgroundImageViewTop.setLayoutY(-1500);
 
         backgroundImageViewBottom = new ImageView(backgroundImage);
-        backgroundImageViewBottom.setFitHeight(1100);
-//        backgroundImageViewBottom.setLayoutX(-200);
-        backgroundImageViewBottom.setLayoutY(800);
+        backgroundImageViewBottom.setFitHeight(1200);
+        backgroundImageViewBottom.setLayoutY(900);
 
         backgroundImageView.fitWidthProperty().bind(borderPane.widthProperty().multiply(0.65));
         backgroundImageViewTop.fitWidthProperty().bind(borderPane.widthProperty().multiply(0.65));
@@ -187,15 +186,24 @@ public class ThirdFXMLController {
         upperRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
         upperRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(upperRectangleBorder.widthProperty()).divide(2));
 
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, circleCanvas, basketImageView, upperRectangleBorder, lowerRectangleBorder);
+//        borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+////            canvas.setMaxWidth(newValue.doubleValue());
+//            circleCanvas.setRadius(newValue.doubleValue());
+//        });;
+//        borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
+////            canvas.setMaxHeight(newValue.doubleValue());
+//            circleCanvas.setRadius(newValue.doubleValue());
+//        });
 
-        Timeline timeline = new Timeline();
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, basketImageView, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+
+        backgroundTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
             moveBackground();
         });
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        backgroundTimeline.getKeyFrames().add(keyFrame);
+        backgroundTimeline.setCycleCount(Animation.INDEFINITE);
+        backgroundTimeline.play();
     }
 
     private void gradualTemperatureDecrease() {
@@ -223,8 +231,8 @@ public class ThirdFXMLController {
 
         if (backgroundImageViewBottom.getLayoutY() <= -300 || backgroundImageViewTop.getLayoutY() >= -300){
             backgroundImageView.setLayoutY(-300);
-            backgroundImageViewTop.setLayoutY(-1400);
-            backgroundImageViewBottom.setLayoutY(800);
+            backgroundImageViewTop.setLayoutY(-1500);
+            backgroundImageViewBottom.setLayoutY(900);
         }
 
         backgroundImageView.setLayoutY(backgroundImageView.getLayoutY() - backgroundVelocity);
@@ -235,11 +243,24 @@ public class ThirdFXMLController {
     private void altitude() {
         Timeline altitudeTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
-            altitude = altitude - backgroundVelocity;
-            String altitudeString;
-            altitudeString = String.format("%.2f", altitude);
-            altitudeLabel.setText(altitudeString);
+            if (altitude > 0) {
+                altitude = altitude - (backgroundVelocity * 100);
+                if (altitude < 0) {
+                    altitudeLabel.setText("0.00 m");
+                    altitude = 0;
+                } else {
+                    String altitudeString;
+                    altitudeString = String.format("%.2f", altitude);
+                    altitudeLabel.setText(altitudeString + " m");
+                }
+            } else if (altitude == 0 && backgroundVelocity < 0){
+                altitude = altitude - (backgroundVelocity * 100);
+                String altitudeString;
+                altitudeString = String.format("%.2f", altitude);
+                altitudeLabel.setText(altitudeString + " m");
+            }
         });
+
         altitudeTimeline.getKeyFrames().add(keyFrame);
         altitudeTimeline.setCycleCount(Animation.INDEFINITE);
         altitudeTimeline.play();
