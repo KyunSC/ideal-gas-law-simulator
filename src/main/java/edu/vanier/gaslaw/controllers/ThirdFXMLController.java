@@ -99,8 +99,8 @@ public class ThirdFXMLController {
     private double backgroundVelocity = 0.007;
     private Timeline decreaseTempTimeline;
     private Timeline backgroundTimeline;
-    private double altitude = 5;
-    private boolean isGroundPresent = false;
+    private double altitude = 0;
+    private boolean isGroundPresent = true;
 
     @FXML
     public void initialize() {
@@ -157,7 +157,7 @@ public class ThirdFXMLController {
         flameImageView.setFitHeight(60);
 
         groundRectangle = new Rectangle(1100, 200, Color.GREEN);
-        groundRectangle.setLayoutY(900);
+        groundRectangle.setLayoutY(750);
         groundRectangle.widthProperty().bind(borderPane.widthProperty().multiply(0.65));
         groundRectangle.layoutXProperty().bind(canvas.widthProperty().subtract(groundRectangle.widthProperty()).divide(2));
 
