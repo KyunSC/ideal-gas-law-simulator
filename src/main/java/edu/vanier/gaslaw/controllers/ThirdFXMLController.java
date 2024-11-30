@@ -95,6 +95,7 @@ public class ThirdFXMLController {
     private ImageView backgroundImageViewTop;
     private ImageView backgroundImageViewBottom;
     private ImageView flameImageView;
+    private Rectangle groundRectangle;
     private double backgroundVelocity = 0.007;
     private Timeline decreaseTempTimeline;
     private Timeline backgroundTimeline;
@@ -154,6 +155,11 @@ public class ThirdFXMLController {
         flameImageView.setFitWidth(60);
         flameImageView.setFitHeight(60);
 
+        groundRectangle = new Rectangle(1100, 200, Color.GREEN);
+        groundRectangle.setLayoutY(750);
+        groundRectangle.widthProperty().bind(borderPane.widthProperty().multiply(0.65));
+        groundRectangle.layoutXProperty().bind(canvas.widthProperty().subtract(groundRectangle.widthProperty()).divide(2));
+
         backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(1200);
         backgroundImageView.setLayoutY(-300);
@@ -173,7 +179,7 @@ public class ThirdFXMLController {
         backgroundImageViewTop.layoutXProperty().bind((canvas.widthProperty().subtract(backgroundImageViewTop.fitWidthProperty())).divide(2));
         backgroundImageViewBottom.layoutXProperty().bind(canvas.widthProperty().subtract(backgroundImageViewBottom.fitWidthProperty()).divide(2));
 
-        Rectangle upperRectangleBorder = new Rectangle(0, -200, 1200, 150);
+        Rectangle upperRectangleBorder = new Rectangle(0, -200, 1100, 150);
         upperRectangleBorder.setFill(Color.BLACK);
         Rectangle lowerRectangleBorder = new Rectangle(0, 0, 1100, 200);
         lowerRectangleBorder.setFill(Color.BLACK);
@@ -186,16 +192,15 @@ public class ThirdFXMLController {
         upperRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
         upperRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(upperRectangleBorder.widthProperty()).divide(2));
 
-//        borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-////            canvas.setMaxWidth(newValue.doubleValue());
-//            circleCanvas.setRadius(newValue.doubleValue());
-//        });;
-//        borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-////            canvas.setMaxHeight(newValue.doubleValue());
-//            circleCanvas.setRadius(newValue.doubleValue());
-//        });
-
         canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, basketImageView, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+
+        Timeline backgroundVelocityTimeline = new Timeline();
+        KeyFrame kf = new KeyFrame(Duration.millis(0.1), event -> {
+            calculatingBackgroundVelocity();
+        });
+        backgroundVelocityTimeline.getKeyFrames().add(kf);
+        backgroundVelocityTimeline.setCycleCount(Animation.INDEFINITE);
+        backgroundVelocityTimeline.play();
 
         backgroundTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
@@ -222,13 +227,14 @@ public class ThirdFXMLController {
         decreaseTempTimeline.play();
     }
 
-    private void moveBackground(){
+    private void calculatingBackgroundVelocity() {
         if (pvnrt.getTemperature() != 300) backgroundVelocity = (301.95 - pvnrt.getTemperature()) / 2000;
         else backgroundVelocity = 0.007;
         if (pvnrt.getTemperature() < 330) circleCanvas.setRadius(250 + ((pvnrt.getTemperature() - 300) / 1.5));
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
+    }
 
-
+    private void moveBackground(){
         if (backgroundImageViewBottom.getLayoutY() <= -300 || backgroundImageViewTop.getLayoutY() >= -300){
             backgroundImageView.setLayoutY(-300);
             backgroundImageViewTop.setLayoutY(-1500);
@@ -248,22 +254,29 @@ public class ThirdFXMLController {
                 if (altitude < 0) {
                     altitudeLabel.setText("0.00 m");
                     altitude = 0;
+                    backgroundTimeline.stop();
                 } else {
                     String altitudeString;
                     altitudeString = String.format("%.2f", altitude);
                     altitudeLabel.setText(altitudeString + " m");
+                    backgroundTimeline.play();
                 }
             } else if (altitude == 0 && backgroundVelocity < 0){
                 altitude = altitude - (backgroundVelocity * 100);
                 String altitudeString;
                 altitudeString = String.format("%.2f", altitude);
                 altitudeLabel.setText(altitudeString + " m");
+                backgroundTimeline.play();
             }
         });
 
         altitudeTimeline.getKeyFrames().add(keyFrame);
         altitudeTimeline.setCycleCount(Animation.INDEFINITE);
         altitudeTimeline.play();
+    }
+
+    private void spawnGround() {
+
     }
 
     private void setupTemperatureControls() {
