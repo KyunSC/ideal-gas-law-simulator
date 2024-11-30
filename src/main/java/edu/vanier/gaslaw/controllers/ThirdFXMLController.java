@@ -2,7 +2,6 @@ package edu.vanier.gaslaw.controllers;
 
 import edu.vanier.gaslaw.BalloonParticle;
 import edu.vanier.gaslaw.MainApp;
-import edu.vanier.gaslaw.Particle;
 import edu.vanier.gaslaw.calculations.PVnRT;
 import edu.vanier.gaslaw.graphics.PressureGauge;
 import edu.vanier.gaslaw.graphics.Thermometer;
@@ -41,6 +40,8 @@ public class ThirdFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(SecondaryFXMLController.class);
 
     @FXML
+    BorderPane borderPane;
+    @FXML
     Button btnSwitchScene;
     @FXML
     Button add;
@@ -76,6 +77,8 @@ public class ThirdFXMLController {
     Label altitudeLabel;
     @FXML
     Circle circleCanvas;
+    @FXML
+    StackPane stackPane;
 
     ArrayList<BalloonParticle> allParticles = new ArrayList<>();
     private Thermometer thermometer;
@@ -88,8 +91,8 @@ public class ThirdFXMLController {
     private Color particleColor;
     private double particleSize;
     private ImageView backgroundImageView;
-    private ImageView backgroundImageView2;
-    private ImageView backgroundImageView3;
+    private ImageView backgroundImageViewTop;
+    private ImageView backgroundImageViewBottom;
     private ImageView flameImageView;
     private double backgroundVelocity = 0.007;
     private Timeline decreaseTempTimeline;
@@ -151,27 +154,40 @@ public class ThirdFXMLController {
 
         backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(1100);
-        backgroundImageView.setFitWidth(1100);
-        backgroundImageView.setLayoutX(-300);
+//        backgroundImageView.setLayoutX(-200);
         backgroundImageView.setLayoutY(-300);
 
-        backgroundImageView2 = new ImageView(backgroundImage);
-        backgroundImageView2.setFitHeight(1100);
-        backgroundImageView2.setFitWidth(1100);
-        backgroundImageView2.setLayoutX(-300);
-        backgroundImageView2.setLayoutY(-1400);
+        backgroundImageViewTop = new ImageView(backgroundImage);
+        backgroundImageViewTop.setFitHeight(1100);
+//        backgroundImageViewTop.setLayoutX(-200);
+        backgroundImageViewTop.setLayoutY(-1400);
 
-        backgroundImageView3 = new ImageView(backgroundImage);
-        backgroundImageView3.setFitHeight(1100);
-        backgroundImageView3.setFitWidth(1100);
-        backgroundImageView3.setLayoutX(-300);
-        backgroundImageView3.setLayoutY(800);
+        backgroundImageViewBottom = new ImageView(backgroundImage);
+        backgroundImageViewBottom.setFitHeight(1100);
+//        backgroundImageViewBottom.setLayoutX(-200);
+        backgroundImageViewBottom.setLayoutY(800);
 
-        Rectangle upperRectangleBorder = new Rectangle(-300, -300, 1100, 150);
+        backgroundImageView.fitWidthProperty().bind(borderPane.widthProperty().multiply(0.65));
+        backgroundImageViewTop.fitWidthProperty().bind(borderPane.widthProperty().multiply(0.65));
+        backgroundImageViewBottom.fitWidthProperty().bind(borderPane.widthProperty().multiply(0.65));
+        backgroundImageView.layoutXProperty().bind(canvas.widthProperty().subtract(backgroundImageView.fitWidthProperty()).divide(2));
+        backgroundImageViewTop.layoutXProperty().bind((canvas.widthProperty().subtract(backgroundImageViewTop.fitWidthProperty())).divide(2));
+        backgroundImageViewBottom.layoutXProperty().bind(canvas.widthProperty().subtract(backgroundImageViewBottom.fitWidthProperty()).divide(2));
+
+        Rectangle upperRectangleBorder = new Rectangle(0, -200, 1200, 150);
         upperRectangleBorder.setFill(Color.BLACK);
-        Rectangle lowerRectangleBorder = new Rectangle(-300, 765, 1100, 200);
+        Rectangle lowerRectangleBorder = new Rectangle(0, 0, 1100, 200);
         lowerRectangleBorder.setFill(Color.BLACK);
-        canvas.getChildren().addAll(backgroundImageView, backgroundImageView2, backgroundImageView3, basketImageView, circleCanvas, upperRectangleBorder, lowerRectangleBorder);
+
+        //binds lower rectangle to the bottom of the borderPane, binds lower rectangle width to width of borderpane, binds center of lower rectangle to center of canvas
+        lowerRectangleBorder.layoutYProperty().bind(borderPane.heightProperty().subtract(125));
+        lowerRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
+        lowerRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(lowerRectangleBorder.widthProperty()).divide(2));
+
+        upperRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
+        upperRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(upperRectangleBorder.widthProperty()).divide(2));
+
+        canvas.getChildren().addAll(backgroundImageView, backgroundImageViewTop, backgroundImageViewBottom, circleCanvas, basketImageView, upperRectangleBorder, lowerRectangleBorder);
 
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(0.1), event -> {
@@ -205,15 +221,15 @@ public class ThirdFXMLController {
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
 
 
-        if (backgroundImageView3.getLayoutY() <= -300 || backgroundImageView2.getLayoutY() >= -300){
+        if (backgroundImageViewBottom.getLayoutY() <= -300 || backgroundImageViewTop.getLayoutY() >= -300){
             backgroundImageView.setLayoutY(-300);
-            backgroundImageView2.setLayoutY(-1400);
-            backgroundImageView3.setLayoutY(800);
+            backgroundImageViewTop.setLayoutY(-1400);
+            backgroundImageViewBottom.setLayoutY(800);
         }
 
         backgroundImageView.setLayoutY(backgroundImageView.getLayoutY() - backgroundVelocity);
-        backgroundImageView2.setLayoutY(backgroundImageView2.getLayoutY() - backgroundVelocity);
-        backgroundImageView3.setLayoutY(backgroundImageView3.getLayoutY() - backgroundVelocity);
+        backgroundImageViewTop.setLayoutY(backgroundImageViewTop.getLayoutY() - backgroundVelocity);
+        backgroundImageViewBottom.setLayoutY(backgroundImageViewBottom.getLayoutY() - backgroundVelocity);
     }
 
     private void altitude() {
