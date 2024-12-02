@@ -307,7 +307,6 @@ public class BalloonFXMLController {
             groundTimeline.play();
             groundTimeline.setOnFinished(event -> {
                 isSpawningGround = false;
-                System.out.println(isSpawningGround);
             });
     }
 
@@ -323,7 +322,6 @@ public class BalloonFXMLController {
             groundTimeline.play();
             groundTimeline.setOnFinished(event -> {
                 isRemovingGround = false;
-                System.out.println(isRemovingGround);
             });
     }
 
