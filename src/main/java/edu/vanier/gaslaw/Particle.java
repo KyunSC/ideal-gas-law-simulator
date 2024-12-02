@@ -115,7 +115,8 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
-            if (animationPanel.getChildren().contains(lid)){
+        System.out.println(lid.getOpacity());
+            if (lid.getOpacity() == 1){
                 //Left wall collision detection
                 if (particle.getCenterX() <= particle.getRadius() + 15) {
                     velocityX *= -1;
@@ -149,7 +150,7 @@ public class Particle {
                     particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 15);
                 }
                 //Top wall collision detection
-                if (particle.getCenterY() <= animationPanel.getLayoutY() + particle.getRadius() + 15 && particle.getCenterX() >= (animationPanel.getWidth() - lid.getFitWidth())) {
+                if (particle.intersects(lid.getBoundsInParent())) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 15);
                 }

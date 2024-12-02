@@ -117,8 +117,9 @@ public class IdealGasFXMLController {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getX() < animationPane.getMaxWidth() - 75 && event.getX() > 200 && event.getY() < 100) {
-                    lid.setFitWidth(event.getX() + 100);
+                if (event.getX() < animationPane.getWidth() - 200 && event.getX() > 0 && event.getY() < 100) {
+                    lid.setLayoutX((animationPane.getWidth() - lid.getFitWidth() - 25));
+                    lid.setFitWidth(1440 - event.getX() + 100);
                 }
             }
         });
@@ -533,12 +534,12 @@ public class IdealGasFXMLController {
                 if (event.getX() > 200 && event.getY() > 100) {
                     animationPane.setMaxWidth(event.getX());
                     if (lid.getFitWidth() > animationPane.getMinWidth() - 100 && event.getX() < animationPane.getWidth()) {
-                        lid.setFitWidth(mouseX);
-                        lid.setLayoutX(animationPane.getWidth() - lid.getFitWidth());
+                        lid.setFitWidth(animationPane.getWidth() - 25);
+                        lid.setLayoutX((animationPane.getWidth() - lid.getFitWidth() - 25));
                     }
                     if (lid.getFitWidth() < animationPane.getWidth() && event.getX() > animationPane.getMinWidth() + 100) {
-                        lid.setFitWidth(mouseX);
-                        lid.setLayoutX(animationPane.getWidth() - lid.getFitWidth());
+                        lid.setFitWidth(animationPane.getWidth() - 25);
+                        lid.setLayoutX((animationPane.getWidth() - lid.getFitWidth() - 25));
                     }
                 }
             }
@@ -561,7 +562,7 @@ public class IdealGasFXMLController {
                         parallelTransition.setCycleCount(1);
                         parallelTransition.play();
                         parallelTransition.setOnFinished(event1 -> {
-                            animationPane.getChildren().remove(lid);
+                            lid.setOpacity(0);
                         });
                     }
                 }
@@ -594,24 +595,32 @@ public class IdealGasFXMLController {
 
     private void returnLid() {
         lidButton.setOnAction(event -> {
+            System.out.println(lid.getOpacity());
             if (lidPopped) {
-                if (!animationPane.getChildren().contains(lid)) {
-                    lid = makingLid();
-                    lid.setFitWidth(animationPane.getWidth() * volumeSlider.getValue() / 10);
-                    animationPane.getChildren().add(lid);
-                    for (Particle allParticle : allParticles) {
-                        allParticle.setLid(lid);
-                    }
+                //if (!animationPane.getChildren().contains(lid)) {
+                System.out.println(lid.getOpacity());
+                lid = makingLid();
+                    lid.setOpacity(1);
+                    lid.setFitWidth(animationPane.getWidth());
+                    lid.setLayoutY(-60);
+                    lid.setLayoutX(0);
+                    //animationPane.getChildren().add(lid);
+                    for (Particle allParticle : allParticles) allParticle.setLid(lid);
                     animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                     lidPopped = false;
-                }
+                //}
             } else {
+                lid.setOpacity(1);
+                lid.setFitWidth(animationPane.getWidth());
+                lid.setLayoutY(-60);
+                lid.setLayoutX(0);
+                System.out.println(lid.getOpacity());
                 if (animationPane.getChildren().contains(lid)) {
                     ParallelTransition parallelTransition = getParallelTransition();
                     parallelTransition.setCycleCount(1);
                     parallelTransition.play();
                     parallelTransition.setOnFinished(event1 -> {
-                        animationPane.getChildren().remove(lid);
+                        lid.setOpacity(0);
                     });
                     animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                     lidPopped = true;
