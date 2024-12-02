@@ -99,6 +99,8 @@ public class BalloonFXMLController {
     private double altitude = 0;
     private boolean isGroundPresent = true;
     private Label altitudeLabel;
+    private boolean isSpawningGround = false;
+    private boolean isRemovingGround = false;
 
     @FXML
     public void initialize() {
@@ -269,9 +271,9 @@ public class BalloonFXMLController {
                     altitudeString = String.format("%.2f", altitude);
                     altitudeLabel.setText(altitudeString + " m");
                     backgroundTimeline.play();
-                    if (isGroundPresent) {
-                        removeGround();
-                        isGroundPresent = false;
+                    if (isGroundPresent && !isSpawningGround) {
+                            removeGround();
+                            isGroundPresent = false;
                     }
                 }
             } else if (altitude == 0 && backgroundVelocity < 0){
@@ -281,9 +283,9 @@ public class BalloonFXMLController {
                 altitudeLabel.setText(altitudeString + " m");
             } else if (altitude == 0) {
                 altitudeLabel.setText("0.00 m");
-                if (!isGroundPresent){
-                    spawnGround();
-                    isGroundPresent = true;
+                if (!isGroundPresent && !isRemovingGround){
+                        spawnGround();
+                        isGroundPresent = true;
                 }
                 backgroundTimeline.stop();
             }
@@ -294,27 +296,35 @@ public class BalloonFXMLController {
     }
 
     private void spawnGround() {
-        groundRectangle.setLayoutY(900);
-        Timeline groundTimeline = new Timeline();
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
-            groundRectangle.setLayoutY(groundRectangle.getLayoutY() - 5);
-        });
-        groundTimeline.getKeyFrames().add(keyFrame);
-        groundTimeline.setCycleCount(30);
-        groundTimeline.play();
-
+        isSpawningGround = true;
+            groundRectangle.setLayoutY(900);
+            Timeline groundTimeline = new Timeline();
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
+                groundRectangle.setLayoutY(groundRectangle.getLayoutY() - 5);
+            });
+            groundTimeline.getKeyFrames().add(keyFrame);
+            groundTimeline.setCycleCount(30);
+            groundTimeline.play();
+            groundTimeline.setOnFinished(event -> {
+                isSpawningGround = false;
+                System.out.println(isSpawningGround);
+            });
     }
 
     private void removeGround() {
-        groundRectangle.setLayoutY(750);
-        Timeline groundTimeline = new Timeline();
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
-            groundRectangle.setLayoutY(groundRectangle.getLayoutY() + 5);
-        });
-        groundTimeline.getKeyFrames().add(keyFrame);
-        groundTimeline.setCycleCount(30);
-        groundTimeline.play();
-
+        isRemovingGround = true;
+            groundRectangle.setLayoutY(750);
+            Timeline groundTimeline = new Timeline();
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
+                groundRectangle.setLayoutY(groundRectangle.getLayoutY() + 5);
+            });
+            groundTimeline.getKeyFrames().add(keyFrame);
+            groundTimeline.setCycleCount(30);
+            groundTimeline.play();
+            groundTimeline.setOnFinished(event -> {
+                isRemovingGround = false;
+                System.out.println(isRemovingGround);
+            });
     }
 
     private void setupTemperatureControls() {
