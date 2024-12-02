@@ -83,7 +83,7 @@ public class ThirdFXMLController {
     private Thermometer thermometer;
     private PVnRT pvnrt;
     private PressureGauge pressureGauge;
-    private double baseParticleVelocity = 3;
+    private double baseParticleVelocity = 3.5;
     boolean paused = false;
     private double totalParticleCount;
     public boolean lidPopped = false;
@@ -97,6 +97,7 @@ public class ThirdFXMLController {
     private double backgroundVelocity = 0.007;
     private Timeline decreaseTempTimeline;
     private Timeline backgroundTimeline;
+    private Timeline altitudeTimeline;
     private double altitude = 0;
     private boolean isGroundPresent = true;
     private Label altitudeLabel;
@@ -259,7 +260,7 @@ public class ThirdFXMLController {
     }
 
     private void altitude() {
-        Timeline altitudeTimeline = new Timeline();
+        altitudeTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
             if (altitude > 0) {
                 altitude = altitude - (backgroundVelocity * 300);
@@ -370,7 +371,7 @@ public class ThirdFXMLController {
 
     private void adjustTemperature(double tempChange) {
         double newTemperature = pvnrt.getTemperature() + tempChange;
-        if (newTemperature <= 500.15 && newTemperature >= 300) {
+        if (newTemperature <= 473.15 && newTemperature >= 300) {
             pvnrt.setTemperature(newTemperature);
             thermometer.updateThermometer();
             updateParticlesWithTemperature(newTemperature);
@@ -456,6 +457,9 @@ public class ThirdFXMLController {
     private void pauseFunction(){
         pause.setOnAction(event -> {
             paused = true;
+            decreaseTempTimeline.pause();
+            altitudeTimeline.pause();
+            backgroundTimeline.pause();
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).pause();
             }
@@ -465,6 +469,9 @@ public class ThirdFXMLController {
     private void playFunction(){
         play.setOnAction(event -> {
             paused = false;
+            decreaseTempTimeline.play();
+            altitudeTimeline.play();
+            backgroundTimeline.play();
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).play();
             }
@@ -507,28 +514,12 @@ public class ThirdFXMLController {
      * If the general list is empty, then the all variables should be at 0
      */
     private void remove1(){
-        if (!allParticles.isEmpty()) {
+        if (allParticles.size() > 29 ) {
             canvas.getChildren().remove(allParticles.getLast().getCircle());
             allParticles.removeLast();
             totalParticleCount--;
             updatePressure();
             pressureGauge.updateGauge();
-            if (allParticles.isEmpty()){
-                pvnrt.setPressure(0);
-                pvnrt.setMoles(0);
-                pressureGauge.updateGauge();
-                pvnrt.setTemperature(0);
-                thermometer.updateThermometer();
-                allParticles.clear();
-            }
-        }
-        else {
-            pvnrt.setPressure(0);
-            pvnrt.setMoles(0);
-            pressureGauge.updateGauge();
-            pvnrt.setTemperature(0);
-            thermometer.updateThermometer();
-            allParticles.clear();
         }
     }
 
