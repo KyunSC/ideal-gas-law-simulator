@@ -156,7 +156,11 @@ public class IdealGasFXMLController {
             animationPane.setMaxHeight(newValue.doubleValue());
             //animationPane.setMinHeight(newValue.doubleValue());
         });
+        lid.fitWidthProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
+        });
     }
+
 
     private void setupTemperatureControls() {
         DropShadow heatGlow = new DropShadow();
@@ -519,8 +523,13 @@ public class IdealGasFXMLController {
                 double mouseX = event.getX();
                 if (event.getX() > 200 && event.getY() > 100) {
                     animationPane.setMaxWidth(event.getX());
-                    if (lid.getFitWidth() > animationPane.getMinWidth() - 100 && event.getX() < animationPane.getWidth()) lid.setFitWidth(mouseX);
-                    if (lid.getFitWidth() < animationPane.getWidth() && event.getX() > animationPane.getMinWidth() + 100 ) lid.setFitWidth(mouseX);
+                    if (lid.getFitWidth() > animationPane.getMinWidth() - 100 && event.getX() < animationPane.getWidth()) {
+                        lid.setFitWidth(mouseX);
+                        lid.setLayoutX(animationPane.getWidth() - lid.getFitWidth());
+                    }
+                    if (lid.getFitWidth() < animationPane.getWidth() && event.getX() > animationPane.getMinWidth() + 100) {
+                        lid.setFitWidth(mouseX);
+                    }
                 }
             }
         });
@@ -536,7 +545,7 @@ public class IdealGasFXMLController {
                 Duration.millis(1000),
                 event -> {
                     if (pvnrt.getPressure() > maxPressure && !lidPopped) {
-                        animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                        animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                         lidPopped = true;
                         ParallelTransition parallelTransition = getParallelTransition();
                         parallelTransition.setCycleCount(1);
@@ -594,7 +603,7 @@ public class IdealGasFXMLController {
                     parallelTransition.setOnFinished(event1 -> {
                         animationPane.getChildren().remove(lid);
                     });
-                    animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                    animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                     lidPopped = true;
                 }
             }
