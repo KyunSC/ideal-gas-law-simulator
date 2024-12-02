@@ -299,7 +299,7 @@ public class BalloonFXMLController {
         isSpawningGround = true;
             groundRectangle.setLayoutY(900);
             Timeline groundTimeline = new Timeline();
-            KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(25), event -> {
                 groundRectangle.setLayoutY(groundRectangle.getLayoutY() - 5);
             });
             groundTimeline.getKeyFrames().add(keyFrame);
