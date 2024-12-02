@@ -117,7 +117,9 @@ public class IdealGasFXMLController {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getX() < animationPane.getWidth() - 75 && event.getX() > 200 && event.getY() < 100) lid.setFitWidth(event.getX() + 100);
+                if (event.getX() < animationPane.getMaxWidth() - 75 && event.getX() > 200 && event.getY() < 100) {
+                    lid.setFitWidth(event.getX() + 100);
+                }
             }
         });
 
@@ -529,6 +531,7 @@ public class IdealGasFXMLController {
                     }
                     if (lid.getFitWidth() < animationPane.getWidth() && event.getX() > animationPane.getMinWidth() + 100) {
                         lid.setFitWidth(mouseX);
+                        lid.setLayoutX(animationPane.getWidth() - lid.getFitWidth());
                     }
                 }
             }
