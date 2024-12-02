@@ -148,11 +148,11 @@ public class Particle {
                     velocityX *= -1;
                     particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 15);
                 }
-                /*//Top wall collision detection
-                if (particle.getCenterY() <= animationPanel.getLayoutY() + particle.getRadius() + 15) {
+                //Top wall collision detection
+                if (particle.getCenterY() <= animationPanel.getLayoutY() + particle.getRadius() + 15 && particle.getCenterX() >= (animationPanel.getWidth() - lid.getFitWidth())) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 15);
-                }*/
+                }
                 //Bottom wall collision detection
                 if (particle.getCenterY() >= animationPanel.getHeight() - particle.getRadius() - 15) {
                     velocityY *= -1;

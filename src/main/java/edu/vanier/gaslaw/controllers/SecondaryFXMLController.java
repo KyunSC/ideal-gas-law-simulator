@@ -578,7 +578,7 @@ public class SecondaryFXMLController {
             if (lidPopped) {
                 if (!animationPane.getChildren().contains(lid)) {
                     lid = makingLid();
-                    lid.setFitWidth(lid.getFitWidth() * volumeSlider.getValue() / 10);
+                    lid.setFitWidth(animationPane.getWidth() * volumeSlider.getValue() / 10);
                     animationPane.getChildren().add(lid);
                     for (Particle allParticle : allParticles) {
                         allParticle.setLid(lid);
