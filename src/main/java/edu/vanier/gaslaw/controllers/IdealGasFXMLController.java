@@ -124,9 +124,10 @@ public class IdealGasFXMLController {
         });
 
         animationPane.getChildren().add(lid);
-        horizontalSlider.layoutXProperty().bind(animationPane.widthProperty().subtract(36));
         initialFunctions();
     }
+
+
 
     private void initialFunctions() {
         addParticlesButton();
@@ -144,6 +145,7 @@ public class IdealGasFXMLController {
         lidPopping();
         initializeComboBox();
         returnLid();
+        update();
 
         borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             //System.out.println("----------------- resize pane -------------- " + newValue);
@@ -161,8 +163,23 @@ public class IdealGasFXMLController {
         lid.fitWidthProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
         });
+
+        horizontalSlider.layoutXProperty().bind(animationPane.widthProperty().subtract(36));
+        horizontalSlider.layoutYProperty().bind(animationPane.heightProperty().divide(2));
     }
 
+    private void update() {
+        Timeline updateTimeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
+            changeVelocityLabel();
+            changeVolumeLabel();
+            pvnrt.setVolume(((animationPane.getWidth()) / 1540) * 10);
+            updatePressure();
+        });
+        updateTimeline.getKeyFrames().add(keyFrame);
+        updateTimeline.setCycleCount(Animation.INDEFINITE);
+        updateTimeline.play();
+    }
 
     private void setupTemperatureControls() {
         DropShadow heatGlow = new DropShadow();
@@ -313,8 +330,6 @@ public class IdealGasFXMLController {
                     checkParticleParticleCollision(thirdListOfParticles);
                     checkParticleParticleCollision(fourthListOfParticles);
                     particleEscaped();
-                    changeVelocityLabel();
-                    changeVolumeLabel();
                 })
         );
         elasticCollisionTimeline.getKeyFrames().add(keyframe);
@@ -349,7 +364,6 @@ public class IdealGasFXMLController {
                 lidPopped = false;
                 animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
             }
-            volumeSlider.setValue(10);
         });
     }
 
@@ -512,13 +526,6 @@ public class IdealGasFXMLController {
     }
 
     private void initializeVolumeSlider() {
-        volumeSlider.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            animationPane.setMaxWidth(1400 * volumeSlider.getValue() / 10);
-            pvnrt.setVolume(volumeSlider.getValue());
-            updatePressure();
-            lid.setFitWidth((volumeSlider.getValue() / (volumeSlider.getMax())) * 1300 * (animationPane.getWidth() / 1400) + 100);
-            for (Particle allParticle : allParticles) allParticle.setAnimationPanel(animationPane);
-        }));
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
