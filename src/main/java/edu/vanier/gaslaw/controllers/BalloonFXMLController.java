@@ -6,7 +6,6 @@ import edu.vanier.gaslaw.calculations.PVnRT;
 import edu.vanier.gaslaw.graphics.PressureGauge;
 import edu.vanier.gaslaw.graphics.Thermometer;
 import javafx.animation.*;
-import javafx.beans.binding.Bindings;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,9 +35,9 @@ import java.util.Objects;
  * Quadrants are used to be more effective when detecting collisions between Particles
  *
  */
-public class ThirdFXMLController {
+public class BalloonFXMLController {
 
-    private final static Logger logger = LoggerFactory.getLogger(SecondaryFXMLController.class);
+    private final static Logger logger = LoggerFactory.getLogger(IdealGasFXMLController.class);
 
     @FXML
     BorderPane borderPane;

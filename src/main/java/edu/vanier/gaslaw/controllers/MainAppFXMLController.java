@@ -29,12 +29,12 @@ public class MainAppFXMLController {
     }
 
     private void handleClickMe(Event e) {
-        MainApp.switchScene(MainApp.THIRD_LAYOUT, new ThirdFXMLController());
+        MainApp.switchScene(MainApp.THIRD_LAYOUT, new BalloonFXMLController());
         logger.info("Click me button has been pressed...");
     }
 
     private void loadSecondaryScene(Event e) {
-        MainApp.switchScene(MainApp.SECONDARY_LAYOUT, new SecondaryFXMLController());
+        MainApp.switchScene(MainApp.SECONDARY_LAYOUT, new IdealGasFXMLController());
         logger.info("Loaded the secondary scene...");
     }
 }

@@ -1,6 +1,5 @@
 package edu.vanier.gaslaw.controllers;
 
-import edu.vanier.gaslaw.BalloonParticle;
 import edu.vanier.gaslaw.MainApp;
 import edu.vanier.gaslaw.Particle;
 import edu.vanier.gaslaw.calculations.PVnRT;
@@ -9,7 +8,6 @@ import edu.vanier.gaslaw.graphics.Thermometer;
 import javafx.animation.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -28,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * FXML controller class for a secondary scene. Contains all the FXML objects
@@ -38,9 +35,9 @@ import java.util.Objects;
  * are used to be more effective when detecting collisions between Particles
  *
  */
-public class SecondaryFXMLController {
+public class IdealGasFXMLController {
 
-    private final static Logger logger = LoggerFactory.getLogger(SecondaryFXMLController.class);
+    private final static Logger logger = LoggerFactory.getLogger(IdealGasFXMLController.class);
 
     @FXML
     Button btnSwitchScene;

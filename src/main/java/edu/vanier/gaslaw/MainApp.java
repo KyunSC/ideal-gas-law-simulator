@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 public class MainApp extends Application {
 
     public static final String MAINAPP_LAYOUT = "MainApp_layout";
-    public static final String SECONDARY_LAYOUT = "secondary_layout";
-    public static final String THIRD_LAYOUT = "third_layout";
+    public static final String SECONDARY_LAYOUT = "idealgas_layout";
+    public static final String THIRD_LAYOUT = "balloon_layout";
     private final static Logger logger = LoggerFactory.getLogger(MainApp.class);
     private static Scene scene;
 
