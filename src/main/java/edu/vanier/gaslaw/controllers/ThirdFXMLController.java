@@ -86,7 +86,6 @@ public class ThirdFXMLController {
     private double baseParticleVelocity = 3.5;
     boolean paused = false;
     private double totalParticleCount;
-    public boolean lidPopped = false;
     private Color particleColor;
     private double particleSize;
     private ImageView backgroundImageView;
@@ -261,16 +260,11 @@ public class ThirdFXMLController {
 
     private void altitude() {
         altitudeTimeline = new Timeline();
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
             if (altitude > 0) {
-                altitude = altitude - (backgroundVelocity * 300);
-                if (altitude <= 0) {
-                    altitudeLabel.setText("0.00 m");
+                altitude = altitude - (backgroundVelocity * 25);
+                if (altitude < 0) {
                     altitude = 0;
-                    if (!isGroundPresent){
-                        spawnGround();
-                        isGroundPresent = true;
-                    }
                 } else {
                     String altitudeString;
                     altitudeString = String.format("%.2f", altitude);
@@ -287,6 +281,11 @@ public class ThirdFXMLController {
                 altitudeString = String.format("%.2f", altitude);
                 altitudeLabel.setText(altitudeString + " m");
             } else if (altitude == 0) {
+                altitudeLabel.setText("0.00 m");
+                if (!isGroundPresent){
+                    spawnGround();
+                    isGroundPresent = true;
+                }
                 backgroundTimeline.stop();
             }
         });
@@ -439,19 +438,21 @@ public class ThirdFXMLController {
 
     private void resetButton(){
         reset.setOnAction(event -> {
-            for (int i = 0; i < allParticles.size(); i++) canvas.getChildren().remove(allParticles.get(i).getCircle());
-            allParticles.clear();
-            totalParticleCount = 0;
-            pvnrt.setMoles(0);
-            updatePressure();
-            pressureGauge.updateGauge();
-            thermometer.updateThermometer();
+            if (!paused) {
+                for (int i = 0; i < allParticles.size(); i++)
+                    canvas.getChildren().remove(allParticles.get(i).getCircle());
+                allParticles.clear();
+                totalParticleCount = 0;
 
-            if (lidPopped){
-                lidPopped = false;
-                canvas.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
+                for (int i = 0; i < 29; i++) addBalloonParticle();
+                altitude = 0;
+                pvnrt.setTemperature(300);
+                updatePressure();
+                pressureGauge.updateGauge();
+                thermometer.updateThermometer();
             }
         });
+
     }
 
     private void pauseFunction(){
@@ -483,15 +484,24 @@ public class ThirdFXMLController {
         KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(1),
                 event1 -> {
+                    decreaseTempTimeline.play();
+                    altitudeTimeline.play();
+                    backgroundTimeline.play();
                     for (BalloonParticle allParticle : allParticles) {
                         allParticle.play();
                     }
                 }
         );
         timeline.setOnFinished(event1 -> {
+            decreaseTempTimeline.play();
+            altitudeTimeline.play();
+            backgroundTimeline.play();
             for (BalloonParticle allParticle : allParticles) {
                 allParticle.play();
             }
+            decreaseTempTimeline.pause();
+            altitudeTimeline.pause();
+            backgroundTimeline.pause();
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).pause();
                 paused = true;
