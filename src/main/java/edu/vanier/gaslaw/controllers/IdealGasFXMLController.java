@@ -79,6 +79,8 @@ public class IdealGasFXMLController {
     Button lidButton;
     @FXML
     Label volumeLabel;
+    @FXML
+    ImageView horizontalSlider;
 
     ArrayList<Particle> allParticles = new ArrayList<>();
     ArrayList<Particle> listOfParticles = new ArrayList<>();
@@ -120,6 +122,7 @@ public class IdealGasFXMLController {
         });
 
         animationPane.getChildren().add(lid);
+        horizontalSlider.layoutXProperty().bind(animationPane.widthProperty().subtract(36));
         initialFunctions();
     }
 

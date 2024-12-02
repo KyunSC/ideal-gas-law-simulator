@@ -167,7 +167,7 @@ public class BalloonFXMLController {
         altitudeTitleLabel.setLayoutY(-25);
 
         altitudeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 28px;;");
-        altitudeLabel.setText("0.00m");
+        altitudeLabel.setText("0.00 m");
         altitudeLabel.setLayoutX(-150);
         altitudeLabel.setLayoutY(0);
 

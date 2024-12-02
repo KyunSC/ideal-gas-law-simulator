@@ -145,7 +145,14 @@
    <center>
       <BorderPane BorderPane.alignment="CENTER">
          <center>
-            <Pane fx:id="animationPane" style="-fx-border-color: white; -fx-border-radius: 20; -fx-border-style: solid; -fx-background-color: black; -fx-background-radius: 20;" BorderPane.alignment="CENTER" />
+            <Pane fx:id="animationPane" style="-fx-border-color: white; -fx-border-radius: 20; -fx-border-style: solid; -fx-background-color: black; -fx-background-radius: 20;" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="horizontalSlider" fitHeight="101.0" fitWidth="71.0" layoutX="1546.0" layoutY="356.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../horizontal-slider.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
          </center>
          <bottom>
             <Slider fx:id="volumeSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="5" prefHeight="38.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" BorderPane.alignment="CENTER">
