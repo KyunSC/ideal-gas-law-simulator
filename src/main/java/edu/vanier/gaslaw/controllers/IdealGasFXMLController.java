@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +98,7 @@ public class IdealGasFXMLController {
     private double particleSize;
 
     Image lidImage = new Image("/LidContainer.png");
+    Rectangle cover;
 
     @FXML
     public void initialize() {
@@ -155,7 +157,6 @@ public class IdealGasFXMLController {
         });
         lid.fitWidthProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("LidWidth: " + lid.getFitWidth());
-            System.out.println("Max" + animationPane.getMaxWidth());
         });
 
         horizontalSlider.layoutXProperty().bind(animationPane.widthProperty().subtract(36));
@@ -305,6 +306,8 @@ public class IdealGasFXMLController {
             circle.setEffect(innerShadow);
 
             Particle particle = new Particle(circle, particleVelocity, animationPane, lid);
+            if (animationPane.getChildren().contains(cover)) particle.setCover(cover);
+            else particle.setCover(new Rectangle(0,0,0,0));
             particle.createTimeline();
             particle.play();
             animationPane.getChildren().add(particle.getCircle());
@@ -568,26 +571,25 @@ public class IdealGasFXMLController {
         lidButton.setOnAction(event -> {
             System.out.println(lid.getOpacity());
             if (lidPopped) {
-                lid.setLayoutY(-60);
-                lid.setLayoutX(0);
-                lid.setOpacity(1);
-                lid.setFitWidth(1200);
+                animationPane.getChildren().remove(cover);
+                lid = makingLid();
+                animationPane.getChildren().add(lid);
                 for (Particle allParticle : allParticles) allParticle.setLid(lid);
-                animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
                 lidPopped = false;
-                //}
             } else {
+                cover = new Rectangle(lid.getLayoutX() + 50, lid.getLayoutY() + 55, lid.getFitWidth() - 100, 10);
+                cover.setFill(Color.BLACK);
                 ParallelTransition parallelTransition = getParallelTransition();
                 parallelTransition.setCycleCount(1);
                 parallelTransition.play();
                 parallelTransition.setOnFinished(event1 -> {
-                    lid.setOpacity(0);
-                    lid.setLayoutX(0);
-                    lid.setLayoutY(-60);
-                    lid.setRotate(0);
-                    lid.setFitWidth(1200);
+                    animationPane.getChildren().remove(lid);
+                    for (Particle allParticle : allParticles) allParticle.setCover(cover);
                 });
-                animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                Timeline coverTimeline = new Timeline(new KeyFrame(Duration.millis(400)));
+                coverTimeline.setOnFinished(event1 -> animationPane.getChildren().add(cover));
+                coverTimeline.setCycleCount(1);
+                coverTimeline.play();
                 lidPopped = true;
             }
         });
@@ -599,17 +601,15 @@ public class IdealGasFXMLController {
                 Duration.millis(1000),
                 event -> {
                     if (pvnrt.getPressure() > maxPressure && !lidPopped) {
-                        animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, new CornerRadii(10), null, null)));
+                        cover = new Rectangle(lid.getLayoutX() + 50, lid.getLayoutY() + 55, lid.getFitWidth() - 100, 10);
                         lidPopped = true;
                         ParallelTransition parallelTransition = getParallelTransition();
                         parallelTransition.setCycleCount(1);
                         parallelTransition.play();
                         parallelTransition.setOnFinished(event1 -> {
-                            lid.setOpacity(0);
-                            lid.setLayoutY(-60);
-                            lid.setLayoutX(0);
-                            lid.setRotate(0);
-                            lid.setFitWidth(1200);
+                            animationPane.getChildren().remove(lid);
+                            animationPane.getChildren().add(cover);
+                            for (Particle allParticle : allParticles) allParticle.setCover(cover);
                         });
                     }
                 }

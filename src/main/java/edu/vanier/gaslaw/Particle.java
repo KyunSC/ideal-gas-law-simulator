@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 
@@ -23,7 +24,7 @@ public class Particle {
     Timeline timeline;
     Pane animationPanel;
     ImageView lid;
-    BoundingBox boundingBox = new BoundingBox(30, 30, 470,470);
+    Rectangle cover;
     boolean collisionDelay = false;
 
     /**
@@ -115,7 +116,7 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
-            if (lid.getOpacity() == 1){
+            if (animationPanel.getChildren().contains(lid)){
                 //Left wall collision detection
                 if (particle.getCenterX() <= particle.getRadius() + 15) {
                     velocityX *= -1;
@@ -149,7 +150,7 @@ public class Particle {
                     particle.setCenterX(animationPanel.getWidth() - particle.getRadius() - 15);
                 }
                 //Top wall collision detection
-                if (particle.intersects(lid.getBoundsInParent())) {
+                if (particle.getCenterX() < cover.getX() && particle.getCenterY() < (2 * circle.getRadius()) || (particle.getCenterX() > (cover.getX() + cover.getWidth())) && particle.getCenterY() < (2*circle.getRadius()) ) {
                     velocityY *= -1;
                     particle.setCenterY(particle.getRadius() + 15);
                 }
@@ -172,4 +173,6 @@ public class Particle {
     public void setAnimationPanel(Pane animationPanel){
         this.animationPanel = animationPanel;
     }
+
+    public void setCover(Rectangle cover){this.cover = cover;}
 }
