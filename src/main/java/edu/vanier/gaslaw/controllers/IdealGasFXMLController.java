@@ -367,18 +367,14 @@ public class IdealGasFXMLController {
     private void pauseFunction() {
         pause.setOnAction(event -> {
             paused = true;
-            for (int i = 0; i < allParticles.size(); i++) {
-                allParticles.get(i).pause();
-            }
+            for (Particle allParticle : allParticles) allParticle.pause();
         });
     }
 
     private void playFunction() {
         play.setOnAction(event -> {
             paused = false;
-            for (int i = 0; i < allParticles.size(); i++) {
-                allParticles.get(i).play();
-            }
+            for (Particle allParticle : allParticles) allParticle.play();
         });
     }
 
@@ -387,15 +383,11 @@ public class IdealGasFXMLController {
         KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(1),
                 event1 -> {
-                    for (Particle allParticle : allParticles) {
-                        allParticle.play();
-                    }
+                    for (Particle allParticle : allParticles) allParticle.play();
                 }
         );
         timeline.setOnFinished(event1 -> {
-            for (Particle allParticle : allParticles) {
-                allParticle.play();
-            }
+            for (Particle allParticle : allParticles) allParticle.play();
             for (int i = 0; i < allParticles.size(); i++) {
                 allParticles.get(i).pause();
                 paused = true;
@@ -526,7 +518,6 @@ public class IdealGasFXMLController {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                double mouseX = event.getX();
                 if (event.getX() > 200 && event.getY() > 100) {
                     animationPane.setMaxWidth(event.getX());
                     if (lid.getFitWidth() > animationPane.getMinWidth() - 100 && event.getX() < animationPane.getWidth()) {
@@ -569,7 +560,6 @@ public class IdealGasFXMLController {
 
     private void returnLid() {
         lidButton.setOnAction(event -> {
-            System.out.println(lid.getOpacity());
             if (lidPopped) {
                 animationPane.getChildren().remove(cover);
                 lid = makingLid();
@@ -577,20 +567,24 @@ public class IdealGasFXMLController {
                 for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
             } else {
-                cover = new Rectangle(lid.getLayoutX() + 50, lid.getLayoutY() + 55, lid.getFitWidth() - 100, 10);
-                cover.setFill(Color.BLACK);
-                ParallelTransition parallelTransition = getParallelTransition();
-                parallelTransition.setCycleCount(1);
-                parallelTransition.play();
-                parallelTransition.setOnFinished(event1 -> {
-                    animationPane.getChildren().remove(lid);
-                    for (Particle allParticle : allParticles) allParticle.setCover(cover);
-                });
-                Timeline coverTimeline = new Timeline(new KeyFrame(Duration.millis(400)));
-                coverTimeline.setOnFinished(event1 -> animationPane.getChildren().add(cover));
-                coverTimeline.setCycleCount(1);
-                coverTimeline.play();
-                lidPopped = true;
+                if (animationPane.getChildren().contains(lid) && !animationPane.getChildren().contains(cover)) {
+                    cover = new Rectangle(lid.getLayoutX() + 50, lid.getLayoutY() + 55, lid.getFitWidth() - 100, 10);
+                    cover.setFill(Color.BLACK);
+                    ParallelTransition parallelTransition = getParallelTransition();
+                    parallelTransition.setCycleCount(1);
+                    parallelTransition.play();
+                    parallelTransition.setOnFinished(event1 -> {
+                        animationPane.getChildren().remove(lid);
+                        for (Particle allParticle : allParticles) allParticle.setCover(cover);
+                        lidPopped = true;
+                    });
+                    Timeline coverTimeline = new Timeline(new KeyFrame(Duration.millis(400)));
+                    coverTimeline.setOnFinished(event1 -> {
+                                animationPane.getChildren().add(cover);
+                            });
+                    coverTimeline.setCycleCount(1);
+                    coverTimeline.play();
+                }
             }
         });
     }
