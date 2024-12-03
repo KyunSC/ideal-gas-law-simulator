@@ -134,7 +134,18 @@ public class IdealGasFXMLController {
         initializeComboBox();
         returnLid();
         update();
+        windowResize();
+    }
 
+    /**
+     *
+     * Event handler for the lid that works at a certain x, y
+     * Listeners to change the borderPane width and height
+     * Adjusts the lid width accordingly
+     * Puts the volume change icon on the pane at the middle of the pane on the right
+     *
+     */
+    private void windowResize(){
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -147,18 +158,11 @@ public class IdealGasFXMLController {
         borderPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             animationPane.setPrefWidth(newValue.doubleValue());
             animationPane.setMaxWidth(newValue.doubleValue());
-            /*animationPane.setMinWidth(newValue.doubleValue());*/
             lid.setFitWidth(animationPane.getMaxWidth() - 405);
         });
         borderPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-            //animationPane.setPrefHeight(newValue.doubleValue());
             animationPane.setMaxHeight(newValue.doubleValue());
-            //animationPane.setMinHeight(newValue.doubleValue());
         });
-        lid.fitWidthProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("LidWidth: " + lid.getFitWidth());
-        });
-
         horizontalSlider.layoutXProperty().bind(animationPane.widthProperty().subtract(36));
         horizontalSlider.layoutYProperty().bind(animationPane.heightProperty().divide(2));
     }
@@ -236,6 +240,9 @@ public class IdealGasFXMLController {
         thermometer.updateThermometer();
     }
 
+    /**
+     * Timeline that calls the addFirstQuadrant and the addSecondThirdFourth methods to make the particles change quadrants
+     */
     private void addToQuadrants() {
         Timeline timeline = new Timeline();
         KeyFrame kf = new KeyFrame(
@@ -252,6 +259,12 @@ public class IdealGasFXMLController {
         timeline.play();
     }
 
+    /**
+     *
+     * @param targetListOfParticles, the initial list of particles from the beginning
+     *
+     *
+     */
     private void addFirstQuadrant(ArrayList<Particle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             if (targetListOfParticles.get(i).getCircle().getCenterX() < animationPane.getWidth() / 2 && targetListOfParticles.get(i).getCircle().getCenterY() < animationPane.getHeight() / 2) {
@@ -359,7 +372,7 @@ public class IdealGasFXMLController {
                 animationPane.getChildren().add(lid);
                 for (Particle allParticle : allParticles) allParticle.setLid(lid);
                 lidPopped = false;
-                animationPane.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID, null, null, null, new CornerRadii(20), null, null)));
+                animationPane.getChildren().remove(cover);
             }
         });
     }
@@ -395,9 +408,7 @@ public class IdealGasFXMLController {
         });
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(10);
-        fastForward.setOnAction(event -> {
-            timeline.play();
-        });
+        fastForward.setOnAction(event -> timeline.play());
     }
 
     /**
@@ -450,9 +461,7 @@ public class IdealGasFXMLController {
      * remove1() once
      */
     private void remove1Button() {
-        remove1.setOnAction(event -> {
-            remove1();
-        });
+        remove1.setOnAction(event -> remove1());
     }
 
     /**
@@ -461,9 +470,7 @@ public class IdealGasFXMLController {
      */
     private void remove10Button() {
         remove10.setOnAction(event -> {
-            for (int i = 0; i < 10; i++) {
-                remove1();
-            }
+            for (int i = 0; i < 10; i++) remove1();
             thermometer.updateThermometer();
         });
     }
@@ -579,9 +586,7 @@ public class IdealGasFXMLController {
                         lidPopped = true;
                     });
                     Timeline coverTimeline = new Timeline(new KeyFrame(Duration.millis(400)));
-                    coverTimeline.setOnFinished(event1 -> {
-                                animationPane.getChildren().add(cover);
-                            });
+                    coverTimeline.setOnFinished(event1 -> animationPane.getChildren().addFirst(cover));
                     coverTimeline.setCycleCount(1);
                     coverTimeline.play();
                 }
@@ -703,9 +708,7 @@ public class IdealGasFXMLController {
     private void delayCollision(Particle particle) {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
-        timeline.setOnFinished(event -> {
-            particle.setCollisionDelay(false);
-        });
+        timeline.setOnFinished(event -> particle.setCollisionDelay(false));
         timeline.setCycleCount(1);
         timeline.play();
     }
