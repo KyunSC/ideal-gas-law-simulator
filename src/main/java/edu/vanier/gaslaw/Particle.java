@@ -115,7 +115,6 @@ public class Particle {
      *
      */
     private void moveCircle(Circle particle) {
-        System.out.println(lid.getOpacity());
             if (lid.getOpacity() == 1){
                 //Left wall collision detection
                 if (particle.getCenterX() <= particle.getRadius() + 15) {
