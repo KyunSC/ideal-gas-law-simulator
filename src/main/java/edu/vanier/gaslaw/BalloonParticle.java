@@ -25,7 +25,12 @@ public class BalloonParticle {
     /**
      * @param circle       it's the shape of the particle
      * @param canvas       canvas
-     * @param circleCanvas
+     * @param circleCanvas balloon
+     * Generates a random angle for the particle to have
+     * Sets velocity x and y using that angle using cos and sin
+     * Set particle angle
+     * Create a timeline for the balloon particle that handles the delay after 100ms when the timeline finishes, so that the particles dont collide at the start
+     *
      */
     public BalloonParticle(Circle circle, double velocity, Pane canvas, Circle circleCanvas){
         this.circle = circle;
@@ -56,15 +61,22 @@ public class BalloonParticle {
     public void setVelocityY(Double velocityY){this.velocityY = velocityY;}
 
 
+    /**
+     *
+     * @param velocity
+     * If velocity is 0, then set velocity , vx, vy to 0
+     * Else if velocity is not 0, then calculate the particle angle
+     * then set the velocity to the new one
+     * then set velocities for x and y using the particle angle
+     *
+     */
     public void setVelocity(double velocity) {
         if (velocity == 0) {
             this.velocity = 0;
             this.velocityX = 0;
             this.velocityY = 0;
         } else {
-            if (this.velocity != 0) {
-                this.particleAngle = Math.atan2(velocityY, velocityX);
-            }
+            if (this.velocity != 0) this.particleAngle = Math.atan2(velocityY, velocityX);
             this.velocity = velocity;
 
             velocityX = velocity * Math.cos(particleAngle); // New x velocity
@@ -132,6 +144,7 @@ public class BalloonParticle {
         particle.setCenterX(particle.getCenterX() + velocityX);
         particle.setCenterY(particle.getCenterY() + velocityY);
     }
+
     public void setCollisionDelay(Boolean collisionDelay){this.collisionDelay = collisionDelay;}
 
     public boolean isCollisionDelay() {return collisionDelay;}

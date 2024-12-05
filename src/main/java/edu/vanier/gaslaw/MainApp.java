@@ -28,6 +28,16 @@ public class MainApp extends Application {
     private final static Logger logger = LoggerFactory.getLogger(MainApp.class);
     private static Scene scene;
 
+    /**
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * Sets the minimum size of the window as 1280x720
+     * Set on key pressed, when user presses F, the scene is put to full screen
+     *
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -62,6 +72,7 @@ public class MainApp extends Application {
      * @param fxmlFile The name of the FXML file to be loaded.
      * @param fxmlController An instance of the FXML controller to be associated
      * with the loaded FXML scene graph.
+     *
      */
     public static void switchScene(String fxmlFile, Object fxmlController) {
         try {
