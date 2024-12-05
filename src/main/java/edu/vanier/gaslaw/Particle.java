@@ -42,13 +42,13 @@ public class Particle {
         this.lid = lid;
     }
 
-    public double getVelocityX() {
-        return velocityX;
-    }
+    /**
+     * Getters for velocities x and y
+     * @return velocitoes x and y
+     */
+    public double getVelocityX() {return velocityX;}
 
-    public double getVelocityY() {
-        return velocityY;
-    }
+    public double getVelocityY() {return velocityY;}
 
     public void setVelocity(double velocity) {
         if (velocity == 0) {
@@ -56,9 +56,8 @@ public class Particle {
             this.velocityX = 0;
             this.velocityY = 0;
         } else {
-            if (this.velocity != 0) {
-                this.particleAngle = Math.atan2(velocityY, velocityX);
-            }
+            if (this.velocity != 0) this.particleAngle = Math.atan2(velocityY, velocityX);
+
             this.velocity = velocity;
 
             velocityX = velocity * Math.cos(particleAngle); // New x velocity
@@ -66,9 +65,7 @@ public class Particle {
         }
     }
 
-    public double getVelocity() {
-        return velocity;
-    }
+    public double getVelocity() {return velocity;}
 
     /**
      *
