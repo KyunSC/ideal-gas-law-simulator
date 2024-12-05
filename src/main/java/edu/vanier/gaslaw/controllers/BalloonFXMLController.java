@@ -427,7 +427,7 @@ public class BalloonFXMLController {
 
     /**
      * Adjusts the temperature by a specified change and updates gauges and particle velocity.
-     *
+     * Temperature has a lower limit of 300 and upper limit of 473
      * @param tempChange The change in temperature in Kelvin.
      */
     private void adjustTemperature(double tempChange) {
