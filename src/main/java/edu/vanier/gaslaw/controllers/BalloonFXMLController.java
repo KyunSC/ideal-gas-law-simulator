@@ -27,12 +27,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * FXML controller class for a secondary scene.
- * Contains all the FXML objects that will need behaviors
- * allParticle Arraylist used to keep all the particles
- * Pane is separated in 4 quadrants
- * Top Left is Quadrant 1, Top Right is Quadrant 2, Bottom Left is Quadrant 3, Bottom Right is Quadrant 4
- * Quadrants are used to be more effective when detecting collisions between Particles
+ * FXML controller class for a hot air balloon simulation scene.
+ * Handles particle collisions background movement, temperature control, altitude changes,
+ * and molar mass and particle velocity adjustments based on ideal gas laws.
  *
  */
 public class BalloonFXMLController {
@@ -75,8 +72,6 @@ public class BalloonFXMLController {
     Label volumeLabel;
     @FXML
     Circle circleCanvas;
-    @FXML
-    StackPane stackPane;
 
     ArrayList<BalloonParticle> allParticles = new ArrayList<>();
     private Thermometer thermometer;
@@ -120,6 +115,9 @@ public class BalloonFXMLController {
         initialFunctions();
     }
 
+    /**
+     * Contains all the methods that must be initialized to run the simulation.
+     */
     private void initialFunctions() {
         initBackground();
         addParticlesButton();
@@ -128,19 +126,38 @@ public class BalloonFXMLController {
         remove10Button();
         pauseFunction();
         playFunction();
-        fastForwardFunction();
+        nextFrameFunction();
         resetButton();
         particleCollisionTimeline();
         setupTemperatureControls();
         initializeComboBox();
         gradualTemperatureDecrease();
         altitude();
+        updateLabels();
         for (int i = 0; i < 29; i++) addBalloonParticle();
     }
 
+    /**
+     * Updates the velocity and volume labels using a timeline animation.
+     */
+    private void updateLabels() {
+        Timeline updateTimeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
+            changeVelocityLabel();
+            changeVolumeLabel();
+        });
+        updateTimeline.getKeyFrames().add(keyFrame);
+        updateTimeline.setCycleCount(Animation.INDEFINITE);
+        updateTimeline.play();
+    }
+
+    /**
+     * Initializes the background elements of the simulation such as a sky background, basket and
+     * flame for the air balloon and ground.
+     * Also provides timeline for the scrolling background and for determining the velocity at which it scrolls.
+     */
     private void initBackground(){
-        Image backgroundImage = new Image(Objects.requireNonNull
-                (getClass().getResource("/seamless-clouds.jpg")).toExternalForm());
+        Image backgroundCloudImage = new Image(Objects.requireNonNull(getClass().getResource("/seamless-clouds.jpg")).toExternalForm());
         Image basketImage = new Image(Objects.requireNonNull(getClass().getResource("/balloonbasket.png")).toExternalForm());
         ImageView basketImageView = new ImageView(basketImage);
         Image flame = new Image(Objects.requireNonNull(getClass().getResource("/flame-gif.gif")).toExternalForm());
@@ -173,15 +190,15 @@ public class BalloonFXMLController {
         altitudeLabel.setLayoutX(-150);
         altitudeLabel.setLayoutY(0);
 
-        backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView = new ImageView(backgroundCloudImage);
         backgroundImageView.setFitHeight(1200);
         backgroundImageView.setLayoutY(-300);
 
-        backgroundImageViewTop = new ImageView(backgroundImage);
+        backgroundImageViewTop = new ImageView(backgroundCloudImage);
         backgroundImageViewTop.setFitHeight(1200);
         backgroundImageViewTop.setLayoutY(-1500);
 
-        backgroundImageViewBottom = new ImageView(backgroundImage);
+        backgroundImageViewBottom = new ImageView(backgroundCloudImage);
         backgroundImageViewBottom.setFitHeight(1200);
         backgroundImageViewBottom.setLayoutY(900);
 
@@ -197,7 +214,6 @@ public class BalloonFXMLController {
         Rectangle lowerRectangleBorder = new Rectangle(0, 0, 1100, 200);
         lowerRectangleBorder.setFill(Color.BLACK);
 
-        //binds lower rectangle to the bottom of the borderPane, binds lower rectangle width to width of borderpane, binds center of lower rectangle to center of canvas
         lowerRectangleBorder.layoutYProperty().bind(borderPane.heightProperty().subtract(125));
         lowerRectangleBorder.widthProperty().bind(borderPane.widthProperty().multiply(0.66));
         lowerRectangleBorder.layoutXProperty().bind(canvas.widthProperty().subtract(lowerRectangleBorder.widthProperty()).divide(2));
@@ -224,6 +240,11 @@ public class BalloonFXMLController {
         backgroundTimeline.play();
     }
 
+    /**
+     * Periodically decreases the temperature of the simulation environment. If
+     * the temperature is above 300K, this method reduces the temperature, updates
+     * the pressure, adjusts particle velocities, and refreshes the thermometer.
+     */
     private void gradualTemperatureDecrease() {
         decreaseTempTimeline  = new Timeline();
 
@@ -240,12 +261,22 @@ public class BalloonFXMLController {
         decreaseTempTimeline.play();
     }
 
+    /**
+     * Calculates the velocity of the background based on the temperature.
+     * Updates the size of the balloon based on the temperature until a temperature of 330K is reached
+     */
     private void calculatingBackgroundVelocity() {
         if (pvnrt.getTemperature() != 300) backgroundVelocity = (301.95 - pvnrt.getTemperature()) / 2000;
         else backgroundVelocity = 0.007;
         if (pvnrt.getTemperature() < 330) circleCanvas.setRadius(250 + ((pvnrt.getTemperature() - 300) / 1.5));
         for (BalloonParticle allParticle : allParticles) allParticle.setCircleCanvas(circleCanvas);
     }
+
+    /**
+     * Moves the background images do simulate the upward or downward movement of the balloon.
+     * Resets the positions of background elements when they reach a certain layout y-value
+     * to create a seamless scrolling effect.
+     */
 
     private void moveBackground(){
         if (backgroundImageViewBottom.getLayoutY() <= -300 || backgroundImageViewTop.getLayoutY() >= -300){
@@ -258,6 +289,11 @@ public class BalloonFXMLController {
         backgroundImageViewBottom.setLayoutY(backgroundImageViewBottom.getLayoutY() - backgroundVelocity);
     }
 
+    /**
+     * Updates the altitude of the balloon based on the
+     * background velocity. Handles conditions for removing
+     * the ground when altitude goes above 0 and spawning it back when the altitude returns to 0.
+     */
     private void altitude() {
         altitudeTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
@@ -294,6 +330,9 @@ public class BalloonFXMLController {
         altitudeTimeline.play();
     }
 
+    /**
+     * Animates the ground appearing when the balloon reaches an altitude of 0.
+     */
     private void spawnGround() {
         isSpawningGround = true;
             groundRectangle.setLayoutY(900);
@@ -309,6 +348,9 @@ public class BalloonFXMLController {
             });
     }
 
+    /**
+     * Animates the ground disappearing when the balloon reaches an altitude above 0.
+     */
     private void removeGround() {
         isRemovingGround = true;
             groundRectangle.setLayoutY(750);
@@ -324,6 +366,10 @@ public class BalloonFXMLController {
             });
     }
 
+    /**
+     * Sets up temperature controls for heating and cooling,
+     * including a visual drop shadow to show heating and cooling glow.
+     */
     private void setupTemperatureControls() {
         DropShadow heatGlow = new DropShadow();
         heatGlow.setColor(Color.FIREBRICK);
@@ -362,6 +408,11 @@ public class BalloonFXMLController {
         });
     }
 
+    /**
+     * Updates the velocity of particles based on the given temperature.
+     *
+     * @param newTemperature The new temperature in Kelvin.
+     */
     private void updateParticlesWithTemperature(double newTemperature) {
         if (newTemperature <= 0) {
             for (BalloonParticle particle : allParticles) {
@@ -374,6 +425,11 @@ public class BalloonFXMLController {
         }
     }
 
+    /**
+     * Adjusts the temperature by a specified change and updates gauges and particle velocity.
+     *
+     * @param tempChange The change in temperature in Kelvin.
+     */
     private void adjustTemperature(double tempChange) {
         double newTemperature = pvnrt.getTemperature() + tempChange;
         if (newTemperature <= 473.15 && newTemperature >= 300) {
@@ -384,6 +440,9 @@ public class BalloonFXMLController {
         }
     }
 
+    /**
+     * Adds 10 balloon particles to the canvas when the associated button is pressed.
+     */
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
             for (int i = 0; i < 10; i++) {
@@ -392,6 +451,18 @@ public class BalloonFXMLController {
         });
     }
 
+    /**
+     * Adds 1 balloon particle to the canvas when the associated button is pressed.
+     */
+    private void addParticlesButton(){
+        add.setOnAction(event -> {
+            addBalloonParticle();
+        });
+    }
+
+    /**
+     * Adds a single balloon particle to the canvas.
+     */
     private void addBalloonParticle() {
         if (pvnrt.getTemperature() == 0) {
             pvnrt.setTemperature(300);
@@ -406,6 +477,7 @@ public class BalloonFXMLController {
             thermometer.updateThermometer();
 
             Circle circle = new Circle(canvas.getMaxWidth()/2, canvas.getMaxHeight()/2, particleSize, particleColor);
+
             InnerShadow innerShadow = new InnerShadow();
             innerShadow.setOffsetX(-4);
             innerShadow.setOffsetY(-4);
@@ -421,27 +493,10 @@ public class BalloonFXMLController {
         }
     }
 
-    private void particleCollisionTimeline() {
-        Timeline elasticCollisionTimeline = new Timeline();
-        KeyFrame keyframe = new KeyFrame(
-                Duration.millis(0.1),
-                (event -> {
-                    checkParticleParticleCollision(allParticles);
-                    changeVelocityLabel();
-                    changeVolumeLabel();
-                })
-        );
-        elasticCollisionTimeline.getKeyFrames().add(keyframe);
-        elasticCollisionTimeline.setCycleCount(Animation.INDEFINITE);
-        elasticCollisionTimeline.play();
-    }
-
-    private void addParticlesButton(){
-        add.setOnAction(event -> {
-            addBalloonParticle();
-        });
-    }
-
+    /**
+     * Resets the simulation, returning the balloon particle number to 29,
+     * setting the temperature to 300, setting altitude to 0 and updating the gauges accordingly.
+     */
     private void resetButton(){
         reset.setOnAction(event -> {
             if (!paused) {
@@ -460,6 +515,9 @@ public class BalloonFXMLController {
 
     }
 
+    /**
+     * Pauses the simulation, pausing animations and timelines.
+     */
     private void pauseFunction(){
         pause.setOnAction(event -> {
             paused = true;
@@ -472,6 +530,9 @@ public class BalloonFXMLController {
         });
     }
 
+    /**
+     * Pauses the simulation, playing animations and timelines.
+     */
     private void playFunction(){
         play.setOnAction(event -> {
             paused = false;
@@ -484,7 +545,11 @@ public class BalloonFXMLController {
         });
     }
 
-    private void fastForwardFunction(){
+    /**
+     * Pauses the simulation and subsequently plays the animation for an incredibly short duration
+     * to get a "frame by frame" view of the simulation.
+     */
+    private void nextFrameFunction(){
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(1),
@@ -521,12 +586,8 @@ public class BalloonFXMLController {
 
     /**
      * Function reused by the buttons remove 1 and 10
-     * Checks if there are any particles available to delete
-     * If so, it removes the last circle in the list
-     * Checks for the deleted particle to delete from its quadrant
-     * Then it removes it from the general list
-     * Updates the particle count, temperature and pressure
-     * If the general list is empty, then the all variables should be at 0
+     * Checks if there are any particles available to delete.
+     * Will only remove particles if there is more than 29 balloon particles.
      */
     private void remove1(){
         if (allParticles.size() > 29 ) {
@@ -561,6 +622,29 @@ public class BalloonFXMLController {
         });
     }
 
+    /**
+     * Creates a timeline that checks for particle-particle collisions
+     */
+    private void particleCollisionTimeline() {
+        Timeline elasticCollisionTimeline = new Timeline();
+        KeyFrame keyframe = new KeyFrame(
+                Duration.millis(0.1),
+                (event -> {
+                    checkParticleParticleCollision(allParticles);
+                    changeVelocityLabel();
+                    changeVolumeLabel();
+                })
+        );
+        elasticCollisionTimeline.getKeyFrames().add(keyframe);
+        elasticCollisionTimeline.setCycleCount(Animation.INDEFINITE);
+        elasticCollisionTimeline.play();
+    }
+
+    /**
+     * Checks for collisions between particles and adjusts their velocities accordingly.
+     *
+     * @param targetListOfParticles The list of particles to check for collisions.
+     */
     public void checkParticleParticleCollision(ArrayList<BalloonParticle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             if (!targetListOfParticles.get(i).isCollisionDelay()){
@@ -603,20 +687,36 @@ public class BalloonFXMLController {
         logger.info("Loaded the primary scene...");
     }
 
+    /**
+     * Updates the pressure gauge based on the current number of particles
+     */
     private void updatePressure() {
         if (allParticles.isEmpty())pvnrt.setMoles(totalParticleCount);
         else pvnrt.setMoles(totalParticleCount);
         pressureGauge.updateGauge();
     }
 
+    /**
+     * Calculates the root mean square (RMS) velocity based on temperature.
+     * This value is used for the velocity of the particles.
+     *
+     * @param temp The temperature in Kelvin.
+     * @return The RMS velocity in meters per second.
+     */
     private double calculateRMS(double temp) {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass()) ;
     }
 
+    /**
+     * Changes the molar mass of the particles and updates their size, color and speed accordingly..
+     * Calculation based on making two RMS gas speed equation of different molar mass equal to each other.
+     * Changes base particle velocity
+     *
+     * @param molarMass The new molar mass in kilograms per mole.
+     */
     private void changeMolarMass(double molarMass) {
         double initialMolarMass = pvnrt.getMolarMass();
         pvnrt.setMolarMass(molarMass);
-        // Calculation based on RMS gas speed equation. Changes base particle velocity
         baseParticleVelocity = Math.sqrt((Math.pow(baseParticleVelocity, 2) * initialMolarMass) / molarMass);
         for (BalloonParticle particle : allParticles) {
             double particleVelocity = (baseParticleVelocity * calculateRMS(pvnrt.getTemperature())) / calculateRMS(300);
@@ -628,20 +728,28 @@ public class BalloonFXMLController {
         }
     }
 
+    /**
+     * Sets the color of the particle. Changes particle's hue based on its molar mass.
+     * @param molarMass
+     */
     private void setParticleColor(double molarMass) {
         double hue = (270 * molarMass) / 0.03200;
         particleColor = Color.hsb(hue, 0.8, 1);
     }
 
     /**
-     * //equation found by having the smallest size of particle to be 9 with molar mass of hydrogen 0.00202kg/mol and
-     *         // Largest size of particle to be 15 with molar mass of radon 0.2201k/mol.
+     * Sets the size of the particles based on their molar mass.
+     * Equation found by having the smallest size of particle to be 9 with molar mass of hydrogen 0.00202kg/mol and
+     * Largest size of particle to be 15 with molar mass of radon 0.2201k/mol.
      * @param molarMass
      */
     private void setParticleSize(double molarMass) {
         particleSize = 27.52 * molarMass + 8.944;
     }
 
+    /**
+     * Initializes the combo box for selecting gas types and updates particle molar mass accordingly.
+     */
     private void initializeComboBox() {
         comboBox.setStyle("-fx-text-fill : white");
         comboBox.getItems().addAll("Oxygen", "Nitrogen", "Hydrogen", "Helium");
@@ -657,6 +765,9 @@ public class BalloonFXMLController {
         });
     }
 
+    /**
+     * Updates the velocity label to display the current RMS velocity of the particles.
+     */
     private void changeVelocityLabel() {
         String velocityValue;
         if (totalParticleCount == 0) {
@@ -667,6 +778,9 @@ public class BalloonFXMLController {
         velocityLabel.setText(velocityValue + " m/s");
     }
 
+    /**
+     * Updates the volume label to display the current volume of the system.
+     */
     private void changeVolumeLabel() {
         String volumeValue;
         if (pvnrt.getVolume() == 0) {
@@ -677,6 +791,11 @@ public class BalloonFXMLController {
         volumeLabel.setText(volumeValue + " L");
     }
 
+    /**
+     * Introduces a delay between particle collisions to prevent particles from overlapping and bunching up.
+     *
+     * @param particle The particle to delay collisions for.
+     */
     private void delayCollision(BalloonParticle particle){
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000)));
