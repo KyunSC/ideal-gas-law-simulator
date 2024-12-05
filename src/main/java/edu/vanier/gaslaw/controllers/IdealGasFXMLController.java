@@ -810,6 +810,14 @@ public class IdealGasFXMLController {
         }
     }
 
+    /**
+     *
+     * @param molarMass
+     * Calculates the new velocity using the molar mass formula
+     * Changes the velocity for each particle
+     * Changes the color and size of the particle
+     *
+     */
     private void changeMolarMass(double molarMass) {
         double initialMolarMass = pvnrt.getMolarMass();
         pvnrt.setMolarMass(molarMass);
@@ -826,6 +834,12 @@ public class IdealGasFXMLController {
 
     }
 
+    /**
+     *
+     * @param molarMass
+     * Changes particle color using the molar mass by hue values
+     *
+     */
     private void setParticleColor(double molarMass) {
         double hue = (270 * molarMass) / 0.2201;
         particleColor = Color.hsb(hue, 1, 1);
@@ -842,6 +856,12 @@ public class IdealGasFXMLController {
         particleSize = 27.52 * molarMass + 8.944;
     }
 
+    /**
+     *
+     * ComboBox for every gas
+     * When choosing the new gas, change the molar mass accordingly
+     *
+     */
     private void initializeComboBox() {
         comboBox.setStyle("-fx-text-fill : white");
         comboBox.getItems().addAll("Oxygen", "Radon", "Hydrogen", "Bromine");
@@ -861,26 +881,39 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * Changes velocity label by calculating the velocity using the temperature in pvnrt
+     *
+     */
     private void changeVelocityLabel() {
         String velocityValue;
-        if (totalParticleCount == 0) {
-            velocityValue = "0.00";
-        } else {
-            velocityValue = String.format("%.2f", calculateRMS(pvnrt.getTemperature()));;
-        }
+        if (totalParticleCount == 0) velocityValue = "0.00";
+        else velocityValue = String.format("%.2f", calculateRMS(pvnrt.getTemperature()));
+
         velocityLabel.setText(velocityValue + " m/s");
     }
 
+    /**
+     *
+     * Changes the volume label by using the volume in pvnrt
+     *
+     */
     private void changeVolumeLabel() {
         String volumeValue;
-        if (pvnrt.getVolume() == 0) {
-            volumeValue = "0.00";
-        } else {
-            volumeValue = String.format("%.2f", pvnrt.getVolume());;
-        }
+        if (pvnrt.getVolume() == 0) volumeValue = "0.00";
+        else volumeValue = String.format("%.2f", pvnrt.getVolume());;
+
         volumeLabel.setText(volumeValue + " L");
     }
 
+    /**
+     *
+     * @param particle
+     * Creates a timeline of a duration 100ms
+     * When finished the particleDelay is false
+     *
+     */
     private void delayCollision(Particle particle) {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100)));
