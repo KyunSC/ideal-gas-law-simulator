@@ -291,6 +291,14 @@ public class IdealGasFXMLController {
         timeline.play();
     }
 
+    /**
+     *
+     * @param listOfParticles First, Second, Third and Fourth Lists
+     * Try and catch for when the particle doesn't exist anymore
+     * Checks if the particle is not in the same quadrant first, then
+     * Adds particles to their respective quadrants using x and y limits
+     *
+     */
     private void addToFirstSecondThirdFourth(ArrayList<Particle> listOfParticles) {
         try{
             for (int i = 0; i < listOfParticles.size(); i++) {
@@ -314,6 +322,11 @@ public class IdealGasFXMLController {
         }catch (Exception e) {System.out.println("Particle does not exist anymore");}
     }
 
+    /**
+     *
+     * Set on action for the button +10 that calls the addParticle() method 10 times
+     *
+     */
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
                 for (int i = 0; i < 10; i++) addParticle();
@@ -321,12 +334,29 @@ public class IdealGasFXMLController {
         );
     }
 
+    /**
+     *
+     * Checks if the simulation is paused or not, then
+     * If there are no particles, the temperature is 0, so it will go from 0 to 300 if a particle is added
+     * Adds 1 to the counter for total number of particles
+     * Updates the pressure
+     * Sets the particles size and color using its molar mass
+     * Calculates the particles velocity using the formula
+     * Creates a circle with an inner shadow
+     * Creates a particle that gets the circle as a parameter
+     * Also send the cover to the particle
+     * Then make the timeline for it to move and play it
+     * Add the circle inside the particle to the animationPanel
+     * Add the particle to all particles and the first list
+     * Updates the thermometer
+     *
+     */
     private void addParticle() {
-        if (pvnrt.getTemperature() == 0) {
-            pvnrt.setTemperature(300);
-            updateParticlesWithTemperature(300);
-        }
         if (!paused) {
+            if (pvnrt.getTemperature() == 0) {
+                pvnrt.setTemperature(300);
+                updateParticlesWithTemperature(300);
+            }
             totalParticleCount++;
             updatePressure();
             setParticleColor(pvnrt.getMolarMass());
@@ -352,6 +382,12 @@ public class IdealGasFXMLController {
         }
     }
 
+    /**
+     *
+     * Checks for the collisions in each quadrant for better efficiency
+     * Checks if the particle escaped the animation panel
+     *
+     */
     private void particleCollisionTimeline() {
         Timeline elasticCollisionTimeline = new Timeline();
         KeyFrame keyframe = new KeyFrame(
@@ -369,12 +405,27 @@ public class IdealGasFXMLController {
         elasticCollisionTimeline.play();
     }
 
+    /**
+     *
+     * Set on click to call the addParticle() method once
+     *
+     */
     private void addParticlesButton() {
-        add.setOnAction(event -> {
-            addParticle();
-        });
+        add.setOnAction(event -> addParticle());
     }
 
+    /**
+     *
+     * Set on action for the reset button
+     * Clears the animationPanel
+     * Clears all the lists
+     * Sets particle and moles count to 0
+     * Updates the pressure to 0
+     * Updates the thermometer and pressure gauge
+     * If the lid is popped, then add back the lid and remove the cover used to simulate a gap in the animationPanel
+     * If so, then sets lidPopped to false
+     *
+     */
     private void resetButton() {
         reset.setOnAction(event -> {
             for (int i = 0; i < allParticles.size(); i++) animationPane.getChildren().remove(allParticles.get(i).getCircle());
@@ -399,6 +450,12 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * Pauses the timelines for each particle
+     * Sets paused to true
+     *
+     */
     private void pauseFunction() {
         pause.setOnAction(event -> {
             paused = true;
@@ -406,6 +463,13 @@ public class IdealGasFXMLController {
         });
     }
 
+
+    /**
+     *
+     * Plays the timelines for each particle
+     * Sets paused to false
+     *
+     */
     private void playFunction() {
         play.setOnAction(event -> {
             paused = false;
@@ -413,23 +477,31 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * Creates a timeline for the fast-forward function
+     * Plays the timelines for the particles for one millis
+     * Then it pauses the timelines for the particles
+     * Set on action
+     *
+     */
     private void fastForwardFunction() {
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(
-                Duration.millis(1),
+                Duration.millis(10),
                 event1 -> {
                     for (Particle allParticle : allParticles) allParticle.play();
                 }
         );
         timeline.setOnFinished(event1 -> {
             for (Particle allParticle : allParticles) allParticle.play();
-            for (int i = 0; i < allParticles.size(); i++) {
-                allParticles.get(i).pause();
+            for (Particle allParticle : allParticles) {
+                allParticle.pause();
                 paused = true;
             }
         });
         timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(10);
+        timeline.setCycleCount(1);
         fastForward.setOnAction(event -> timeline.play());
     }
 
@@ -547,7 +619,7 @@ public class IdealGasFXMLController {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getX() > 200 && event.getY() > 100) {
+                if (event.getX() > animationPane.getWidth() - 100 && event.getY() > 100 && event.getX() > 200) {
                     animationPane.setMaxWidth(event.getX());
                     if (lid.getFitWidth() > animationPane.getMinWidth() - 100 && event.getX() < animationPane.getWidth()) {
                         lid.setFitWidth(animationPane.getWidth() - 25);
