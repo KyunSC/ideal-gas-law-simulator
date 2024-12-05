@@ -482,7 +482,7 @@ public class IdealGasFXMLController {
      * Creates a timeline for the fast-forward function
      * Plays the timelines for the particles for one millis
      * Then it pauses the timelines for the particles
-     * Set on action
+     * Set on action to play the timeline when pressed
      *
      */
     private void fastForwardFunction() {
@@ -569,6 +569,15 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * @param targetListOfParticles first, second, third, fourth quadrant
+     * Checks for the collision delay first, then
+     * Using intersects to find if the particles are colliding
+     * Then checks who are on top, bottom, left, right to change their velocities according going negative
+     * Then sets a delay to the particles
+     *
+     */
     public void checkParticleParticleCollision(ArrayList<Particle> targetListOfParticles) {
         for (int i = 0; i < targetListOfParticles.size(); i++) {
             if (!targetListOfParticles.get(i).isCollisionDelay()) {
@@ -604,28 +613,46 @@ public class IdealGasFXMLController {
         }
     }
 
+    /**
+     *
+     * @param e
+     * Loads primary scene using switchScene() method
+     *
+     */
     private void loadPrimaryScene(Event e) {
         MainApp.switchScene(MainApp.MAINAPP_LAYOUT, new MainAppFXMLController());
         logger.info("Loaded the primary scene...");
     }
 
+    /**
+     *
+     * Check if there are particles, if not then moles = 0
+     * Else it sets moles to the particle count
+     * Then updates the pressure gauge
+     *
+     */
     private void updatePressure() {
         if (allParticles.isEmpty()) pvnrt.setMoles(totalParticleCount);
         else pvnrt.setMoles(totalParticleCount);
         pressureGauge.updateGauge();
     }
 
+    /**
+     *
+     * Volume slider for the animationPane
+     * Using event handler for mouse drag
+     * Check if the mouse is at the right area first, then
+     * sets the animation pane to the mouse position
+     * Adjusts the lid to the pane size is it is too small
+     *
+     */
     private void initializeVolumeSlider() {
         animationPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getX() > animationPane.getWidth() - 100 && event.getY() > 100 && event.getX() > 200) {
                     animationPane.setMaxWidth(event.getX());
-                    if (lid.getFitWidth() > animationPane.getMinWidth() - 100 && event.getX() < animationPane.getWidth()) {
-                        lid.setFitWidth(animationPane.getWidth() - 25);
-                        lid.setLayoutX((animationPane.getWidth() - lid.getFitWidth() - 25));
-                    }
-                    if (lid.getFitWidth() < animationPane.getWidth() && event.getX() > animationPane.getMinWidth() + 100) {
+                    if (lid.getFitWidth() > animationPane.getWidth() - 25 && event.getX() < animationPane.getWidth()) {
                         lid.setFitWidth(animationPane.getWidth() - 25);
                         lid.setLayoutX((animationPane.getWidth() - lid.getFitWidth() - 25));
                     }
@@ -634,10 +661,21 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * @param temp
+     * @return number using formula
+     */
     private double calculateRMS(double temp) {
         return Math.sqrt((3 * 8.314 * temp) / pvnrt.getMolarMass());
     }
 
+    /**
+     *
+     * Adds a rotate and a translate transition to a parrallel transition to create the lid animation
+     * @return transition to be used for when the lid pops
+     *
+     */
     private ParallelTransition getParallelTransition() {
         RotateTransition rotate = new RotateTransition(Duration.millis(1000), lid);
         rotate.setByAngle(100);
@@ -649,16 +687,26 @@ public class IdealGasFXMLController {
         return new ParallelTransition(lid, rotate, translateTransition);
     }
 
+    /**
+     *
+     * Gives proportions to the image view
+     * @return lid as an imageview
+     *
+     */
     private ImageView makingLid() {
         ImageView imageView = new ImageView(lidImage);
         imageView.setFitWidth(1300);
         imageView.setFitHeight(100);
         imageView.setLayoutY(-60);
         imageView.setPreserveRatio(false);
-
         return imageView;
     }
 
+    /**
+     *
+     * 
+     *
+     */
     private void returnLid() {
         lidButton.setOnAction(event -> {
             if (lidPopped) {
