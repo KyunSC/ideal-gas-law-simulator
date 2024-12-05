@@ -5,16 +5,33 @@ import eu.hansolo.medusa.Gauge;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+/**
+ * Thermometer class provides a visual representation of temperature using a gauge.
+ * Using JavaFX library for gauges made by HanSolo: https://github.com/HanSolo/medusa?tab=readme-ov-file.
+ * It allows toggling between Kelvin (K) and Celsius (°C)
+ * units and updates the thermometer's value based on the temperature obtained from the PVnRT object.
+ */
 public class Thermometer {
     private PVnRT pvnrt;
     private Gauge thermometer;
     private boolean isCelsius = false;
 
+    /**
+     * Constructs a Thermometer using the provided PVnRT object.
+     *
+     * @param pvnrt The PVnRT object used to get the temperature value.
+     */
     public Thermometer(PVnRT pvnrt) {
         this.pvnrt = pvnrt;
         createThermometer();
     }
 
+
+    /**
+     * Creates the thermometer and sets up its properties.
+     * Enables the interactive button inside the gauge to be able to switch
+     * units without implementing additional buttons for a cleaner ui.
+     */
     private void createThermometer() {
         thermometer = new Gauge();
         thermometer.setTitle("Temperature");
@@ -38,6 +55,10 @@ public class Thermometer {
         thermometer.setOnButtonPressed(buttonEvent -> toggleTemperatureGauge());
     }
 
+    /**
+     * Toggles the unit of the thermometer between Kelvin (K) and Celsius (°C).
+     * Adjusts the thermometer's minimum and maximum values, tick spaces, and threshold.
+     */
     private void toggleTemperatureGauge() {
         if (isCelsius) {
             thermometer.setUnit("K");
@@ -61,6 +82,10 @@ public class Thermometer {
         isCelsius = !isCelsius;
     }
 
+    /**
+     * Updates the thermometer's value based on the current temperature from the PVnRT object.
+     * Converts the value to Celsius if the unit is Celsius.
+     */
     public void updateThermometer() {
         if (isCelsius) {
             thermometer.setValue(pvnrt.getTemperature() - 273.15);
@@ -69,6 +94,11 @@ public class Thermometer {
         }
     }
 
+    /**
+     * Returns a StackPane containing the thermometer.
+     *
+     * @return A StackPane with the thermometer.
+     */
     public StackPane getThermometerPane() {
         return new StackPane(thermometer);
     }
