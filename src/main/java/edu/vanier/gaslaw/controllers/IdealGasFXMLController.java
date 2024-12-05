@@ -695,7 +695,7 @@ public class IdealGasFXMLController {
      */
     private ImageView makingLid() {
         ImageView imageView = new ImageView(lidImage);
-        imageView.setFitWidth(1300);
+        imageView.setFitWidth(animationPane.getWidth());
         imageView.setFitHeight(100);
         imageView.setLayoutY(-60);
         imageView.setPreserveRatio(false);
