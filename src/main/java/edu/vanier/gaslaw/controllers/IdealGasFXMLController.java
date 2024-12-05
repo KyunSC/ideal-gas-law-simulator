@@ -293,7 +293,7 @@ public class IdealGasFXMLController {
 
     private void addToFirstSecondThirdFourth(ArrayList<Particle> listOfParticles) {
         try{
-            for (int i = 0; i < listOfParticles.size();) {
+            for (int i = 0; i < listOfParticles.size(); i++) {
                 if (firstListOfParticles!=listOfParticles && listOfParticles.get(i).getCircle().getCenterX() < animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() < animationPane.getHeight() / 2) {
                     firstListOfParticles.add(listOfParticles.get(i));
                     listOfParticles.remove(listOfParticles.get(i));
@@ -311,15 +311,14 @@ public class IdealGasFXMLController {
                     listOfParticles.remove(listOfParticles.get(i));
                 }
             }
-        }catch (Exception e) { System.out.println("Particle does not exist anymore");}
+        }catch (Exception e) {System.out.println("Particle does not exist anymore");}
     }
 
     private void add10ParticlesButton() {
         add10.setOnAction(event -> {
-            for (int i = 0; i < 10; i++) {
-                addParticle();
+                for (int i = 0; i < 10; i++) addParticle();
             }
-        });
+        );
     }
 
     private void addParticle() {
