@@ -100,6 +100,15 @@ public class IdealGasFXMLController {
     Image lidImage = new Image("/LidContainer.png");
     Rectangle cover;
 
+    /**
+     *
+     * This handles the switch scene button
+     * Creates a variable pvnrt needed for the calculations
+     * Creates a pressure gauge and thermometer and add them to the VBox
+     * Sets the image for the lid and adds it to the animationPane
+     * Then calls the initial functions
+     *
+     */
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
@@ -117,6 +126,11 @@ public class IdealGasFXMLController {
         initialFunctions();
     }
 
+    /**
+     *
+     * Calls all the functions needed in this application to be initiated
+     *
+     */
     private void initialFunctions() {
         addParticlesButton();
         add10ParticlesButton();
@@ -167,6 +181,12 @@ public class IdealGasFXMLController {
         horizontalSlider.layoutYProperty().bind(animationPane.heightProperty().divide(2));
     }
 
+    /**
+     *
+     * Timeline that refreshes every 100ms to update the volume, velocity and pressure
+     * It plays indefinitely
+     *
+     */
     private void update() {
         Timeline updateTimeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
@@ -180,6 +200,13 @@ public class IdealGasFXMLController {
         updateTimeline.play();
     }
 
+    /**
+     *
+     * Sets up drop shadows for heating and cooling with their respective color with radius 25
+     * Creates timelines that calls the function to adjust temperature for cooling and heating
+     * Sets up on mouse click and hold for the heating and cooling buttons to play the heating and cooling timelines
+     *
+     */
     private void setupTemperatureControls() {
         DropShadow heatGlow = new DropShadow();
         heatGlow.setColor(Color.FIREBRICK);
@@ -214,29 +241,34 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * @param newTemperature New temperature received as a parameter
+     * Changes the particles according to the formulas
+     *                       Sets to 0 when temp is 0
+     *
+     */
     private void updateParticlesWithTemperature(double newTemperature) {
-        if (newTemperature <= 0) {
-            for (Particle particle : allParticles) {
-                particle.setVelocity(0);
-            }
-        } else {
-            for (Particle particle : allParticles) {
-                particle.setVelocity((baseParticleVelocity * calculateRMS(newTemperature)) / calculateRMS(300));
-            }
-        }
+        if (newTemperature <= 0) for (Particle particle : allParticles) particle.setVelocity(0);
+        else for (Particle particle : allParticles) particle.setVelocity((baseParticleVelocity * calculateRMS(newTemperature)) / calculateRMS(300));
     }
 
+    /**
+     *
+     * @param tempChange
+     * Sets the increment depending on if the temperature is above or under 100
+     * Puts a limit to the temperature to 1000
+     * Sets and updates the temperature
+     * Updates the particles and the thermometer
+     *
+     */
     private void adjustTemperature(int tempChange) {
         int temperatureIncrement = (pvnrt.getTemperature() < 100) ? 1 : 10;
-
         double newTemperature = pvnrt.getTemperature() + tempChange * temperatureIncrement;
-
         newTemperature = Math.min(1000, Math.max(0, newTemperature));
         pvnrt.setTemperature(newTemperature);
-
         updateParticlesWithTemperature(newTemperature);
         updatePressure();
-
         thermometer.updateThermometer();
     }
 
@@ -262,7 +294,7 @@ public class IdealGasFXMLController {
     /**
      *
      * @param targetListOfParticles, the initial list of particles from the beginning
-     *
+     * Adds the particles to the
      *
      */
     private void addFirstQuadrant(ArrayList<Particle> targetListOfParticles) {

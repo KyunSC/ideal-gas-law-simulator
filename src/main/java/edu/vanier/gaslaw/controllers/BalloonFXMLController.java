@@ -284,7 +284,6 @@ public class BalloonFXMLController {
             backgroundImageViewTop.setLayoutY(-1500);
             backgroundImageViewBottom.setLayoutY(900);
         }
-
         backgroundImageView.setLayoutY(backgroundImageView.getLayoutY() - backgroundVelocity);
         backgroundImageViewTop.setLayoutY(backgroundImageViewTop.getLayoutY() - backgroundVelocity);
         backgroundImageViewBottom.setLayoutY(backgroundImageViewBottom.getLayoutY() - backgroundVelocity);
@@ -357,7 +356,7 @@ public class BalloonFXMLController {
             groundRectangle.setLayoutY(750);
             Timeline groundTimeline = new Timeline();
             KeyFrame keyFrame = new KeyFrame(Duration.millis(50), event -> {
-                groundRectangle.setLayoutY(groundRectangle.getLayoutY() + 5);
+                groundRectangle.setLayoutY(groundRectangle.getLayoutY() + 10);
             });
             groundTimeline.getKeyFrames().add(keyFrame);
             groundTimeline.setCycleCount(30);
@@ -501,8 +500,7 @@ public class BalloonFXMLController {
     private void resetButton(){
         reset.setOnAction(event -> {
             if (!paused) {
-                for (int i = 0; i < allParticles.size(); i++)
-                    canvas.getChildren().remove(allParticles.get(i).getCircle());
+                for (BalloonParticle allParticle : allParticles) canvas.getChildren().remove(allParticle.getCircle());
                 allParticles.clear();
                 totalParticleCount = 0;
 
