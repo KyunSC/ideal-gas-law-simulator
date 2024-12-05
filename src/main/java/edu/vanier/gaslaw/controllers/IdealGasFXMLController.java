@@ -292,28 +292,26 @@ public class IdealGasFXMLController {
     }
 
     private void addToFirstSecondThirdFourth(ArrayList<Particle> listOfParticles) {
-        if (!listOfParticles.isEmpty()) {
-            for (int i = 0; i < listOfParticles.size() - 2; i++) {
-                if (i < listOfParticles.size()) {
-                    if (listOfParticles != firstListOfParticles && listOfParticles.get(i).getCircle().getCenterX() < animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() < animationPane.getHeight() / 2) {
-                        listOfParticles.remove(listOfParticles.get(i));
-                        firstListOfParticles.add(listOfParticles.get(i));
-                    }
-                    if (listOfParticles != secondListOfParticles && listOfParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() < animationPane.getHeight() / 2) {
-                        listOfParticles.remove(listOfParticles.get(i));
-                        secondListOfParticles.add(listOfParticles.get(i));
-                    }
-                    if (listOfParticles != thirdListOfParticles && listOfParticles.get(i).getCircle().getCenterX() < animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() > animationPane.getHeight() / 2) {
-                        listOfParticles.remove(listOfParticles.get(i));
-                        thirdListOfParticles.add(listOfParticles.get(i));
-                    }
-                    if (listOfParticles != fourthListOfParticles && listOfParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() > animationPane.getHeight() / 2) {
-                        listOfParticles.remove(listOfParticles.get(i));
-                        fourthListOfParticles.add(listOfParticles.get(i));
-                    }
+        try{
+            for (int i = 0; i < listOfParticles.size();) {
+                if (firstListOfParticles!=listOfParticles && listOfParticles.get(i).getCircle().getCenterX() < animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() < animationPane.getHeight() / 2) {
+                    firstListOfParticles.add(listOfParticles.get(i));
+                    listOfParticles.remove(listOfParticles.get(i));
+                }
+                if (secondListOfParticles!=listOfParticles && listOfParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() < animationPane.getHeight() / 2) {
+                    secondListOfParticles.add(listOfParticles.get(i));
+                    listOfParticles.remove(listOfParticles.get(i));
+                }
+                if (thirdListOfParticles!=listOfParticles && listOfParticles.get(i).getCircle().getCenterX() < animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() > animationPane.getHeight() / 2) {
+                    thirdListOfParticles.add(listOfParticles.get(i));
+                    listOfParticles.remove(listOfParticles.get(i));
+                }
+                if (fourthListOfParticles!=listOfParticles && listOfParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() / 2 && listOfParticles.get(i).getCircle().getCenterY() > animationPane.getHeight() / 2) {
+                    fourthListOfParticles.add(listOfParticles.get(i));
+                    listOfParticles.remove(listOfParticles.get(i));
                 }
             }
-        }
+        }catch (Exception e) { System.out.println("Particle does not exist anymore");}
     }
 
     private void add10ParticlesButton() {
