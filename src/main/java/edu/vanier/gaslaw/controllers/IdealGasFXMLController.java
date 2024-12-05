@@ -704,7 +704,22 @@ public class IdealGasFXMLController {
 
     /**
      *
-     * 
+     * Set on action for the +/- lid button
+     * Checks if the lid is popped or not
+     * If so then, remove the cover, then
+     * make a lid
+     * add the lid to the animationPane
+     * then set the lid for each particle
+     * then set lid popped to false
+     *
+     * If lid is not popped, then
+     * check if the animationPane contains the lid and does not contain the cover
+     * then make a new cover using the lid as a reference to make it seem like there is a gap in the animationPane
+     * Then play the lid popping animation
+     * Then remove the lid from the animationPane
+     * Set the cover for each particle
+     * Set lidPopped to true
+     * Then remove the cover using a timeline after 400 millis
      *
      */
     private void returnLid() {
@@ -736,6 +751,15 @@ public class IdealGasFXMLController {
         });
     }
 
+    /**
+     *
+     * Timeline that checks every second if the pressure is too high
+     * If so then create the cover using the lids dimension
+     * Then play the animation of the lid popping
+     * Then remove the lid and add the cover to the animationPane
+     * Cycle through this checker indefinitely
+     *
+     */
     private void lidPopping() {
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(
@@ -760,9 +784,19 @@ public class IdealGasFXMLController {
         timeline.play();
     }
 
+    /**
+     *
+     * Checks for all particles if the particle passed a certain threshold inside the animationPane
+     * If it is then, remove it from its list
+     * Then remove it from the animationPane
+     * Then remove it from allParticles
+     * Remove one from the particle count
+     * Updates pressure and its gauge
+     *
+     */
     private void particleEscaped() {
         for (int i = 0; i < allParticles.size(); i++) {
-            if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() + 100) {
+            if (allParticles.get(i).getCircle().getCenterY() < -50 || allParticles.get(i).getCircle().getCenterX() < -10 || allParticles.get(i).getCircle().getCenterX() > animationPane.getWidth() + 100 && allParticles.get(i).getCircle().getCenterY() > animationPane.getMaxHeight()) {
                 if (firstListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
                 if (secondListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
                 if (thirdListOfParticles.contains(allParticles.get(i))) firstListOfParticles.remove(allParticles.get(i));
