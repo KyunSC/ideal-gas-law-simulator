@@ -1,40 +1,53 @@
-# JavaFX Project Template
+# Ideal Gas Law Simulator
 
-This is a non-modular, Gradle-based project skeleton for creating JavaFX applications.
-
-It uses `JavaFX 20.0.2`, and includes the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) (no need to install Gradle locally).
+A 2D physics simulation built with Java and JavaFX that visualizes the Ideal Gas Law (PV = nRT) in real time.
 
 ## Features
 
-- JavaFX-aware coding assistance (code completion, search, navigation in JavaFX-specific source files)
-- Logging with [Logback](https://logback.qos.ch/).
-- Support for FXML.
-- Access to JavaFX's JavaDoc from within your IDE.
+### Gas Container Simulation
+- Adjust pressure, volume, temperature, and number of particles using interactive sliders
+- Watch particles move inside a container responding to variable changes
+- Slidable lid that moves based on pressure changes
+- Lid pops off when pressure exceeds the threshold
 
-## How Do I Use this Project Template
+### Hot Air Balloon Mode
+- Visualize how gas behavior affects a hot air balloon
+- Adjust the same variables and watch the balloon rise or descend
+- Demonstrates real-world application of the Ideal Gas Law
 
-1. Download this repository as `.zip` file.
-2. Unzip the downloaded `javafx-template-main.zip` file.
-3. Add the extracted files to your GitHub repo (if you already have one)
-4. Open the project with NetBeans
-5. Using NetBeans, build the project to download/resolve the dependencies
-6. Change the project name in `settings.gradle`
-7. Rename the default Java package `edu.vanier.template` to `edu.vanier.projectname` in `MainApp.java` and `MainAppFXMLController.java`.
-8. Change the value of the `mainClass` class property in `build.gradle`. A fully-qualified name of the class containing the main method that you want to run must be supplied.
+## Built With
 
-## How Do I Run Multiple Main Classes?
+- Java
+- JavaFX
+- Gradle
 
-If you have a project that contains multiple `main` methods, then  you need to change the value of the `mainClass` property in the `build.gradle` file. The fully-qualified name of the class that contains the main method to be executed  must be specified.
+## Getting Started
 
-The `mainClass` property is declared in the application section (shown below). Note that `//` can be used for inserting a comment line.
+### Prerequisites
+- JDK 18 or higher
+- Gradle (or use the included Gradle Wrapper)
 
-```gradle
-application {
-   mainClass = 'edu.vanier.template.MainApp'
-   //mainClass = 'edu.vanier.tests.Driver'
-}
+### Running the Project
+
+```bash
+# Clone the repository
+git clone https://github.com/KyunSC/ideal-gas-law-simulator.git
+
+# Navigate to the project directory
+cd ideal-gas-law-simulator
+
+# Run the application
+./gradlew run
 ```
 
-## NetBeans
+On Windows, use `gradlew.bat run` instead.
 
-This project template was tested with `NetBeans 17` and `JDK 18`.
+## Contributors
+
+- [KyunSC](https://github.com/KyunSC)
+- [Jameel6251791](https://github.com/Jameel6251791)
+- [hamza-khalid-v](https://github.com/hamza-khalid-v)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
